@@ -14,20 +14,24 @@ from sklearn import neighbors
 from sklearn import svm
 
 
-'''Each of the agrithm have several hyperparameters, for this assignment.  Grid search is sth ppl can do, in their live. But in this secific assignment, 
+''' 
+From Office Hour 1:
+Each of the agrithm have several hyperparameters, for this assignment.  Grid search is sth ppl can do, in their live. But in this secific assignment, 
 we want u to pick at least one, usually 2, hyperparameter of ur problem, and actually do the model complexity anaylsis for it. which means u actually change 
 the values of these hyperparameters, plot the curve for training set, and also validation curve,  and then u compare u find ur best value for that HP.We
 dont need u to do that for all the HP, for something like neuron analysis, that could be many, but of course if u want to learn the best, you know, model, u will have to do that anyways. 
 But in ur analysis as long as u  provide the chart and  analysis for 2 of the HP, that would be good enough . 
 
 For the rest of the them u can say w/e u did if u did , u know, model complexsity analysis,but u dont have to provide the chart, u just say that the result was, 
-but we need to see the the some sort of the model complexity analys for two of the HP parameters. '''
+but we need to see the the some sort of the model complexity analysis for two of the HP parameters. '''
 
 
-def recording_and_plotting(name, alter, train, validation,
+def recording_and_plotting(dataset_name, name, alter, train, validation,
                            x_title="Sample size", y_title="Score"):
     # recording
-    DT_1 = open('{}.txt'.format(name), 'w')
+    DT_1 = open('{}/{}.txt'.format(dataset_name, name), 'w')
+    DT_1.write('{}/{}'.format(dataset_name, name))
+    DT_1.write("\n\n")
     DT_1.write(str(alter))
     DT_1.write("\n\n")
     DT_1.write(str(train))
@@ -54,140 +58,35 @@ def recording_and_plotting(name, alter, train, validation,
     plt.xlabel(x_title)
     plt.ylabel(y_title)
     plt.legend(loc="best")
-    plt.savefig('{}.png'.format(name))
+    plt.savefig('{}/{}.png'.format(dataset_name, name))
     plt.gcf().clear()
 
 
-def decision_tree_model(X_tr, y_tr, X_te, y_te, min_samples_leaf):
-    from sklearn import tree
-    from sklearn.model_selection import cross_val_score
-    # print X_tr
-    # print y_tr
-    # choose decision tree classifier
-    clf = tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=min_samples_leaf)
-
-    # cvs = cross_val_score(clf, X_tr, y_tr, cv=10, scoring='accuracy')
-    # print cvs
-    clf.fit(X_tr, y_tr)
-
-    # use metrics to evaluate how good the performance is
-    y_tr_predict = clf.predict(X_tr)
-
-    # Internal test, using training set for accurate performance evaluation
-    internal_score = metrics.accuracy_score(y_tr, y_tr_predict)
-
-    # Standard external test, using test set for accurate performance evaluation
-    y_predict = clf.predict(X_te)
-    external_score = metrics.accuracy_score(y_te, y_predict)
-
-    return internal_score, external_score
-    # return 1,2
-
-
-def boost_dt_model(X_tr, y_tr, X_te, y_te, min_samples_leaf, n_estimators):
-    from sklearn.ensemble import AdaBoostClassifier
-    from sklearn import tree
-    # choose AdaBoostClassifier classifier
-    clf = tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=min_samples_leaf)
-    boost = AdaBoostClassifier(base_estimator=clf, n_estimators=n_estimators, learning_rate=1.0, algorithm='SAMME.R',
-                                random_state=None)
-    boost.fit(X_tr, y_tr)
-
-    # use metrics to evaluate how good the performance is
-    y_tr_predict = boost.predict(X_tr)
-
-    # Internal test, using training set for accurate performance evaluation
-    internal_score = metrics.accuracy_score(y_tr, y_tr_predict)
-
-    # Standard external test, using test set for accurate performance evaluation
-    y_predict = boost.predict(X_te)
-    external_score = metrics.accuracy_score(y_te, y_predict)
-
-    return internal_score, external_score
-
-
-def ann_model(X_tr, y_tr, X_te, y_te, hidden_layer_sizes=(5, )):
-    from sklearn.neural_network import MLPClassifier
-    # choose MLP classifier
-    clf = MLPClassifier(hidden_layer_sizes=hidden_layer_sizes, random_state=1, max_iter=500)
-    clf.fit(X_tr, y_tr)
-
-    # use metrics to evaluate how good the performance is
-    y_tr_predict = clf.predict(X_tr)
-
-    # Internal test, using training set for accurate performance evaluation
-    internal_score = metrics.accuracy_score(y_tr, y_tr_predict)
-
-    # Standard external test, using test set for accurate performance evaluation
-    y_predict = clf.predict(X_te)
-    external_score = metrics.accuracy_score(y_te, y_predict)
-
-    return internal_score, external_score
-
-
-def knn_model(X_tr, y_tr, X_te, y_te, n_neighbors=5):
-    from sklearn import neighbors
-    # choose KNeighbors classifier
-    clf = neighbors.KNeighborsClassifier(n_neighbors = n_neighbors)
-    clf.fit(X_tr, y_tr)
-
-    # use metrics to evaluate how good the performance is
-    y_tr_predict = clf.predict(X_tr)
-
-    # Internal test, using training set for accurate performance evaluation
-    internal_score = metrics.accuracy_score(y_tr, y_tr_predict)
-
-    # Standard external test, using test set for accurate performance evaluation
-    y_predict = clf.predict(X_te)
-    external_score = metrics.accuracy_score(y_te, y_predict)
-
-    return internal_score, external_score
-
-
-def svm_model(X_tr, y_tr, X_te, y_te, kernel='rbf'):
-    from sklearn import svm
-    # choose KNeighbors classifier
-    clf = svm.SVC(kernel=kernel)
-    clf.fit(X_tr, y_tr)
-
-    # use metrics to evaluate how good the performance is
-    y_tr_predict = clf.predict(X_tr)
-
-    # Internal test, using training set for accurate performance evaluation
-    internal_score = metrics.accuracy_score(y_tr, y_tr_predict)
-
-    # Standard external test, using test set for accurate performance evaluation
-    y_predict = clf.predict(X_te)
-    external_score = metrics.accuracy_score(y_te, y_predict)
-
-    return internal_score, external_score
-
-
-def decision_tree_experiment_1(X_train, y_train): # Decision tree experiment 1: Sample size vs Accuracy
+def decision_tree_experiment_1(dataset_name, X_train, y_train): # Decision tree experiment 1: Sample size vs Accuracy
     clf = tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=25, max_depth=None)
     start_time = time.time()
     cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
     # cv = None
     train_sizes = np.linspace(.01, 1.0, 50)
     train_sizes, train_scores, test_scores = learning_curve(clf, X_train, y_train,
-                                                            cv = cv,
-                                                            train_sizes = train_sizes)
+                                                            cv=cv,
+                                                            train_sizes=train_sizes)
     end_time = time.time()
     difference = end_time - start_time
     print "DT difference:", difference
 
-    recording_and_plotting(name="DT1",
+    recording_and_plotting(dataset_name, name="DT1",
                            alter=train_sizes,
                            train=train_scores,
                            validation=test_scores, x_title="Sample size", y_title="Score")
 
 
-def decision_tree_experiment_2(X_train, y_train): # Decision tree experiment 2: Leaf size vs Accuracy  (Pruning)
+def decision_tree_experiment_2(dataset_name, X_train, y_train): # Decision tree experiment 2: Leaf size vs Accuracy  (Pruning)
     clf = tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=25, max_depth=None)
     start_time = time.time()
     cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
     # cv = None
-    param_range = range(1, 40, 2)
+    param_range = range(1, 50, 1)
     train_scores, test_scores = validation_curve(clf, X_train, y_train,
                                                  param_name="min_samples_leaf",
                                                  param_range=param_range,
@@ -198,18 +97,18 @@ def decision_tree_experiment_2(X_train, y_train): # Decision tree experiment 2: 
     difference = end_time - start_time
     print "DT 2 difference:", difference
 
-    recording_and_plotting(name="DT2",
+    recording_and_plotting(dataset_name, name="DT2",
                            alter=param_range,
                            train=train_scores,
                            validation=test_scores, x_title="Minimum leaf size", y_title="Score")
 
 
-def decision_tree_experiment_3(X_train, y_train): # Decision tree experiment 3: Max depth vs Accuracy  (Pruning)
+def decision_tree_experiment_3(dataset_name, X_train, y_train): # Decision tree experiment 3: Max depth vs Accuracy  (Pruning)
     clf = tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=25, max_depth=None)
     start_time = time.time()
     cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
     # cv = None
-    param_range = range(1, 40, 2)
+    param_range = range(1, 50, 1)
     print param_range
     train_scores, test_scores = validation_curve(clf, X_train, y_train,
                                                  param_name="max_depth",
@@ -221,13 +120,13 @@ def decision_tree_experiment_3(X_train, y_train): # Decision tree experiment 3: 
     difference = end_time - start_time
     print "DT 3 difference:", difference
 
-    recording_and_plotting(name="DT3",
+    recording_and_plotting(dataset_name, name="DT3",
                            alter=param_range,
                            train=train_scores,
                            validation=test_scores, x_title="Max tree depth", y_title="Score")
 
 
-def boost_dt_experiment_1(X_train, y_train): # Boosted decision tree experiment 1: Sample size vs Accuracy
+def boost_dt_experiment_1(dataset_name, X_train, y_train): # Boosted decision tree experiment 1: Sample size vs Accuracy
     clf = AdaBoostClassifier(tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=25), n_estimators=5, learning_rate=1.0)
     start_time = time.time()
     cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
@@ -241,20 +140,20 @@ def boost_dt_experiment_1(X_train, y_train): # Boosted decision tree experiment 
     difference = end_time - start_time
     print "BoostDT1 difference:", difference
 
-    recording_and_plotting(name="BoostDT1",
+    recording_and_plotting(dataset_name, name="BoostDT1",
                            alter=train_sizes,
                            train=train_scores,
                            validation=test_scores, x_title="Sample size", y_title="Score")
 
 
-def boost_dt_experiment_2(X_train, y_train): # Boosted Decision tree experiment 2: Leaf size vs Accuracy  (Pruning)
+def boost_dt_experiment_2(dataset_name, X_train, y_train): # Boosted Decision tree experiment 2: Leaf size vs Accuracy  (Pruning)
     clf = AdaBoostClassifier(base_estimator=tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=25), n_estimators=5, learning_rate=1.0)
     start_time = time.time()
     cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
     # cv = None
     param_range = []
     alter_list = []
-    for i in range(1, 40, 2):
+    for i in range(1, 50, 1):
         param_range.append(tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=i))
         alter_list.append(i)
     # print param_range
@@ -268,13 +167,13 @@ def boost_dt_experiment_2(X_train, y_train): # Boosted Decision tree experiment 
     difference = end_time - start_time
     print "BoostDT2 difference:", difference
 
-    recording_and_plotting(name="BoostDT2",
+    recording_and_plotting(dataset_name, name="BoostDT2",
                            alter=alter_list,
                            train=train_scores,
                            validation=test_scores, x_title="Minimum leaf size in Base estimator", y_title="Score")
 
 
-def boost_dt_experiment_3(X_train, y_train): # Boosted Decision tree experiment 3: Number of estim vs Accuracy
+def boost_dt_experiment_3(dataset_name, X_train, y_train): # Boosted Decision tree experiment 3: n_estimators vs Score
     clf = AdaBoostClassifier(tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=25),
                              n_estimators=5,
                              learning_rate=1.0)
@@ -292,12 +191,13 @@ def boost_dt_experiment_3(X_train, y_train): # Boosted Decision tree experiment 
     difference = end_time - start_time
     print "BoostDT3 difference:", difference
 
-    recording_and_plotting(name="BoostDT3",
+    recording_and_plotting(dataset_name, name="BoostDT3",
                            alter=param_range,
                            train=train_scores,
                            validation=test_scores, x_title="n_estimators", y_title="Score")
 
-def boost_dt_experiment_4(X_train, y_train): # Boosted Decision tree experiment 4: Learning rate vs Accuracy
+
+def boost_dt_experiment_4(dataset_name, X_train, y_train): # Boosted Decision tree experiment 4: Learning rate vs Accuracy
     clf = AdaBoostClassifier(tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=25),
                              n_estimators=5,
                              learning_rate=1.0)
@@ -315,13 +215,13 @@ def boost_dt_experiment_4(X_train, y_train): # Boosted Decision tree experiment 
     difference = end_time - start_time
     print "BoostDT4 difference:", difference
 
-    recording_and_plotting(name="BoostDT4",
+    recording_and_plotting(dataset_name, name="BoostDT4",
                            alter=param_range,
                            train=train_scores,
                            validation=test_scores, x_title="learning_rate", y_title="Score")
 
 
-def ann_experiment_1(X_train, y_train): # ANN experiment 1: Sample size vs Accuracy
+def ann_experiment_1(dataset_name, X_train, y_train): # ANN experiment 1: Sample size vs Accuracy
     clf = MLPClassifier(hidden_layer_sizes=(5, ), random_state=1, max_iter=500)
     start_time = time.time()
     cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
@@ -335,13 +235,13 @@ def ann_experiment_1(X_train, y_train): # ANN experiment 1: Sample size vs Accur
     difference = end_time - start_time
     print "ANN difference:", difference
 
-    recording_and_plotting(name="ANN1",
+    recording_and_plotting(dataset_name, name="ANN1",
                            alter=train_sizes,
                            train=train_scores,
                            validation=test_scores, x_title="Sample size", y_title="Score")
 
 
-def ann_experiment_2(X_train, y_train): # ANN experiment 2: hidden layer size
+def ann_experiment_2(dataset_name, X_train, y_train): # ANN experiment 2: hidden layer size
     clf = MLPClassifier(hidden_layer_sizes=(5, ), random_state=1, max_iter=500)
     start_time = time.time()
     cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
@@ -362,12 +262,13 @@ def ann_experiment_2(X_train, y_train): # ANN experiment 2: hidden layer size
     difference = end_time - start_time
     print "ANN2 difference:", difference
 
-    recording_and_plotting(name="ANN2",
+    recording_and_plotting(dataset_name, name="ANN2",
                            alter=alter_list,
                            train=train_scores,
                            validation=test_scores, x_title="Hidden layer size", y_title="Score")
 
-def ann_experiment_3(X_train, y_train): # ANN experiment 3: alpha
+
+def ann_experiment_3(dataset_name, X_train, y_train): # ANN experiment 3: alpha
     clf = MLPClassifier(hidden_layer_sizes=(5, ), random_state=1, max_iter=500)
     start_time = time.time()
     cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
@@ -383,14 +284,14 @@ def ann_experiment_3(X_train, y_train): # ANN experiment 3: alpha
     difference = end_time - start_time
     print "ANN3 difference:", difference
 
-    recording_and_plotting(name="ANN3",
+    recording_and_plotting(dataset_name, name="ANN3",
                            alter=param_range,
                            train=train_scores,
                            validation=test_scores, x_title="alpha", y_title="Score")
 
 
-def knn_experiment_1(X_train, y_train): # ANN experiment 1: Sample size vs Accuracy
-    clf = neighbors.KNeighborsClassifier(n_neighbors=5)
+def knn_experiment_1(dataset_name, X_train, y_train): # ANN experiment 1: Sample size vs Accuracy
+    clf = neighbors.KNeighborsClassifier(n_neighbors=5, p=2)
     start_time = time.time()
     cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
     # cv = None
@@ -403,35 +304,55 @@ def knn_experiment_1(X_train, y_train): # ANN experiment 1: Sample size vs Accur
     difference = end_time - start_time
     print "KNN difference:", difference
 
-    recording_and_plotting(name="KNN1",
+    recording_and_plotting(dataset_name, name="KNN1",
                            alter=train_sizes,
                            train=train_scores,
                            validation=test_scores, x_title="Sample size", y_title="Score")
 
 
-def knn_experiment_2(X_train, y_train): # Decision tree experiment 2: Leaf size vs Accuracy  (Pruning)
-    clf = neighbors.KNeighborsClassifier(n_neighbors=5)
+def knn_experiment_2(dataset_name, X_train, y_train): # KNN experiment 2: n_neighbours vs. score
+    clf = neighbors.KNeighborsClassifier(n_neighbors=5, p=2)
     start_time = time.time()
     cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
     # cv = None
-    param_range = range(1, 40, 2)
+
+    train_sizes = np.linspace(.01, 1.0, 50)
+    train_sizes, train_scores, test_scores = learning_curve(clf, X_train, y_train,
+                                                            cv=cv,
+                                                            train_sizes=train_sizes)
+    end_time = time.time()
+    difference = end_time - start_time
+    print "KNN difference:", difference
+
+    recording_and_plotting(dataset_name, name="KNN1",
+                           alter=train_sizes,
+                           train=train_scores,
+                           validation=test_scores, x_title="Sample size", y_title="Score")
+
+
+def knn_experiment_3(dataset_name, X_train, y_train): # Decision tree experiment 3: p vs score
+    clf = neighbors.KNeighborsClassifier(n_neighbors=5, p=2)
+    start_time = time.time()
+    cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
+    # cv = None
+    param_range = range(1, 20, 2)
     train_scores, test_scores = validation_curve(clf, X_train, y_train,
-                                                 param_name="n_neighbors",
+                                                 param_name="p",
                                                  param_range=param_range,
                                                  cv=cv,
                                                  scoring="accuracy",
                                                  n_jobs=1)
     end_time = time.time()
     difference = end_time - start_time
-    print "KNN 2 difference:", difference
+    print "KNN 3 difference:", difference
 
-    recording_and_plotting(name="KNN2",
+    recording_and_plotting(dataset_name, name="KNN3",
                            alter=param_range,
                            train=train_scores,
-                           validation=test_scores, x_title="n_neighbors", y_title="Score")
+                           validation=test_scores, x_title="p", y_title="Score")
 
 
-def svm_experiment_1(X_train, y_train): # SVM experiment 1: Sample size vs Accuracy
+def svm_experiment_1(dataset_name, X_train, y_train): # SVM experiment 1: Sample size vs Accuracy
     clf = svm.SVC(kernel='rbf')
     start_time = time.time()
     cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
@@ -445,18 +366,18 @@ def svm_experiment_1(X_train, y_train): # SVM experiment 1: Sample size vs Accur
     difference = end_time - start_time
     print "SVM difference:", difference
 
-    recording_and_plotting(name="SVM1",
+    recording_and_plotting(dataset_name, name="SVM1",
                            alter=train_sizes,
                            train=train_scores,
                            validation=test_scores, x_title="Sample size", y_title="Score")
 
 
-def svm_experiment_2(X_train, y_train): # SVM experiment 2: C
+def svm_experiment_2(dataset_name, X_train, y_train): # SVM experiment 2: C
     clf = svm.SVC(C = 1.0, kernel='rbf')
     start_time = time.time()
     cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
     # cv = None
-    param_range = np.linspace(0.01, 1.0, 50)
+    param_range = np.linspace(0.01, 10, 50)
     print param_range
     train_scores, test_scores = validation_curve(clf, X_train, y_train,
                                                  param_name="C",
@@ -468,13 +389,13 @@ def svm_experiment_2(X_train, y_train): # SVM experiment 2: C
     difference = end_time - start_time
     print "SVM 2 difference:", difference
 
-    recording_and_plotting(name="SVM2",
+    recording_and_plotting(dataset_name, name="SVM2",
                            alter=param_range,
                            train=train_scores,
                            validation=test_scores, x_title="C", y_title="Score")
 
 
-def svm_experiment_3(X_train, y_train): # SVM experiment 2: C alternation
+def svm_experiment_3(dataset_name, X_train, y_train): # SVM experiment 2: C alternation
     clf = svm.SVC(C = 1.0, kernel='rbf')
     start_time = time.time()
     cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
@@ -490,7 +411,7 @@ def svm_experiment_3(X_train, y_train): # SVM experiment 2: C alternation
     difference = end_time - start_time
     print "SVM 3 difference:", difference
 
-    recording_and_plotting(name="SVM3",
+    recording_and_plotting(dataset_name, name="SVM3",
                            alter=param_range,
                            train=train_scores,
                            validation=test_scores, x_title="kernel", y_title="Score")
@@ -511,47 +432,126 @@ if __name__=="__main__":
 
     # standardize the original data - this is important but usually neglected by newbies.
     scaler = preprocessing.StandardScaler()
+    # print X_train[:5, :]
     X_train = scaler.fit_transform(X_train)
+    # print X_train[:5, :]
     X_test = scaler.transform(X_test)
 
-
-    # load and standardize data set #2
-    # pass
+    set1_name = "mnist"
 
     # # Decision tree experiment 1: Sample size vs Accuracy
-    # decision_tree_experiment_1(X_train, y_train)
-    #
-    # # Decision tree experiment 2: Leaf size vs Accuracy  (Pruning)
-    decision_tree_experiment_2(X_train, y_train) # Leaf size vs Accuracy  (Pruning)
-    decision_tree_experiment_3(X_train, y_train) # Max depth vs Accuracy
+    # decision_tree_experiment_1(set1_name, X_train, y_train)
+    # decision_tree_experiment_2(set1_name, X_train, y_train)  # Leaf size vs Accuracy  (Pruning)
+    # decision_tree_experiment_3(set1_name, X_train, y_train)  # Max depth vs Accuracy
     #
     # # Boosted decision tree experiment 1: Sample size vs Accuracy
-    # boost_dt_experiment_1(X_train, y_train)
-    #
-    # # Boosted decision tree experiment 2: Leaf size vs Accuracy  (Pruning)
-    boost_dt_experiment_2(X_train, y_train)
-    # boost_dt_experiment_3(X_train, y_train)
-    # boost_dt_experiment_4(X_train, y_train)
-    #
-    # # # ANN experiment 1: Sample size vs Accuracy
-    # ann_experiment_1(X_train, y_train)
-    #
-    # # # ANN experiment 1: Sample size vs Accuracy
-    # ann_experiment_2(X_train, y_train)
-    # ann_experiment_3(X_train, y_train)
-    # # #
-    # # # # KNN experiment 1: Sample size vs Accuracy
-    # knn_experiment_1(X_train, y_train)
-    #
-    # # # KNN experiment 1: Sample size vs Accuracy
-    knn_experiment_2(X_train, y_train)
-    # #
-    # # # SVM experiment 1: Sample size vs Accuracy
-    # svm_experiment_1(X_train, y_train)
-    # #
-    # # # SVM experiment 2: Sample size vs Accuracy
-    # svm_experiment_2(X_train, y_train)
-    # svm_experiment_3(X_train, y_train)
+    # boost_dt_experiment_1(set1_name, X_train, y_train)
+    # boost_dt_experiment_2(set1_name, X_train, y_train)
+    # boost_dt_experiment_3(set1_name, X_train, y_train)
+    # boost_dt_experiment_4(set1_name, X_train, y_train)
+
+    # # ANN experiment 1: Sample size vs Accuracy
+    # ann_experiment_1(set1_name, X_train, y_train)
+    # ann_experiment_2(set1_name, X_train, y_train)
+    # ann_experiment_3(set1_name, X_train, y_train)
+
+    # # KNN experiment 1: Sample size vs Accuracy
+    # knn_experiment_1(set1_name, X_train, y_train)
+    # knn_experiment_2(set1_name, X_train, y_train)  # n_neighbours vs. score
+    # knn_experiment_3(set1_name, X_train, y_train)  # p vs. score
+
+    # # SVM experiment 1: Sample size vs Accuracy
+    # svm_experiment_1(set1_name, X_train, y_train)
+    # svm_experiment_2(set1_name, X_train, y_train)  # C vs. score
+    # svm_experiment_3(set1_name, X_train, y_train)  # kernel vs. score
+
+    '''load and standardize data set #2'''
+
+    set2 = np.genfromtxt('bank.csv', delimiter=';', dtype=None)[1:, :]
+
+    set2[set2 == '"unknown"'] = 0
+    set2[set2 == '"admin."'] = 1
+    set2[set2 == '"unemployed"'] = 2
+    set2[set2 == '"management"'] = 3
+    set2[set2 == '"housemaid"'] = 4
+    set2[set2 == '"entrepreneur"'] = 5
+    set2[set2 == '"student"'] = 6
+    set2[set2 == '"blue-collar"'] = 7
+    set2[set2 == '"self-employed"'] = 8
+    set2[set2 == '"retired"'] = 9
+    set2[set2 == '"technician"'] = 10
+    set2[set2 == '"services"'] = 11
+
+    set2[set2 == '"married"'] = 0
+    set2[set2 == '"divorced"'] = 1
+    set2[set2 == '"single"'] = 2
+
+    set2[set2 == '"jan"'] = 0
+    set2[set2 == '"feb"'] = 1
+    set2[set2 == '"mar"'] = 2
+    set2[set2 == '"apr"'] = 3
+    set2[set2 == '"may"'] = 4
+    set2[set2 == '"jun"'] = 5
+    set2[set2 == '"jul"'] = 6
+    set2[set2 == '"aug"'] = 7
+    set2[set2 == '"sep"'] = 8
+    set2[set2 == '"oct"'] = 9
+    set2[set2 == '"nov"'] = 10
+    set2[set2 == '"dec"'] = 11
+
+    set2[set2 == '"yes"'] = 1
+    set2[set2 == '"no"'] = 0
+
+    set2[set2 == '"secondary"'] = 1
+    set2[set2 == '"primary"'] = 2
+    set2[set2 == '"tertiary"'] = 3
+
+    set2[set2 == '"telephone"'] = 1
+    set2[set2 == '"cellular"'] = 2
+
+    set2[set2 == '"other"'] = 1
+    set2[set2 == '"failure"'] = 2
+    set2[set2 == '"success"'] = 3
+
+    set2 = set2.astype(int)
+    # print set2[:5, :]
+    # scaler = preprocessing.StandardScaler()
+    # set2 = scaler.fit_transform(set2)
+    # print set2[:5, :]
+    # separating set2 into X and y, then train and test
+    X2 = set2[:, :-1]
+    y2 = set2[:, -1]
+    X2_train, X2_test, y2_train, y2_test = train_test_split(X2, y2, test_size=0.2, random_state=0)
+
+    set2_name = "bank"
+
+    # Decision tree experiment:
+    decision_tree_experiment_1(set2_name, X2_train, y2_train)
+    decision_tree_experiment_2(set2_name, X2_train, y2_train)  # Leaf size vs Accuracy  (Pruning)
+    decision_tree_experiment_3(set2_name, X2_train, y2_train)  # Max depth vs Accuracy
+
+    # Boosted decision tree experiment:
+    boost_dt_experiment_1(set2_name, X2_train, y2_train)
+    boost_dt_experiment_3(set2_name, X2_train, y2_train)  # Leaf size vs Accuracy  (Pruning)
+    boost_dt_experiment_4(set2_name, X2_train, y2_train)
+
+    # ANN experiment 1: Sample size vs Accuracy
+    ann_experiment_1(set2_name, X2_train, y2_train)
+    ann_experiment_2(set2_name, X2_train, y2_train)
+    ann_experiment_3(set2_name, X2_train, y2_train)
+
+    # KNN experiment 1: Sample size vs Accuracy
+    knn_experiment_1(set2_name, X2_train, y2_train)
+    knn_experiment_2(set2_name, X2_train, y2_train)  # n_neighbours vs. score
+    # knn_experiment_3(set2_name, X2_train, y2_train)  # p vs. score
+
+    # SVM experiment 1: Sample size vs Accuracy
+    svm_experiment_1(set2_name, X2_train, y2_train)
+    svm_experiment_2(set2_name, X2_train, y2_train)  # C vs. score
+    svm_experiment_3(set2_name, X2_train, y2_train)  # kernel vs. score
+
+
+
 
 
 
