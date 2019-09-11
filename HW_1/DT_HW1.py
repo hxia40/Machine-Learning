@@ -466,8 +466,9 @@ if __name__=="__main__":
 
     # SVM experiment 1: Sample size vs Accuracy
     svm_experiment_1(set1_name, X_train, y_train)
-    svm_experiment_2(set1_name, X_train, y_train)  # C vs. score
     svm_experiment_3(set1_name, X_train, y_train)  # kernel vs. score
+    svm_experiment_2(set1_name, X_train, y_train)  # C vs. score
+   
 
     '''load and standardize data set #2'''
 
