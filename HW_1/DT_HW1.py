@@ -85,7 +85,7 @@ def decision_tree_experiment_2(dataset_name, X_train, y_train): # Decision tree 
     clf = tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=25, max_depth=None)
     start_time = time.time()
     cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
-    # cv = None
+    # cv = 10
     param_range = range(1, 50, 1)
     train_scores, test_scores = validation_curve(clf, X_train, y_train,
                                                  param_name="min_samples_leaf",
@@ -315,7 +315,7 @@ def knn_experiment_2(dataset_name, X_train, y_train): # KNN experiment 2: n_neig
     start_time = time.time()
     cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
     # cv = None
-    param_range = range(1,50,10)
+    param_range = range(1,50,1)
     print param_range
     train_scores, test_scores = validation_curve(clf, X_train, y_train,
                                                  param_name="n_neighbors",
@@ -424,138 +424,138 @@ def svm_experiment_3(dataset_name, X_train, y_train): # SVM experiment 2: C alte
 if __name__=="__main__":
     '''load and standardize data set #1'''
 
-    # train = np.genfromtxt('fashion-mnist_train_minor.csv', delimiter=',')[1:, :]
-    # test = np.genfromtxt('fashion-mnist_test_minor.csv', delimiter=',')[1:, :]
-    # # train = np.genfromtxt('fashion-mnist_train.csv', delimiter=',')[1:, :]
-    # # test = np.genfromtxt('fashion-mnist_test.csv', delimiter=',')[1:, :]
-    #
-    # X_train = train[:, 1:]
-    # y_train = train[:, 0]
-    # X_test = test[:, 1:]
-    # y_test = test[:, 0]
-    #
-    # # standardize the original data - this is important but usually neglected by newbies.
-    # scaler = preprocessing.StandardScaler()
-    # # print X_train[:5, :]
-    # X_train = scaler.fit_transform(X_train)
-    # # print X_train[:5, :]
-    # X_test = scaler.transform(X_test)
-    #
-    # set1_name = "mnist"
+    train = np.genfromtxt('fashion-mnist_train_minor.csv', delimiter=',')[1:, :]
+    test = np.genfromtxt('fashion-mnist_test_minor.csv', delimiter=',')[1:, :]
+    # train = np.genfromtxt('fashion-mnist_train.csv', delimiter=',')[1:, :]
+    # test = np.genfromtxt('fashion-mnist_test.csv', delimiter=',')[1:, :]
 
-    # # Decision tree experiment 1: Sample size vs Accuracy
-    # decision_tree_experiment_1(set1_name, X_train, y_train)
-    # decision_tree_experiment_2(set1_name, X_train, y_train)  # Leaf size vs Accuracy  (Pruning)
-    # decision_tree_experiment_3(set1_name, X_train, y_train)  # Max depth vs Accuracy
-    #
-    # # Boosted decision tree experiment 1: Sample size vs Accuracy
-    # boost_dt_experiment_1(set1_name, X_train, y_train)
-    # boost_dt_experiment_2(set1_name, X_train, y_train)
-    # boost_dt_experiment_3(set1_name, X_train, y_train)
-    # boost_dt_experiment_4(set1_name, X_train, y_train)
+    X_train = train[:, 1:]
+    y_train = train[:, 0]
+    X_test = test[:, 1:]
+    y_test = test[:, 0]
 
-    # # ANN experiment 1: Sample size vs Accuracy
-    # ann_experiment_1(set1_name, X_train, y_train)
-    # ann_experiment_2(set1_name, X_train, y_train)
-    # ann_experiment_3(set1_name, X_train, y_train)
+    # standardize the original data - this is important but usually neglected by newbies.
+    scaler = preprocessing.StandardScaler()
+    # print X_train[:5, :]
+    X_train = scaler.fit_transform(X_train)
+    # print X_train[:5, :]
+    X_test = scaler.transform(X_test)
 
-    # # KNN experiment 1: Sample size vs Accuracy
-    # knn_experiment_1(set1_name, X_train, y_train)
-    # knn_experiment_2(set1_name, X_train, y_train)  # n_neighbours vs. score
-    # knn_experiment_3(set1_name, X_train, y_train)  # algorithm vs. score
+    set1_name = "mnist"
 
-    # # SVM experiment 1: Sample size vs Accuracy
-    # svm_experiment_1(set1_name, X_train, y_train)
-    # svm_experiment_2(set1_name, X_train, y_train)  # C vs. score
-    # svm_experiment_3(set1_name, X_train, y_train)  # kernel vs. score
+    # Decision tree experiment 1: Sample size vs Accuracy
+    decision_tree_experiment_1(set1_name, X_train, y_train)
+    decision_tree_experiment_2(set1_name, X_train, y_train)  # Leaf size vs Accuracy  (Pruning)
+    decision_tree_experiment_3(set1_name, X_train, y_train)  # Max depth vs Accuracy
+
+    # Boosted decision tree experiment 1: Sample size vs Accuracy
+    boost_dt_experiment_1(set1_name, X_train, y_train)
+    boost_dt_experiment_2(set1_name, X_train, y_train)
+    boost_dt_experiment_3(set1_name, X_train, y_train)
+    boost_dt_experiment_4(set1_name, X_train, y_train)
+
+    # ANN experiment 1: Sample size vs Accuracy
+    ann_experiment_1(set1_name, X_train, y_train)
+    ann_experiment_2(set1_name, X_train, y_train)
+    ann_experiment_3(set1_name, X_train, y_train)
+
+    # KNN experiment 1: Sample size vs Accuracy
+    knn_experiment_1(set1_name, X_train, y_train)
+    knn_experiment_2(set1_name, X_train, y_train)  # n_neighbours vs. score
+    knn_experiment_3(set1_name, X_train, y_train)  # algorithm vs. score
+
+    # SVM experiment 1: Sample size vs Accuracy
+    svm_experiment_1(set1_name, X_train, y_train)
+    svm_experiment_2(set1_name, X_train, y_train)  # C vs. score
+    svm_experiment_3(set1_name, X_train, y_train)  # kernel vs. score
 
     '''load and standardize data set #2'''
 
-    set2 = np.genfromtxt('bank-full.csv', delimiter=';', dtype=None)[1:, :]
-
-    set2[set2 == '"unknown"'] = 0
-    set2[set2 == '"admin."'] = 1
-    set2[set2 == '"unemployed"'] = 2
-    set2[set2 == '"management"'] = 3
-    set2[set2 == '"housemaid"'] = 4
-    set2[set2 == '"entrepreneur"'] = 5
-    set2[set2 == '"student"'] = 6
-    set2[set2 == '"blue-collar"'] = 7
-    set2[set2 == '"self-employed"'] = 8
-    set2[set2 == '"retired"'] = 9
-    set2[set2 == '"technician"'] = 10
-    set2[set2 == '"services"'] = 11
-
-    set2[set2 == '"married"'] = 0
-    set2[set2 == '"divorced"'] = 1
-    set2[set2 == '"single"'] = 2
-
-    set2[set2 == '"jan"'] = 0
-    set2[set2 == '"feb"'] = 1
-    set2[set2 == '"mar"'] = 2
-    set2[set2 == '"apr"'] = 3
-    set2[set2 == '"may"'] = 4
-    set2[set2 == '"jun"'] = 5
-    set2[set2 == '"jul"'] = 6
-    set2[set2 == '"aug"'] = 7
-    set2[set2 == '"sep"'] = 8
-    set2[set2 == '"oct"'] = 9
-    set2[set2 == '"nov"'] = 10
-    set2[set2 == '"dec"'] = 11
-
-    set2[set2 == '"yes"'] = 1
-    set2[set2 == '"no"'] = 0
-
-    set2[set2 == '"secondary"'] = 1
-    set2[set2 == '"primary"'] = 2
-    set2[set2 == '"tertiary"'] = 3
-
-    set2[set2 == '"telephone"'] = 1
-    set2[set2 == '"cellular"'] = 2
-
-    set2[set2 == '"other"'] = 1
-    set2[set2 == '"failure"'] = 2
-    set2[set2 == '"success"'] = 3
-
-    set2 = set2.astype(int)
-
-    # separating set2 into X and y, then train and test
-    X2 = set2[:, :-1]
-    # print X2[:5, :]
-    scaler = preprocessing.StandardScaler()
-    X2 = scaler.fit_transform(X2)
-    # print X2[:5, :]
-    y2 = set2[:, -1]
-    # print y2
-    X2_train, X2_test, y2_train, y2_test = train_test_split(X2, y2, test_size=0.2, random_state=0)
+    # set2 = np.genfromtxt('bank-full.csv', delimiter=';', dtype=None)[1:, :]
     #
-    set2_name = "bank"
+    # set2[set2 == '"unknown"'] = 0
+    # set2[set2 == '"admin."'] = 1
+    # set2[set2 == '"unemployed"'] = 2
+    # set2[set2 == '"management"'] = 3
+    # set2[set2 == '"housemaid"'] = 4
+    # set2[set2 == '"entrepreneur"'] = 5
+    # set2[set2 == '"student"'] = 6
+    # set2[set2 == '"blue-collar"'] = 7
+    # set2[set2 == '"self-employed"'] = 8
+    # set2[set2 == '"retired"'] = 9
+    # set2[set2 == '"technician"'] = 10
+    # set2[set2 == '"services"'] = 11
     #
-    # Decision tree experiment:
-    decision_tree_experiment_1(set2_name, X2_train, y2_train)
-    decision_tree_experiment_2(set2_name, X2_train, y2_train)  # Leaf size vs Accuracy  (Pruning)
-    decision_tree_experiment_3(set2_name, X2_train, y2_train)  # Max depth vs Accuracy
-
-    # Boosted decision tree experiment:
-    boost_dt_experiment_1(set2_name, X2_train, y2_train)
-    boost_dt_experiment_2(set2_name, X2_train, y2_train)
-    boost_dt_experiment_3(set2_name, X2_train, y2_train)  # Leaf size vs Accuracy  (Pruning)
-    boost_dt_experiment_4(set2_name, X2_train, y2_train)
-
-    # ANN experiment 1: Sample size vs Accuracy
-    ann_experiment_1(set2_name, X2_train, y2_train)
-    ann_experiment_2(set2_name, X2_train, y2_train)
-    ann_experiment_3(set2_name, X2_train, y2_train)
-
-    # KNN experiment 1: Sample size vs Accuracy
-    knn_experiment_1(set2_name, X2_train, y2_train)
-    knn_experiment_2(set2_name, X2_train, y2_train)  # n_neighbours vs. score
-    knn_experiment_3(set2_name, X2_train, y2_train)  # algorithm vs. score
-
-    # SVM experiment 1: Sample size vs Accuracy
-    svm_experiment_1(set2_name, X2_train, y2_train)
-    svm_experiment_2(set2_name, X2_train, y2_train)  # C vs. score
-    svm_experiment_3(set2_name, X2_train, y2_train)  # kernel vs. score
+    # set2[set2 == '"married"'] = 0
+    # set2[set2 == '"divorced"'] = 1
+    # set2[set2 == '"single"'] = 2
+    #
+    # set2[set2 == '"jan"'] = 0
+    # set2[set2 == '"feb"'] = 1
+    # set2[set2 == '"mar"'] = 2
+    # set2[set2 == '"apr"'] = 3
+    # set2[set2 == '"may"'] = 4
+    # set2[set2 == '"jun"'] = 5
+    # set2[set2 == '"jul"'] = 6
+    # set2[set2 == '"aug"'] = 7
+    # set2[set2 == '"sep"'] = 8
+    # set2[set2 == '"oct"'] = 9
+    # set2[set2 == '"nov"'] = 10
+    # set2[set2 == '"dec"'] = 11
+    #
+    # set2[set2 == '"yes"'] = 1
+    # set2[set2 == '"no"'] = 0
+    #
+    # set2[set2 == '"secondary"'] = 1
+    # set2[set2 == '"primary"'] = 2
+    # set2[set2 == '"tertiary"'] = 3
+    #
+    # set2[set2 == '"telephone"'] = 1
+    # set2[set2 == '"cellular"'] = 2
+    #
+    # set2[set2 == '"other"'] = 1
+    # set2[set2 == '"failure"'] = 2
+    # set2[set2 == '"success"'] = 3
+    #
+    # set2 = set2.astype(int)
+    #
+    # # separating set2 into X and y, then train and test
+    # X2 = set2[:, :-1]
+    # # print X2[:5, :]
+    # scaler = preprocessing.StandardScaler()
+    # X2 = scaler.fit_transform(X2)
+    # # print X2[:5, :]
+    # y2 = set2[:, -1]
+    # # print y2
+    # X2_train, X2_test, y2_train, y2_test = train_test_split(X2, y2, test_size=0.2, random_state=0)
+    # #
+    # set2_name = "bank"
+    #
+    # # Decision tree experiment:
+    # decision_tree_experiment_1(set2_name, X2_train, y2_train)
+    # decision_tree_experiment_2(set2_name, X2_train, y2_train)  # Leaf size vs Accuracy  (Pruning)
+    # decision_tree_experiment_3(set2_name, X2_train, y2_train)  # Max depth vs Accuracy
+    #
+    # # Boosted decision tree experiment:
+    # boost_dt_experiment_1(set2_name, X2_train, y2_train)
+    # boost_dt_experiment_2(set2_name, X2_train, y2_train)
+    # boost_dt_experiment_3(set2_name, X2_train, y2_train)  # Leaf size vs Accuracy  (Pruning)
+    # boost_dt_experiment_4(set2_name, X2_train, y2_train)
+    #
+    # # ANN experiment 1: Sample size vs Accuracy
+    # ann_experiment_1(set2_name, X2_train, y2_train)
+    # ann_experiment_2(set2_name, X2_train, y2_train)
+    # ann_experiment_3(set2_name, X2_train, y2_train)
+    #
+    # # KNN experiment 1: Sample size vs Accuracy
+    # knn_experiment_1(set2_name, X2_train, y2_train)
+    # knn_experiment_2(set2_name, X2_train, y2_train)  # n_neighbours vs. score
+    # knn_experiment_3(set2_name, X2_train, y2_train)  # algorithm vs. score
+    #
+    # # SVM experiment 1: Sample size vs Accuracy
+    # svm_experiment_1(set2_name, X2_train, y2_train)
+    # svm_experiment_2(set2_name, X2_train, y2_train)  # C vs. score
+    # svm_experiment_3(set2_name, X2_train, y2_train)  # kernel vs. score
 
 
 
