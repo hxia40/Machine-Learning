@@ -1,0 +1,17 @@
+mnist
+DT difference: 68.0916879177
+DT 2 difference: 156.954186916
+DT 3 difference: 138.077687025
+BoostDT1 difference: 374.018045902
+BoostDT2 difference: 856.343875885
+BoostDT3 difference: 8611.86684489
+BoostDT4 difference: 838.84709692
+ANN difference: 1324.07335019
+ANN2 difference: 2255.16459203
+ANN3 difference: 2653.30553794
+KNN difference: 673.519257069
+KNN 2 difference: 1630.13748908
+KNN 3 difference: 92.9645619392
+SVM difference: 600.553359985
+SVM 2 difference: 1568.10943508
+SVM 3 difference: 107.091856956
