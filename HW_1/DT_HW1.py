@@ -291,7 +291,7 @@ def ann_experiment_3(dataset_name, X_train, y_train): # ANN experiment 3: alpha
 
 
 def knn_experiment_1(dataset_name, X_train, y_train): # ANN experiment 1: Sample size vs Accuracy
-    clf = neighbors.KNeighborsClassifier(n_neighbors=5, p=2)
+    clf = neighbors.KNeighborsClassifier(n_neighbors=5, algorithm = 'auto')
     start_time = time.time()
     cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
     # cv = None
@@ -311,33 +311,37 @@ def knn_experiment_1(dataset_name, X_train, y_train): # ANN experiment 1: Sample
 
 
 def knn_experiment_2(dataset_name, X_train, y_train): # KNN experiment 2: n_neighbours vs. score
-    clf = neighbors.KNeighborsClassifier(n_neighbors=5, p=2)
+    clf = neighbors.KNeighborsClassifier(n_neighbors=5, algorithm='auto')
     start_time = time.time()
     cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
     # cv = None
-
-    train_sizes = np.linspace(.01, 1.0, 50)
-    train_sizes, train_scores, test_scores = learning_curve(clf, X_train, y_train,
-                                                            cv=cv,
-                                                            train_sizes=train_sizes)
+    param_range = range(1,50,10)
+    print param_range
+    train_scores, test_scores = validation_curve(clf, X_train, y_train,
+                                                 param_name="n_neighbors",
+                                                 param_range=param_range,
+                                                 cv=cv,
+                                                 scoring="accuracy",
+                                                 n_jobs=1)
     end_time = time.time()
     difference = end_time - start_time
-    print "KNN difference:", difference
+    print "KNN 2 difference:", difference
 
-    recording_and_plotting(dataset_name, name="KNN1",
-                           alter=train_sizes,
+    recording_and_plotting(dataset_name, name="KNN2",
+                           alter=param_range,
                            train=train_scores,
-                           validation=test_scores, x_title="Sample size", y_title="Score")
+                           validation=test_scores, x_title="n_neighbors", y_title="Score")
 
 
 def knn_experiment_3(dataset_name, X_train, y_train): # Decision tree experiment 3: p vs score
-    clf = neighbors.KNeighborsClassifier(n_neighbors=5, p=2)
+    clf = neighbors.KNeighborsClassifier(n_neighbors=5, algorithm = 'auto')
     start_time = time.time()
     cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
     # cv = None
-    param_range = range(1, 20, 2)
+    param_range = ['auto', 'ball_tree', 'kd_tree', 'brute']
+    print param_range
     train_scores, test_scores = validation_curve(clf, X_train, y_train,
-                                                 param_name="p",
+                                                 param_name="algorithm",
                                                  param_range=param_range,
                                                  cv=cv,
                                                  scoring="accuracy",
@@ -349,7 +353,7 @@ def knn_experiment_3(dataset_name, X_train, y_train): # Decision tree experiment
     recording_and_plotting(dataset_name, name="KNN3",
                            alter=param_range,
                            train=train_scores,
-                           validation=test_scores, x_title="p", y_title="Score")
+                           validation=test_scores, x_title="algorithm", y_title="Score")
 
 
 def svm_experiment_1(dataset_name, X_train, y_train): # SVM experiment 1: Sample size vs Accuracy
@@ -418,26 +422,26 @@ def svm_experiment_3(dataset_name, X_train, y_train): # SVM experiment 2: C alte
 
 
 if __name__=="__main__":
-    # load and standardize data set #1
+    '''load and standardize data set #1'''
 
-    train = np.genfromtxt('fashion-mnist_train_minor.csv', delimiter=',')[1:, :]
-    test = np.genfromtxt('fashion-mnist_test_minor.csv', delimiter=',')[1:, :]
-    # train = np.genfromtxt('fashion-mnist_train.csv', delimiter=',')[1:, :]
-    # test = np.genfromtxt('fashion-mnist_test.csv', delimiter=',')[1:, :]
-
-    X_train = train[:, 1:]
-    y_train = train[:, 0]
-    X_test = test[:, 1:]
-    y_test = test[:, 0]
-
-    # standardize the original data - this is important but usually neglected by newbies.
-    scaler = preprocessing.StandardScaler()
-    # print X_train[:5, :]
-    X_train = scaler.fit_transform(X_train)
-    # print X_train[:5, :]
-    X_test = scaler.transform(X_test)
-
-    set1_name = "mnist"
+    # train = np.genfromtxt('fashion-mnist_train_minor.csv', delimiter=',')[1:, :]
+    # test = np.genfromtxt('fashion-mnist_test_minor.csv', delimiter=',')[1:, :]
+    # # train = np.genfromtxt('fashion-mnist_train.csv', delimiter=',')[1:, :]
+    # # test = np.genfromtxt('fashion-mnist_test.csv', delimiter=',')[1:, :]
+    #
+    # X_train = train[:, 1:]
+    # y_train = train[:, 0]
+    # X_test = test[:, 1:]
+    # y_test = test[:, 0]
+    #
+    # # standardize the original data - this is important but usually neglected by newbies.
+    # scaler = preprocessing.StandardScaler()
+    # # print X_train[:5, :]
+    # X_train = scaler.fit_transform(X_train)
+    # # print X_train[:5, :]
+    # X_test = scaler.transform(X_test)
+    #
+    # set1_name = "mnist"
 
     # # Decision tree experiment 1: Sample size vs Accuracy
     # decision_tree_experiment_1(set1_name, X_train, y_train)
@@ -458,7 +462,7 @@ if __name__=="__main__":
     # # KNN experiment 1: Sample size vs Accuracy
     # knn_experiment_1(set1_name, X_train, y_train)
     # knn_experiment_2(set1_name, X_train, y_train)  # n_neighbours vs. score
-    # knn_experiment_3(set1_name, X_train, y_train)  # p vs. score
+    # knn_experiment_3(set1_name, X_train, y_train)  # algorithm vs. score
 
     # # SVM experiment 1: Sample size vs Accuracy
     # svm_experiment_1(set1_name, X_train, y_train)
@@ -467,7 +471,7 @@ if __name__=="__main__":
 
     '''load and standardize data set #2'''
 
-    set2 = np.genfromtxt('bank.csv', delimiter=';', dtype=None)[1:, :]
+    set2 = np.genfromtxt('bank-full.csv', delimiter=';', dtype=None)[1:, :]
 
     set2[set2 == '"unknown"'] = 0
     set2[set2 == '"admin."'] = 1
@@ -514,17 +518,19 @@ if __name__=="__main__":
     set2[set2 == '"success"'] = 3
 
     set2 = set2.astype(int)
-    # print set2[:5, :]
-    # scaler = preprocessing.StandardScaler()
-    # set2 = scaler.fit_transform(set2)
-    # print set2[:5, :]
+
     # separating set2 into X and y, then train and test
     X2 = set2[:, :-1]
+    # print X2[:5, :]
+    scaler = preprocessing.StandardScaler()
+    X2 = scaler.fit_transform(X2)
+    # print X2[:5, :]
     y2 = set2[:, -1]
+    # print y2
     X2_train, X2_test, y2_train, y2_test = train_test_split(X2, y2, test_size=0.2, random_state=0)
-
+    #
     set2_name = "bank"
-
+    #
     # Decision tree experiment:
     decision_tree_experiment_1(set2_name, X2_train, y2_train)
     decision_tree_experiment_2(set2_name, X2_train, y2_train)  # Leaf size vs Accuracy  (Pruning)
@@ -532,6 +538,7 @@ if __name__=="__main__":
 
     # Boosted decision tree experiment:
     boost_dt_experiment_1(set2_name, X2_train, y2_train)
+    boost_dt_experiment_2(set2_name, X2_train, y2_train)
     boost_dt_experiment_3(set2_name, X2_train, y2_train)  # Leaf size vs Accuracy  (Pruning)
     boost_dt_experiment_4(set2_name, X2_train, y2_train)
 
@@ -543,7 +550,7 @@ if __name__=="__main__":
     # KNN experiment 1: Sample size vs Accuracy
     knn_experiment_1(set2_name, X2_train, y2_train)
     knn_experiment_2(set2_name, X2_train, y2_train)  # n_neighbours vs. score
-    # knn_experiment_3(set2_name, X2_train, y2_train)  # p vs. score
+    knn_experiment_3(set2_name, X2_train, y2_train)  # algorithm vs. score
 
     # SVM experiment 1: Sample size vs Accuracy
     svm_experiment_1(set2_name, X2_train, y2_train)

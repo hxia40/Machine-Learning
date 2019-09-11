@@ -45,24 +45,24 @@ Citation Request:
    Input variables:
    # bank client data:
    1 - age (numeric)
-   2 - job : type of job (categorical: "unknown":0,"admin.":1, "unemployed":2, "management":3,"housemaid":4,"entrepreneur":5,"student":6,
-                                       "blue-collar":7,"self-employed":8,"retired":9,"technician":10,"services":11) 
-   3 - marital : marital status (categorical: "married":0,"divorced":1,"single":2; note: "divorced" means divorced or widowed)
-   4 - education (categorical: "unknown":0,"secondary":1,"primary":2,"tertiary":3)
-   5 - default: has credit in default? (binary: "yes":1,"no":0)
+   2 - job : type of job (categorical: "admin.","unknown","unemployed","management","housemaid","entrepreneur","student",
+                                       "blue-collar","self-employed","retired","technician","services") 
+   3 - marital : marital status (categorical: "married","divorced","single"; note: "divorced" means divorced or widowed)
+   4 - education (categorical: "unknown","secondary","primary","tertiary")
+   5 - default: has credit in default? (binary: "yes","no")
    6 - balance: average yearly balance, in euros (numeric) 
-   7 - housing: has housing loan? (binary: "yes":1,"no":0)
-   8 - loan: has personal loan? (binary: "yes":1,"no":0)
+   7 - housing: has housing loan? (binary: "yes","no")
+   8 - loan: has personal loan? (binary: "yes","no")
    # related with the last contact of the current campaign:
-   9 - contact: contact communication type (categorical: "unknown":0,"telephone":1,"cellular":2) 
+   9 - contact: contact communication type (categorical: "unknown","telephone","cellular") 
   10 - day: last contact day of the month (numeric)
-  11 - month: last contact month of year (categorical: "jan", "feb", "mar", ..., "nov", "dec") (0-11)
+  11 - month: last contact month of year (categorical: "jan", "feb", "mar", ..., "nov", "dec")
   12 - duration: last contact duration, in seconds (numeric)
    # other attributes:
   13 - campaign: number of contacts performed during this campaign and for this client (numeric, includes last contact)
   14 - pdays: number of days that passed by after the client was last contacted from a previous campaign (numeric, -1 means client was not previously contacted)
   15 - previous: number of contacts performed before this campaign and for this client (numeric)
-  16 - poutcome: outcome of the previous marketing campaign (categorical: "unknown":0,"other":1,"failure":2,"success":3)
+  16 - poutcome: outcome of the previous marketing campaign (categorical: "unknown","other","failure","success")
 
   Output variable (desired target):
   17 - y - has the client subscribed a term deposit? (binary: "yes","no")
