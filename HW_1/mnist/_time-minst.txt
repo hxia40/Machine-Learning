@@ -1,0 +1,16 @@
+DT difference: 65.231869936
+DT 2 difference: 146.994456053
+DT 3 difference: 130.016211987
+BoostDT1 difference: 353.949452877
+BoostDT2 difference: 791.65735507
+BoostDT3 difference: 7934.06570578
+BoostDT4 difference: 775.821273088
+ANN difference: 1031.80226183
+ANN2 difference: 1529.65819216
+ANN3 difference: 1976.44570708
+KNN difference: 714.878854036
+KNN 2 difference: 1846.23958015
+KNN 3 difference: 107.126378059
+SVM difference: 733.448448181
+SVM 2 difference: 1876.49722099
+SVM 3 difference: 128.900213957
