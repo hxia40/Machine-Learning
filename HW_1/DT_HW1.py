@@ -535,7 +535,7 @@ def svm_experiment_1(dataset_name, X_train, y_train): # SVM experiment 1: Sample
     print train_sizes
     train_sizes, train_scores, test_scores = learning_curve(clf, X_train, y_train,
                                                             cv=cv,
-                                                            # train_sizes=train_sizes
+                                                            train_sizes=train_sizes
                                                             )
     end_time = time.time()
     difference = end_time - start_time
@@ -634,31 +634,31 @@ if __name__=="__main__":
 
     set1_name = "mnist"
 
-    # Decision tree experiment 1: Sample size vs Accuracy
-    decision_tree_experiment_1(set1_name, X_train, y_train)
-    decision_tree_experiment_2(set1_name, X_train, y_train)  # Leaf size vs Accuracy  (Pruning)
-    decision_tree_experiment_3(set1_name, X_train, y_train)  # Max depth vs Accuracy
-
-    # Boosted decision tree experiment 1: Sample size vs Accuracy
-    boost_dt_experiment_1(set1_name, X_train, y_train)
-    boost_dt_experiment_2(set1_name, X_train, y_train)
-    boost_dt_experiment_3(set1_name, X_train, y_train)
-    boost_dt_experiment_4(set1_name, X_train, y_train)
-
-    # ANN experiment 1: Sample size vs Accuracy
-    ann_experiment_1(set1_name, X_train, y_train)
-    ann_experiment_2(set1_name, X_train, y_train)
-    ann_experiment_3(set1_name, X_train, y_train)
-
-    # KNN experiment 1: Sample size vs Accuracy
-    knn_experiment_1(set1_name, X_train, y_train)
-    knn_experiment_2(set1_name, X_train, y_train)  # n_neighbours vs. score
-    knn_experiment_3(set1_name, X_train, y_train)  # algorithm vs. score
+    # # Decision tree experiment 1: Sample size vs Accuracy
+    # decision_tree_experiment_1(set1_name, X_train, y_train)
+    # decision_tree_experiment_2(set1_name, X_train, y_train)  # Leaf size vs Accuracy  (Pruning)
+    # decision_tree_experiment_3(set1_name, X_train, y_train)  # Max depth vs Accuracy
+    #
+    # # Boosted decision tree experiment 1: Sample size vs Accuracy
+    # boost_dt_experiment_1(set1_name, X_train, y_train)
+    # boost_dt_experiment_2(set1_name, X_train, y_train)
+    # boost_dt_experiment_3(set1_name, X_train, y_train)
+    # boost_dt_experiment_4(set1_name, X_train, y_train)
+    #
+    # # ANN experiment 1: Sample size vs Accuracy
+    # ann_experiment_1(set1_name, X_train, y_train)
+    # ann_experiment_2(set1_name, X_train, y_train)
+    # ann_experiment_3(set1_name, X_train, y_train)
+    #
+    # # KNN experiment 1: Sample size vs Accuracy
+    # knn_experiment_1(set1_name, X_train, y_train)
+    # knn_experiment_2(set1_name, X_train, y_train)  # n_neighbours vs. score
+    # knn_experiment_3(set1_name, X_train, y_train)  # algorithm vs. score
 
     # SVM experiment 1: Sample size vs Accuracy
     svm_experiment_1(set1_name, X_train, y_train)
-    svm_experiment_3(set1_name, X_train, y_train)  # kernel vs. score
-    svm_experiment_2(set1_name, X_train, y_train)  # C vs. score
+    # svm_experiment_3(set1_name, X_train, y_train)  # kernel vs. score
+    # svm_experiment_2(set1_name, X_train, y_train)  # C vs. score
 
     # # Post-optimization learning curve
     # decision_tree_experiment_4(set1_name, X_train, y_train)
@@ -818,32 +818,32 @@ if __name__=="__main__":
     #
     set2_name = "seizure_5"
 
-    # # Decision tree experiment:
-    decision_tree_experiment_1(set2_name, X2_train, y2_train)
-    decision_tree_experiment_2(set2_name, X2_train, y2_train)  # Leaf size vs Accuracy  (Pruning)
-    decision_tree_experiment_3(set2_name, X2_train, y2_train)  # Max depth vs Accuracy
-
-    # Boosted decision tree experiment:
-    boost_dt_experiment_1(set2_name, X2_train, y2_train)
-    boost_dt_experiment_2(set2_name, X2_train, y2_train)
-    boost_dt_experiment_3(set2_name, X2_train, y2_train)  # Leaf size vs Accuracy  (Pruning)
-    boost_dt_experiment_4(set2_name, X2_train, y2_train)
-
-    # ANN experiment 1: Sample size vs Accuracy
-    ann_experiment_1(set2_name, X2_train, y2_train)
-    ann_experiment_2(set2_name, X2_train, y2_train)
-    ann_experiment_3(set2_name, X2_train, y2_train)
-    # ann_experiment_4(set2_name, X2_train, y2_train, X2_test, y2_test)
-
-    # KNN experiment 1: Sample size vs Accuracy
-    knn_experiment_1(set2_name, X2_train, y2_train)
-    knn_experiment_2(set2_name, X2_train, y2_train)  # n_neighbours vs. score
-    knn_experiment_3(set2_name, X2_train, y2_train)  # algorithm vs. score
+    # # # Decision tree experiment:
+    # decision_tree_experiment_1(set2_name, X2_train, y2_train)
+    # decision_tree_experiment_2(set2_name, X2_train, y2_train)  # Leaf size vs Accuracy  (Pruning)
+    # decision_tree_experiment_3(set2_name, X2_train, y2_train)  # Max depth vs Accuracy
+    #
+    # # Boosted decision tree experiment:
+    # boost_dt_experiment_1(set2_name, X2_train, y2_train)
+    # boost_dt_experiment_2(set2_name, X2_train, y2_train)
+    # boost_dt_experiment_3(set2_name, X2_train, y2_train)  # Leaf size vs Accuracy  (Pruning)
+    # boost_dt_experiment_4(set2_name, X2_train, y2_train)
+    #
+    # # ANN experiment 1: Sample size vs Accuracy
+    # ann_experiment_1(set2_name, X2_train, y2_train)
+    # ann_experiment_2(set2_name, X2_train, y2_train)
+    # ann_experiment_3(set2_name, X2_train, y2_train)
+    # # ann_experiment_4(set2_name, X2_train, y2_train, X2_test, y2_test)
+    #
+    # # KNN experiment 1: Sample size vs Accuracy
+    # knn_experiment_1(set2_name, X2_train, y2_train)
+    # knn_experiment_2(set2_name, X2_train, y2_train)  # n_neighbours vs. score
+    # knn_experiment_3(set2_name, X2_train, y2_train)  # algorithm vs. score
 
     # SVM experiment 1: Sample size vs Accuracy
     svm_experiment_1(set2_name, X2_train, y2_train)
-    svm_experiment_2(set2_name, X2_train, y2_train)  # C vs. score
-    svm_experiment_3(set2_name, X2_train, y2_train)  # kernel vs. score
+    # svm_experiment_2(set2_name, X2_train, y2_train)  # C vs. score
+    # svm_experiment_3(set2_name, X2_train, y2_train)  # kernel vs. score
 
 
 
