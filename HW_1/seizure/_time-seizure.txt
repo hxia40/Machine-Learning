@@ -1,0 +1,18 @@
+seizure
+
+DT difference: 77.2153310776
+DT 2 difference: 188.752502918
+DT 3 difference: 149.256886959
+BoostDT1 difference: 338.441748857
+BoostDT2 difference: 765.354748964
+
+BoostDT4 difference: 826.061474085
+ANN difference: 869.51573801
+ANN2 difference: 1463.63691211
+ANN3 difference: 1223.57678008
+KNN difference: 653.814720154
+KNN 2 difference: 1690.26251197
+KNN 3 difference: 99.99731493
+SVM difference: 12.9738340378
+SVM 2 difference: 284.131846905
+SVM 3 difference: 93.8139989376

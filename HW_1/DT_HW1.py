@@ -72,11 +72,11 @@ def decision_tree_experiment_1(dataset_name, X_train, y_train): # Decision tree 
     train_sizes, train_scores, test_scores = learning_curve(clf, X_train, y_train,
                                                             cv=cv,
                                                             train_sizes=train_sizes,
-                                                            verbose=10)
+                                                            )
     end_time = time.time()
     difference = end_time - start_time
     print "DT difference:", difference
-
+    print train_scores, type(train_scores)
     recording_and_plotting(dataset_name, name="DT1",
                            alter=train_sizes,
                            train=train_scores,
@@ -263,7 +263,7 @@ def boost_dt_experiment_5(dataset_name, X_train, y_train): # Boosted decision tr
 
 
 def ann_experiment_1(dataset_name, X_train, y_train): # ANN experiment 1: Sample size vs Accuracy
-    clf = MLPClassifier(hidden_layer_sizes=(5, ), random_state=1, max_iter=500)
+    clf = MLPClassifier(hidden_layer_sizes=(5, ), random_state=1, max_iter=500, alpha=0.0001)
     start_time = time.time()
     cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
     # cv = None
@@ -283,7 +283,7 @@ def ann_experiment_1(dataset_name, X_train, y_train): # ANN experiment 1: Sample
 
 
 def ann_experiment_2(dataset_name, X_train, y_train): # ANN experiment 2: hidden layer size
-    clf = MLPClassifier(hidden_layer_sizes=(5, ), random_state=1, max_iter=500)
+    clf = MLPClassifier(hidden_layer_sizes=(5, ), random_state=1, alpha=0.0001)
     start_time = time.time()
     cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
     # cv = None
@@ -310,10 +310,10 @@ def ann_experiment_2(dataset_name, X_train, y_train): # ANN experiment 2: hidden
 
 
 def ann_experiment_3(dataset_name, X_train, y_train): # ANN experiment 3: alpha
-    clf = MLPClassifier(hidden_layer_sizes=(5, ), random_state=1, max_iter=500)
+    clf = MLPClassifier(hidden_layer_sizes=(5, ), random_state=1, alpha=0.0001)
     start_time = time.time()
-    cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
-    # cv = None
+    # cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
+    cv = 5
     param_range = np.linspace(0.01, 1, 50)
     train_scores, test_scores = validation_curve(clf, X_train, y_train,
                                                  param_name="alpha",
@@ -331,8 +331,96 @@ def ann_experiment_3(dataset_name, X_train, y_train): # ANN experiment 3: alpha
                            validation=test_scores, x_title="alpha", y_title="Score")
 
 
-def ann_experiment_4(dataset_name, X_train, y_train): # ANN experiment 1: Sample size vs Accuracy
-    clf = MLPClassifier(hidden_layer_sizes=(20, ), random_state=1, max_iter=500, alpha=0.75)
+def ann_experiment_4(dataset_name, X_train, y_train, X_test, y_test): # ANN experiment 3: alpha
+    # mlp = MLPClassifier(hidden_layer_sizes=(5, ), random_state=1, alpha=0.0001)
+    # from sklearn.datasets import fetch_mldata
+    # np.random.seed(1)
+    # mnist = fetch_mldata("MNIST original")
+    # # rescale the data, use the traditional train/test split
+    # X, y = mnist.data / 255., mnist.target
+    # X_train, X_test = X[:60000], X[60000:]
+    # y_train, y_test = y[:60000], y[60000:]
+    mlp = MLPClassifier(hidden_layer_sizes=(50,), max_iter=10, alpha=1e-4,
+                        solver='adam', verbose=0, tol=1e-8, random_state=1,
+                        learning_rate_init=.01)
+
+    """ Home-made mini-batch learning
+        -> not to be used in out-of-core setting!
+    """
+
+    # cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
+    # cv = None
+    N_TRAIN_SAMPLES = X_train.shape[0]
+    N_EPOCHS = 25
+    N_BATCH = 128
+    N_CLASSES = np.unique(y_train)
+
+    scores_train = []
+    scores_test = []
+    n_alter = []
+    # EPOCH
+    epoch = 0
+    while epoch < N_EPOCHS:
+        print('epoch: ', epoch)
+        # SHUFFLING
+        random_perm = np.random.permutation(X_train.shape[0])
+        mini_batch_index = 0
+        while True:
+            # MINI-BATCH
+            indices = random_perm[mini_batch_index:mini_batch_index + N_BATCH]
+            mlp.partial_fit(X_train[indices], y_train[indices], classes=N_CLASSES)
+            mini_batch_index += N_BATCH
+
+            if mini_batch_index >= N_TRAIN_SAMPLES:
+                break
+
+        # SCORE TRAIN
+        scores_train.append(mlp.score(X_train, y_train))
+
+        # SCORE TEST
+        scores_test.append(mlp.score(X_test, y_test))
+
+        n_alter.append(epoch)
+
+        epoch += 1
+
+    # recording
+    dataset_name = 'seizure_5'
+    name = 'ANN4'
+    train_scores_mean = scores_train
+    test_scores_mean = scores_test
+    DT_1 = open('{}/{}.txt'.format(dataset_name, name), 'w')
+    DT_1.write('{}/{}'.format(dataset_name, name))
+    DT_1.write("\n\n")
+    DT_1.write(str(alter))
+    DT_1.write("\n\n")
+    DT_1.write(str(train_scores_mean))
+    DT_1.write("\n\n")
+    DT_1.write(str(test_scores_mean))
+
+    # plotting
+    plt.grid()
+    ylim = (0, 1.1)
+    plt.ylim(*ylim)
+    # plt.fill_between(alter, train_scores_mean - train_scores_std,
+    #                  train_scores_mean + train_scores_std, alpha=0.1,
+    #                  color="r")
+    # plt.fill_between(alter, test_scores_mean - test_scores_std,
+    #                  test_scores_mean + test_scores_std, alpha=0.1, color="g")
+    plt.plot(alter, train_scores_mean, color="r",
+             label="Training score")
+    plt.plot(alter, test_scores_mean, color="g",
+             label="Cross-validation score")
+    plt.xlabel(x_title)
+    plt.ylabel(y_title)
+    plt.legend(loc="best")
+    # plt.savefig('seizure_5/ANN4.png')
+    plt.savefig('22222.png')
+    plt.gcf().clear()
+
+
+def ann_experiment_5(dataset_name, X_train, y_train): # ANN experiment 1: Sample size vs Accuracy
+    clf = MLPClassifier(hidden_layer_sizes=(20, ), random_state=1, alpha=0.75)
     start_time = time.time()
     cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
     # cv = None
@@ -345,7 +433,7 @@ def ann_experiment_4(dataset_name, X_train, y_train): # ANN experiment 1: Sample
     difference = end_time - start_time
     print "ANN difference:", difference
 
-    recording_and_plotting(dataset_name, name="ANN4",
+    recording_and_plotting(dataset_name, name="ANN5",
                            alter=train_sizes,
                            train=train_scores,
                            validation=test_scores, x_title="Sample size", y_title="Score")
@@ -714,7 +802,7 @@ if __name__=="__main__":
 
     '''===========for seizure========='''
     # set2 = np.genfromtxt('Epileptic_Seizure_Recognition_binary.csv', delimiter=',', dtype=None)[1:1001, :]
-    set2 = np.genfromtxt('Epileptic_Seizure_Recognition.csv', delimiter=',', dtype=None)[1:5001, :]
+    set2 = np.genfromtxt('Epileptic_Seizure_Recognition.csv', delimiter=',', dtype=None)[1:1001, :]
 
     set2 = set2.astype(int)
 
@@ -732,29 +820,30 @@ if __name__=="__main__":
 
     # # Decision tree experiment:
     decision_tree_experiment_1(set2_name, X2_train, y2_train)
-    decision_tree_experiment_2(set2_name, X2_train, y2_train)  # Leaf size vs Accuracy  (Pruning)
-    decision_tree_experiment_3(set2_name, X2_train, y2_train)  # Max depth vs Accuracy
-
-    # Boosted decision tree experiment:
-    boost_dt_experiment_1(set2_name, X2_train, y2_train)
-    boost_dt_experiment_2(set2_name, X2_train, y2_train)
-    boost_dt_experiment_3(set2_name, X2_train, y2_train)  # Leaf size vs Accuracy  (Pruning)
-    boost_dt_experiment_4(set2_name, X2_train, y2_train)
-
-    # ANN experiment 1: Sample size vs Accuracy
-    ann_experiment_1(set2_name, X2_train, y2_train)
-    ann_experiment_2(set2_name, X2_train, y2_train)
-    ann_experiment_3(set2_name, X2_train, y2_train)
-
-    # KNN experiment 1: Sample size vs Accuracy
-    knn_experiment_1(set2_name, X2_train, y2_train)
-    knn_experiment_2(set2_name, X2_train, y2_train)  # n_neighbours vs. score
-    knn_experiment_3(set2_name, X2_train, y2_train)  # algorithm vs. score
-
-    # SVM experiment 1: Sample size vs Accuracy
-    svm_experiment_1(set2_name, X2_train, y2_train)
-    svm_experiment_2(set2_name, X2_train, y2_train)  # C vs. score
-    svm_experiment_3(set2_name, X2_train, y2_train)  # kernel vs. score
+    # decision_tree_experiment_2(set2_name, X2_train, y2_train)  # Leaf size vs Accuracy  (Pruning)
+    # decision_tree_experiment_3(set2_name, X2_train, y2_train)  # Max depth vs Accuracy
+    #
+    # # Boosted decision tree experiment:
+    # boost_dt_experiment_1(set2_name, X2_train, y2_train)
+    # boost_dt_experiment_2(set2_name, X2_train, y2_train)
+    # boost_dt_experiment_3(set2_name, X2_train, y2_train)  # Leaf size vs Accuracy  (Pruning)
+    # boost_dt_experiment_4(set2_name, X2_train, y2_train)
+    #
+    # # ANN experiment 1: Sample size vs Accuracy
+    # ann_experiment_1(set2_name, X2_train, y2_train)
+    # ann_experiment_2(set2_name, X2_train, y2_train)
+    # ann_experiment_3(set2_name, X2_train, y2_train)
+    # ann_experiment_4(set2_name, X2_train, y2_train, X2_test, y2_test)
+    #
+    # # KNN experiment 1: Sample size vs Accuracy
+    # knn_experiment_1(set2_name, X2_train, y2_train)
+    # knn_experiment_2(set2_name, X2_train, y2_train)  # n_neighbours vs. score
+    # knn_experiment_3(set2_name, X2_train, y2_train)  # algorithm vs. score
+    #
+    # # SVM experiment 1: Sample size vs Accuracy
+    # svm_experiment_1(set2_name, X2_train, y2_train)
+    # svm_experiment_2(set2_name, X2_train, y2_train)  # C vs. score
+    # svm_experiment_3(set2_name, X2_train, y2_train)  # kernel vs. score
 
 
 

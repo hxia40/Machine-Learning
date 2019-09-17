@@ -8,6 +8,7 @@ BoostDT4 difference: 876.25356102
 ANN difference: 1230.93209791
 ANN2 difference: 1978.7496469
 ANN3 difference: 1980.25904393
+ANN4 difference: 318.078104973
 KNN difference: 647.444988966
 KNN 2 difference: 1660.39342093
 KNN 3 difference: 97.5115249157
