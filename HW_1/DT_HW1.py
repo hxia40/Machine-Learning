@@ -314,7 +314,7 @@ def ann_experiment_3(dataset_name, X_train, y_train): # ANN experiment 3: alpha
     start_time = time.time()
     cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
     # cv = 5
-    param_range = np.linspace(0.01, 1, 25)
+    param_range = np.linspace(0.00001, 10, 25)
     train_scores, test_scores = validation_curve(clf, X_train, y_train,
                                                  param_name="alpha",
                                                  param_range=param_range,
@@ -552,7 +552,7 @@ def svm_experiment_2(dataset_name, X_train, y_train): # SVM experiment 2: C
     start_time = time.time()
     cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
     # cv = None
-    param_range = np.linspace(0.01, 10, 25)
+    param_range = np.linspace(0.01, 100, 25)
     print param_range
     train_scores, test_scores = validation_curve(clf, X_train, y_train,
                                                  param_name="C",
@@ -656,7 +656,7 @@ if __name__=="__main__":
     # knn_experiment_3(set1_name, X_train, y_train)  # algorithm vs. score
 
     # SVM experiment 1: Sample size vs Accuracy
-    svm_experiment_1(set1_name, X_train, y_train)
+    # svm_experiment_1(set1_name, X_train, y_train)
     # svm_experiment_3(set1_name, X_train, y_train)  # kernel vs. score
     # svm_experiment_2(set1_name, X_train, y_train)  # C vs. score
 
@@ -841,8 +841,8 @@ if __name__=="__main__":
     # knn_experiment_3(set2_name, X2_train, y2_train)  # algorithm vs. score
 
     # SVM experiment 1: Sample size vs Accuracy
-    svm_experiment_1(set2_name, X2_train, y2_train)
-    # svm_experiment_2(set2_name, X2_train, y2_train)  # C vs. score
+    # svm_experiment_1(set2_name, X2_train, y2_train)
+    svm_experiment_2(set2_name, X2_train, y2_train)  # C vs. score
     # svm_experiment_3(set2_name, X2_train, y2_train)  # kernel vs. score
 
 
