@@ -552,7 +552,7 @@ def svm_experiment_2(dataset_name, X_train, y_train): # SVM experiment 2: C
     start_time = time.time()
     cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
     # cv = None
-    param_range = np.linspace(0.01, 50, 25)
+    param_range = np.linspace(0.01, 60, 25)
     print param_range
     train_scores, test_scores = validation_curve(clf, X_train, y_train,
                                                  param_name="C",
@@ -655,7 +655,7 @@ if __name__=="__main__":
     knn_experiment_2(set1_name, X_train, y_train)  # n_neighbours vs. score
     knn_experiment_3(set1_name, X_train, y_train)  # algorithm vs. score
 
-    SVM experiment 1: Sample size vs Accuracy
+    # SVM experiment 1: Sample size vs Accuracy
     svm_experiment_1(set1_name, X_train, y_train)
     svm_experiment_3(set1_name, X_train, y_train)  # kernel vs. score
     svm_experiment_2(set1_name, X_train, y_train)  # C vs. score
