@@ -739,30 +739,30 @@ def svm_vld_curve_2(dataset_name, X_train, y_train, C=1.0, kernel='rbf', max_ite
 if __name__=="__main__":
     '''load and standardize data set #1'''
 
-    train = np.genfromtxt('fashion-mnist_train_minor.csv', delimiter=',')[1:, :]
-    test = np.genfromtxt('fashion-mnist_test_minor.csv', delimiter=',')[1:, :]
-
-    X_train = train[:, 1:]
-    y_train = train[:, 0]
-    X_test = test[:, 1:]
-    y_test = test[:, 0]
-
-    # standardize the original data - this is important but usually neglected by newbies.
-    scaler = preprocessing.StandardScaler()
-    X_train = scaler.fit_transform(X_train)
-    X_test = scaler.transform(X_test)
-    set1_name = "mnist"
-
-    # pre-parameter adjustment
-    decision_tree_learning_curve_size_pre(set1_name, X_train, y_train)
-    boost_dt_learning_curve_size_pre(set1_name, X_train, y_train)
-    ann_learning_curve_size_pre(set1_name, X_train, y_train)
-    knn_learning_curve_size_pre(set1_name, X_train, y_train)
-    svm_learning_curve_size_pre(set1_name, X_train, y_train)
-
-    boost_dt_learning_curve_epoch_pre(set1_name, X_train, y_train)
-    ann_learning_curve_epoch_pre(set1_name, X_train, y_train)
-    svm_learning_curve_epoch_pre(set1_name, X_train, y_train)
+    # train = np.genfromtxt('fashion-mnist_train_minor.csv', delimiter=',')[1:, :]
+    # test = np.genfromtxt('fashion-mnist_test_minor.csv', delimiter=',')[1:, :]
+    #
+    # X_train = train[:, 1:]
+    # y_train = train[:, 0]
+    # X_test = test[:, 1:]
+    # y_test = test[:, 0]
+    #
+    # # standardize the original data - this is important but usually neglected by newbies.
+    # scaler = preprocessing.StandardScaler()
+    # X_train = scaler.fit_transform(X_train)
+    # X_test = scaler.transform(X_test)
+    # set1_name = "mnist"
+    #
+    # # pre-parameter adjustment
+    # decision_tree_learning_curve_size_pre(set1_name, X_train, y_train)
+    # boost_dt_learning_curve_size_pre(set1_name, X_train, y_train)
+    # ann_learning_curve_size_pre(set1_name, X_train, y_train)
+    # knn_learning_curve_size_pre(set1_name, X_train, y_train)
+    # svm_learning_curve_size_pre(set1_name, X_train, y_train)
+    #
+    # boost_dt_learning_curve_epoch_pre(set1_name, X_train, y_train)
+    # ann_learning_curve_epoch_pre(set1_name, X_train, y_train)
+    # svm_learning_curve_epoch_pre(set1_name, X_train, y_train)
 
     # # parameter validation curve
     # decision_tree_vld_curve_1(set1_name, X_train, y_train)
@@ -788,7 +788,7 @@ if __name__=="__main__":
     # svm_learning_curve_epoch_post(set1_name, X_train, y_train)
 
     '''===========for seizure========='''
-    set2 = np.genfromtxt('Epileptic_Seizure_Recognition.csv', delimiter=',', dtype=None)[1:601, :]
+    set2 = np.genfromtxt('Epileptic_Seizure_Recognition.csv', delimiter=',', dtype=None)[1:6001, :]
     set2 = set2.astype(int)
 
     # separating set2 into X and y, then train and test

@@ -1,0 +1,19 @@
+
+DT_learning_curve_size_pre 32.6347100735
+boost_dt_learning_curve_size_pre 179.911057949
+ann_learning_curve_size_pre 522.989838839
+knn_learning_curve_size_pre 377.580668926
+svm_learning_curve_size_pre 381.521679163
+boost_dt_learning_curve_epoch_pre 3899.91171694
+ann_learning_curve_epoch_pre 5.78724884987
+SVM epoch difference: 618.808358908
+
+
+DT_learning_curve_size_pre 19.6413800716
+boost_dt_learning_curve_size_pre 81.6904878616
+ann_learning_curve_size_pre 511.244807005
+knn_learning_curve_size_pre 472.405802011
+svm_learning_curve_size_pre 657.520359039
+boost_dt_learning_curve_epoch_pre 1556.60481
+ann_learning_curve_epoch_pre 8.73295903206
+SVM epoch difference: 263.377413034
