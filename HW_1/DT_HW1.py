@@ -739,20 +739,20 @@ def svm_vld_curve_2(dataset_name, X_train, y_train, C=1.0, kernel='rbf', max_ite
 if __name__=="__main__":
     '''load and standardize data set #1'''
 
-    # train = np.genfromtxt('fashion-mnist_train_minor.csv', delimiter=',')[1:, :]
-    # test = np.genfromtxt('fashion-mnist_test_minor.csv', delimiter=',')[1:, :]
-    #
-    # X_train = train[:, 1:]
-    # y_train = train[:, 0]
-    # X_test = test[:, 1:]
-    # y_test = test[:, 0]
-    #
-    # # standardize the original data - this is important but usually neglected by newbies.
-    # scaler = preprocessing.StandardScaler()
-    # X_train = scaler.fit_transform(X_train)
-    # X_test = scaler.transform(X_test)
-    # set1_name = "mnist"
-    #
+    train = np.genfromtxt('fashion-mnist_train_minor.csv', delimiter=',')[1:, :]
+    test = np.genfromtxt('fashion-mnist_test_minor.csv', delimiter=',')[1:, :]
+
+    X_train = train[:, 1:]
+    y_train = train[:, 0]
+    X_test = test[:, 1:]
+    y_test = test[:, 0]
+
+    # standardize the original data - this is important but usually neglected by newbies.
+    scaler = preprocessing.StandardScaler()
+    X_train = scaler.fit_transform(X_train)
+    X_test = scaler.transform(X_test)
+    set1_name = "mnist"
+
     # # pre-parameter adjustment
     # decision_tree_learning_curve_size_pre(set1_name, X_train, y_train)
     # boost_dt_learning_curve_size_pre(set1_name, X_train, y_train)
@@ -764,18 +764,18 @@ if __name__=="__main__":
     # ann_learning_curve_epoch_pre(set1_name, X_train, y_train)
     # svm_learning_curve_epoch_pre(set1_name, X_train, y_train)
 
-    # # parameter validation curve
-    # decision_tree_vld_curve_1(set1_name, X_train, y_train)
-    # decision_tree_vld_curve_2(set1_name, X_train, y_train)
-    # boost_dt_vld_curve_1(set1_name, X_train, y_train)
-    # boost_dt_vld_curve_2(set1_name, X_train, y_train)
-    # ann_vld_curve_1(set1_name, X_train, y_train)
-    # ann_vld_curve_2(set1_name, X_train, y_train)
-    # knn_vld_curve_1(set1_name, X_train, y_train)
-    # knn_vld_curve_2(set1_name, X_train, y_train)
-    # svm_vld_curve_1(set1_name, X_train, y_train)
-    # svm_vld_curve_2(set1_name, X_train, y_train)
-    #
+    # parameter validation curve
+    decision_tree_vld_curve_1(set1_name, X_train, y_train)
+    decision_tree_vld_curve_2(set1_name, X_train, y_train)
+    boost_dt_vld_curve_1(set1_name, X_train, y_train)
+    boost_dt_vld_curve_2(set1_name, X_train, y_train)
+    ann_vld_curve_1(set1_name, X_train, y_train)
+    ann_vld_curve_2(set1_name, X_train, y_train)
+    knn_vld_curve_1(set1_name, X_train, y_train)
+    knn_vld_curve_2(set1_name, X_train, y_train)
+    svm_vld_curve_1(set1_name, X_train, y_train)
+    svm_vld_curve_2(set1_name, X_train, y_train)
+
     # # post-parameter adjustment
     # decision_tree_learning_curve_size_post(set1_name, X_train, y_train)
     # boost_dt_learning_curve_size_post(set1_name, X_train, y_train)
@@ -800,16 +800,28 @@ if __name__=="__main__":
     #
     set2_name = "seizure_5"
 
-    # pre-parameter adjustment
-    decision_tree_learning_curve_size_pre(set2_name, X2_train, y2_train)
-    boost_dt_learning_curve_size_pre(set2_name, X2_train, y2_train)
-    ann_learning_curve_size_pre(set2_name, X2_train, y2_train)
-    knn_learning_curve_size_pre(set2_name, X2_train, y2_train)
-    svm_learning_curve_size_pre(set2_name, X2_train, y2_train)
+    # # pre-parameter adjustment
+    # decision_tree_learning_curve_size_pre(set2_name, X2_train, y2_train)
+    # boost_dt_learning_curve_size_pre(set2_name, X2_train, y2_train)
+    # ann_learning_curve_size_pre(set2_name, X2_train, y2_train)
+    # knn_learning_curve_size_pre(set2_name, X2_train, y2_train)
+    # svm_learning_curve_size_pre(set2_name, X2_train, y2_train)
+    #
+    # boost_dt_learning_curve_epoch_pre(set2_name, X2_train, y2_train)
+    # ann_learning_curve_epoch_pre(set2_name, X2_train, y2_train)
+    # svm_learning_curve_epoch_pre(set2_name, X2_train, y2_train)
 
-    boost_dt_learning_curve_epoch_pre(set2_name, X2_train, y2_train)
-    ann_learning_curve_epoch_pre(set2_name, X2_train, y2_train)
-    svm_learning_curve_epoch_pre(set2_name, X2_train, y2_train)
+    # parameter validation curve
+    decision_tree_vld_curve_1(set2_name, X2_train, y2_train)
+    decision_tree_vld_curve_2(set2_name, X2_train, y2_train)
+    boost_dt_vld_curve_1(set2_name, X2_train, y2_train)
+    boost_dt_vld_curve_2(set2_name, X2_train, y2_train)
+    ann_vld_curve_1(set2_name, X2_train, y2_train)
+    ann_vld_curve_2(set2_name, X2_train, y2_train)
+    knn_vld_curve_1(set2_name, X2_train, y2_train)
+    knn_vld_curve_2(set2_name, X2_train, y2_train)
+    svm_vld_curve_1(set2_name, X2_train, y2_train)
+    svm_vld_curve_2(set2_name, X2_train, y2_train)
 
 
 
