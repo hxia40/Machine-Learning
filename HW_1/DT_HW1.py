@@ -62,9 +62,8 @@ def recording_and_plotting(dataset_name, name, alter, train, validation,
     plt.savefig('{}/{}.png'.format(dataset_name, name))
     plt.gcf().clear()
 
-
-def decision_tree_experiment_1(dataset_name, X_train, y_train): # Decision tree experiment 1: Sample size vs Accuracy
-    clf = tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=25, max_depth=None) #original
+def decision_tree_learning_curve_size_pre(dataset_name, X_train, y_train, min_samples_leaf=25, max_depth=None):
+    clf = tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=min_samples_leaf, max_depth=max_depth)
     start_time = time.time()
     cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
     # cv = None
@@ -75,80 +74,13 @@ def decision_tree_experiment_1(dataset_name, X_train, y_train): # Decision tree 
                                                             )
     end_time = time.time()
     difference = end_time - start_time
-    print "DT difference:", difference
-    print train_scores, type(train_scores)
-    recording_and_plotting(dataset_name, name="DT1",
+    print "DT_learning_curve_size_pre", difference
+    recording_and_plotting(dataset_name, name="DT_learning_curve_size_pre",
                            alter=train_sizes,
                            train=train_scores,
                            validation=test_scores, x_title="Sample size", y_title="Score")
-
-
-def decision_tree_experiment_2(dataset_name, X_train, y_train): # Decision tree experiment 2: Leaf size vs Accuracy  (Pruning)
-    clf = tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=25, max_depth=None)
-    start_time = time.time()
-    cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
-    # cv = 10
-    param_range = range(1, 50, 2)
-    train_scores, test_scores = validation_curve(clf, X_train, y_train,
-                                                 param_name="min_samples_leaf",
-                                                 param_range=param_range,
-                                                 cv=cv,
-                                                 scoring="accuracy",
-                                                 n_jobs=1)
-    end_time = time.time()
-    difference = end_time - start_time
-    print "DT 2 difference:", difference
-
-    recording_and_plotting(dataset_name, name="DT2",
-                           alter=param_range,
-                           train=train_scores,
-                           validation=test_scores, x_title="Minimum leaf size", y_title="Score")
-
-
-def decision_tree_experiment_3(dataset_name, X_train, y_train): # Decision tree experiment 3: Max depth vs Accuracy  (Pruning)
-    clf = tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=25, max_depth=None)
-    start_time = time.time()
-    cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
-    # cv = None
-    param_range = range(1, 50, 2)
-    print param_range
-    train_scores, test_scores = validation_curve(clf, X_train, y_train,
-                                                 param_name="max_depth",
-                                                 param_range=param_range,
-                                                 cv=cv,
-                                                 scoring="accuracy",
-                                                 n_jobs=1)
-    end_time = time.time()
-    difference = end_time - start_time
-    print "DT 3 difference:", difference
-
-    recording_and_plotting(dataset_name, name="DT3",
-                           alter=param_range,
-                           train=train_scores,
-                           validation=test_scores, x_title="Max tree depth", y_title="Score")
-
-
-def decision_tree_experiment_4(dataset_name, X_train, y_train): # Decision tree experiment 4: Sample size vs Accuracy
-    clf = tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=1, max_depth=None)  #opt
-    start_time = time.time()
-    cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
-    # cv = None
-    train_sizes = np.linspace(.01, 1.0, 25)
-    train_sizes, train_scores, test_scores = learning_curve(clf, X_train, y_train,
-                                                            cv=cv,
-                                                            train_sizes=train_sizes)
-    end_time = time.time()
-    difference = end_time - start_time
-    print "DT difference:", difference
-
-    recording_and_plotting(dataset_name, name="DT4",
-                           alter=train_sizes,
-                           train=train_scores,
-                           validation=test_scores, x_title="Sample size", y_title="Score")
-
-
-def boost_dt_learning_curve_size(dataset_name, X_train, y_train): # Boosted decision tree experiment 1: Sample size vs Accuracy
-    clf = AdaBoostClassifier(tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=25), n_estimators=5, learning_rate=1.0)
+def boost_dt_learning_curve_size_pre(dataset_name, X_train, y_train, min_samples_leaf=25, n_estimators=5, learning_rate = 1.0):
+    clf = AdaBoostClassifier(tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=min_samples_leaf), n_estimators=n_estimators, learning_rate=learning_rate)
     start_time = time.time()
     cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
     # cv = None
@@ -159,142 +91,70 @@ def boost_dt_learning_curve_size(dataset_name, X_train, y_train): # Boosted deci
                                                             train_sizes=train_sizes)
     end_time = time.time()
     difference = end_time - start_time
-    print "BoostDT1 difference:", difference
+    print "boost_dt_learning_curve_size_pre", difference
 
-    recording_and_plotting(dataset_name, name="BoostDT1",
+    recording_and_plotting(dataset_name, name="boost_dt_learning_curve_size_pre",
+                           alter=train_sizes,
+                           train=train_scores,
+                           validation=test_scores, x_title="Sample size", y_title="Score")
+def ann_learning_curve_size_pre(dataset_name, X_train, y_train, hidden_layer_sizes=(5, ), max_iter=500, alpha=0.0001): # ANN experiment 1: Sample size vs Accuracy
+    clf = MLPClassifier(hidden_layer_sizes=hidden_layer_sizes, max_iter=max_iter, alpha=alpha, random_state=1)
+    start_time = time.time()
+    cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
+    # cv = None
+
+    train_sizes = np.linspace(.01, 1.0, 25)
+    train_sizes, train_scores, test_scores = learning_curve(clf, X_train, y_train,
+                                                            cv=cv,
+                                                            train_sizes=train_sizes)
+    end_time = time.time()
+    difference = end_time - start_time
+    print "ann_learning_curve_size_pre", difference
+
+    recording_and_plotting(dataset_name, name="ann_learning_curve_size_pre",
+                           alter=train_sizes,
+                           train=train_scores,
+                           validation=test_scores, x_title="Sample size", y_title="Score")
+def knn_learning_curve_size_pre(dataset_name, X_train, y_train, n_neighbors=5, algorithm='auto'):
+    clf = neighbors.KNeighborsClassifier(n_neighbors=n_neighbors, algorithm=algorithm)
+    start_time = time.time()
+    cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
+    # cv = None
+
+    train_sizes = np.linspace(.01, 1.0, 25)
+    train_sizes, train_scores, test_scores = learning_curve(clf, X_train, y_train,
+                                                            cv=cv,
+                                                            train_sizes=train_sizes)
+    end_time = time.time()
+    difference = end_time - start_time
+    print "knn_learning_curve_size_pre", difference
+
+    recording_and_plotting(dataset_name, name="knn_learning_curve_size_pre",
+                           alter=train_sizes,
+                           train=train_scores,
+                           validation=test_scores, x_title="Sample size", y_title="Score")
+def svm_learning_curve_size_pre(dataset_name, X_train, y_train, C=1.0, kernel='rbf', max_iter=-1):
+    clf = svm.SVC(C=C, kernel=kernel,  max_iter=max_iter)
+    start_time = time.time()
+    cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
+    # cv = None
+
+    train_sizes = np.linspace(.01, 1.0, 25)
+    train_sizes, train_scores, test_scores = learning_curve(clf, X_train, y_train,
+                                                            cv=cv,
+                                                            train_sizes=train_sizes
+                                                            )
+    end_time = time.time()
+    difference = end_time - start_time
+    print "svm_learning_curve_size_pre", difference
+
+    recording_and_plotting(dataset_name, name="svm_learning_curve_size_pre",
                            alter=train_sizes,
                            train=train_scores,
                            validation=test_scores, x_title="Sample size", y_title="Score")
 
-
-def boost_dt_learning_curve_epoch(dataset_name, X, y):
-
-    clf = AdaBoostClassifier(tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=25), n_estimators=5, learning_rate=1.0)
-    rs = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
-
-    scores_train = []
-    scores_test = []
-    for train_index, validation_index in rs.split(X):
-
-        X_train = X[train_index]
-        X_test = X[validation_index]
-        y_train = y[train_index]
-        y_test = y[validation_index]
-        # print "y_train", y_train, '\n', "valid:", y_test
-        clf.fit(X_train, y_train)
-        """ Home-made mini-batch learning
-            -> not to be used in out-of-core setting!
-        """
-
-        N_TRAIN_SAMPLES = X_train.shape[0]
-        N_EPOCHS = 25
-        N_BATCH = 128
-        N_CLASSES = np.unique(y_train)
-
-        scores_train_looper = []
-        scores_test_looper = []
-        n_alter_looper = []
-        # EPOCH
-        epoch = 0
-        while epoch < N_EPOCHS:
-            print('epoch: ', epoch)
-            # SHUFFLING
-            random_perm = np.random.permutation(X_train.shape[0])
-            mini_batch_index = 0
-            while True:
-                # MINI-BATCH
-                indices = random_perm[mini_batch_index:mini_batch_index + N_BATCH]
-                print "rtrt",clf.staged_score(X_train[indices], y_train[indices], sample_weight=None)
-                mini_batch_index += N_BATCH
-
-                if mini_batch_index >= N_TRAIN_SAMPLES:
-                    break
-
-            # SCORE TRAIN
-            scores_train_looper.append(clf.score(X_train, y_train))
-
-            # SCORE TEST
-            scores_test_looper.append(clf.score(X_test, y_test))
-
-            n_alter_looper.append(epoch)
-
-            epoch += 1
-            # print scores_train_looper
-        scores_train.append(scores_train_looper)
-        scores_test.append(scores_test_looper)
-
-    n_alter = range(25)
-
-    # recording
-    name = 'Boost_dt_LearningCurve_Epoch'
-    # n_alter_mean = np.mean(n_alter, axis=1)
-    train_scores_mean = np.mean(scores_train, axis=0)
-    train_scores_std = np.std(scores_train, axis=0)
-    test_scores_mean = np.mean(scores_test, axis=0)
-    test_scores_std = np.std(scores_test, axis=0)
-    DT_1 = open('{}/{}.txt'.format(dataset_name, name), 'w')
-    DT_1.write('{}/{}'.format(dataset_name, name))
-    DT_1.write("\n\n")
-    DT_1.write(str(n_alter))
-    DT_1.write("\n\n")
-    DT_1.write(str(train_scores_mean))
-    DT_1.write("\n\n")
-    DT_1.write(str(test_scores_mean))
-
-    # plotting
-    plt.grid()
-    ylim = (0, 1.1)
-    plt.ylim(*ylim)
-    plt.fill_between(n_alter, train_scores_mean - train_scores_std,
-                     train_scores_mean + train_scores_std, alpha=0.1,
-                     color="r")
-    plt.fill_between(n_alter, test_scores_mean - test_scores_std,
-                     test_scores_mean + test_scores_std, alpha=0.1, color="g")
-    plt.plot(n_alter, train_scores_mean, color="r",
-             label="Training score")
-    plt.plot(n_alter, test_scores_mean, color="g",
-             label="Cross-validation score")
-    x_title = "Epochs"
-    y_title = "Score"
-    plt.xlabel(x_title)
-    plt.ylabel(y_title)
-    plt.legend(loc="best")
-    plt.savefig('seizure_5/Boost_dt_LearningCurve_Epoch.png')
-    # plt.savefig('22222.png')
-    plt.gcf().clear()
-
-
-def boost_dt_experiment_2(dataset_name, X_train, y_train): # Boosted Decision tree experiment 2: Leaf size vs Accuracy  (Pruning)
-    clf = AdaBoostClassifier(base_estimator=tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=25), n_estimators=5, learning_rate=1.0)
-    start_time = time.time()
-    cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
-    # cv = None
-    param_range = []
-    alter_list = []
-    for i in range(1, 50, 2):
-        param_range.append(tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=i))
-        alter_list.append(i)
-    # print param_range
-    train_scores, test_scores = validation_curve(clf, X_train, y_train,
-                                                 param_name="base_estimator",
-                                                 param_range=param_range,
-                                                 cv=cv,
-                                                 scoring="accuracy",
-                                                 n_jobs=1)
-    end_time = time.time()
-    difference = end_time - start_time
-    print "BoostDT2 difference:", difference
-
-    recording_and_plotting(dataset_name, name="BoostDT2",
-                           alter=alter_list,
-                           train=train_scores,
-                           validation=test_scores, x_title="Minimum leaf size in Base estimator", y_title="Score")
-
-
-def boost_dt_experiment_3(dataset_name, X_train, y_train): # Boosted Decision tree experiment 3: n_estimators vs Score
-    clf = AdaBoostClassifier(tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=25),
-                             n_estimators=5,
-                             learning_rate=1.0)
+def boost_dt_learning_curve_epoch_pre(dataset_name, X_train, y_train, min_samples_leaf=25, n_estimators=5, learning_rate = 1.0):
+    clf = AdaBoostClassifier(tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=min_samples_leaf), n_estimators=n_estimators, learning_rate=learning_rate)
     start_time = time.time()
     cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
     # cv = None
@@ -307,81 +167,15 @@ def boost_dt_experiment_3(dataset_name, X_train, y_train): # Boosted Decision tr
                                                  n_jobs=1)
     end_time = time.time()
     difference = end_time - start_time
-    print "BoostDT3 difference:", difference
+    print "boost_dt_learning_curve_epoch_pre", difference
 
-    recording_and_plotting(dataset_name, name="BoostDT3",
+    recording_and_plotting(dataset_name, name="boost_dt_learning_curve_epoch_pre",
                            alter=param_range,
                            train=train_scores,
                            validation=test_scores, x_title="n_estimators", y_title="Score")
-
-
-def boost_dt_experiment_4(dataset_name, X_train, y_train): # Boosted Decision tree experiment 4: Learning rate vs Accuracy
-    clf = AdaBoostClassifier(tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=25),
-                             n_estimators=5,
-                             learning_rate=1.0)
+def ann_learning_curve_epoch_pre(dataset_name, X, y, hidden_layer_sizes=(5, ), max_iter=500, alpha=0.0001): # ANN experiment 1: Sample size vs Accuracy
+    clf = MLPClassifier(hidden_layer_sizes=hidden_layer_sizes, max_iter=max_iter, alpha=alpha, random_state=1)
     start_time = time.time()
-    cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
-    # cv = None
-    param_range = np.linspace(0.01, 1, 25)
-    train_scores, test_scores = validation_curve(clf, X_train, y_train,
-                                                 param_name="learning_rate",
-                                                 param_range=param_range,
-                                                 cv=cv,
-                                                 scoring="accuracy",
-                                                 n_jobs=1)
-    end_time = time.time()
-    difference = end_time - start_time
-    print "BoostDT4 difference:", difference
-
-    recording_and_plotting(dataset_name, name="BoostDT4",
-                           alter=param_range,
-                           train=train_scores,
-                           validation=test_scores, x_title="learning_rate", y_title="Score")
-
-
-def boost_dt_experiment_2nd_learningcurve(dataset_name, X_train, y_train): # Boosted decision tree experiment 1: Sample size vs Accuracy
-    clf = AdaBoostClassifier(tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=2), n_estimators=50, learning_rate=0.07)
-    start_time = time.time()
-    cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
-    # cv = None
-
-    train_sizes = np.linspace(.01, 1.0, 25)
-    train_sizes, train_scores, test_scores = learning_curve(clf, X_train, y_train,
-                                                            cv=cv,
-                                                            train_sizes=train_sizes)
-    end_time = time.time()
-    difference = end_time - start_time
-    print "BoostDT1 difference:", difference
-
-    recording_and_plotting(dataset_name, name="BoostDT5",
-                           alter=train_sizes,
-                           train=train_scores,
-                           validation=test_scores, x_title="Sample size", y_title="Score")
-
-
-def ann_learning_curve_size(dataset_name, X_train, y_train): # ANN experiment 1: Sample size vs Accuracy
-    clf = MLPClassifier(hidden_layer_sizes=(5, ), random_state=1, max_iter=500, alpha=0.0001)
-    start_time = time.time()
-    cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
-    # cv = None
-
-    train_sizes = np.linspace(.01, 1.0, 25)
-    train_sizes, train_scores, test_scores = learning_curve(clf, X_train, y_train,
-                                                            cv=cv,
-                                                            train_sizes=train_sizes)
-    end_time = time.time()
-    difference = end_time - start_time
-    print "ANN difference:", difference
-
-    recording_and_plotting(dataset_name, name="ANN1",
-                           alter=train_sizes,
-                           train=train_scores,
-                           validation=test_scores, x_title="Sample size", y_title="Score")
-
-
-def ann_learning_curve_epoch(dataset_name, X, y):  # ANN experiment 3: alpha
-    # mlp = MLPClassifier(hidden_layer_sizes=(5, ), random_state=1, alpha=0.0001)
-    clf = MLPClassifier(hidden_layer_sizes=(5,), random_state=1, alpha=0.0001)
     rs = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
 
     scores_train = []
@@ -435,14 +229,13 @@ def ann_learning_curve_epoch(dataset_name, X, y):  # ANN experiment 3: alpha
         scores_train.append(scores_train_looper)
         scores_test.append(scores_test_looper)
         # n_alter.append(n_alter_looper)
-    # print "\n ANN4 alter", n_alter
-    # print "\n", len(range(25)), type(range(25))
-    print "\n ANN4 scores_train", scores_train
-    print "\n", len(scores_train), type(scores_train)
+    end_time = time.time()
+    difference = end_time - start_time
+    print "ann_learning_curve_epoch_pre", difference
     n_alter = range(25)
 
     # recording
-    name = 'ANN_LearningCurve_Epoch'
+    name = 'ann_learning_curve_epoch_pre'
     # n_alter_mean = np.mean(n_alter, axis=1)
     train_scores_mean = np.mean(scores_train, axis=0)
     train_scores_std = np.std(scores_train, axis=0)
@@ -475,245 +268,15 @@ def ann_learning_curve_epoch(dataset_name, X, y):  # ANN experiment 3: alpha
     plt.xlabel(x_title)
     plt.ylabel(y_title)
     plt.legend(loc="best")
-    plt.savefig('seizure_5/ANN_LearningCurve_Epoch.png')
+    plt.savefig('{}/{}.png'.format(dataset_name, name))
     # plt.savefig('22222.png')
     plt.gcf().clear()
-
-
-def ann_experiment_2(dataset_name, X_train, y_train): # ANN experiment 2: hidden layer size
-    clf = MLPClassifier(hidden_layer_sizes=(5, ), random_state=1, alpha=0.0001)
+def svm_learning_curve_epoch_pre(dataset_name, X_train, y_train, C=1.0, kernel='rbf', max_iter=-1):
+    clf = svm.SVC(C=C, kernel=kernel,  max_iter=max_iter)
     start_time = time.time()
     cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
     # cv = None
-    param_range = []
-    alter_list = []
-    for i in range(1,120,5):
-        param_range.append((i,))
-        alter_list.append(i)
-    print param_range
-    train_scores, test_scores = validation_curve(clf, X_train, y_train,
-                                                 param_name="hidden_layer_sizes",
-                                                 param_range=param_range,
-                                                 cv=cv,
-                                                 scoring="accuracy",
-                                                 n_jobs=1)
-    end_time = time.time()
-    difference = end_time - start_time
-    print "ANN2 difference:", difference
-
-    recording_and_plotting(dataset_name, name="ANN2",
-                           alter=alter_list,
-                           train=train_scores,
-                           validation=test_scores, x_title="Hidden layer size", y_title="Score")
-
-
-def ann_experiment_3(dataset_name, X_train, y_train): # ANN experiment 3: alpha
-    clf = MLPClassifier(hidden_layer_sizes=(5, ), random_state=1, alpha=0.0001)
-    start_time = time.time()
-    cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
-    # cv = 5
-    param_range = np.linspace(0.00001, 10, 25)
-    train_scores, test_scores = validation_curve(clf, X_train, y_train,
-                                                 param_name="alpha",
-                                                 param_range=param_range,
-                                                 cv=cv,
-                                                 scoring="accuracy",
-                                                 n_jobs=1)
-    end_time = time.time()
-    difference = end_time - start_time
-    print "ANN3 difference:", difference
-    print "\n ANN3 alter_list:", param_range
-    print '\n', param_range.shape, type(param_range)
-    print "\n ANN3 trainscores:", train_scores
-    print "\n", train_scores.shape(), type(train_scores)
-    recording_and_plotting(dataset_name, name="ANN3",
-                           alter=param_range,
-                           train=train_scores,
-                           validation=test_scores, x_title="alpha", y_title="Score")
-
-
-
-
-
-def ann_experiment_5(dataset_name, X_train, y_train): # ANN experiment 1: Sample size vs Accuracy
-    clf = MLPClassifier(hidden_layer_sizes=(20, ), random_state=1, alpha=0.75)
-    start_time = time.time()
-    cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
-    # cv = None
-
-    train_sizes = np.linspace(.01, 1.0, 25)
-    train_sizes, train_scores, test_scores = learning_curve(clf, X_train, y_train,
-                                                            cv=cv,
-                                                            train_sizes=train_sizes)
-    end_time = time.time()
-    difference = end_time - start_time
-    print "ANN difference:", difference
-
-    recording_and_plotting(dataset_name, name="ANN5",
-                           alter=train_sizes,
-                           train=train_scores,
-                           validation=test_scores, x_title="Sample size", y_title="Score")
-
-
-def knn_experiment_1(dataset_name, X_train, y_train): # ANN experiment 1: Sample size vs Accuracy
-    clf = neighbors.KNeighborsClassifier(n_neighbors=5, algorithm = 'auto')
-    start_time = time.time()
-    cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
-    # cv = None
-
-    train_sizes = np.linspace(.01, 1.0, 25)
-    train_sizes, train_scores, test_scores = learning_curve(clf, X_train, y_train,
-                                                            cv=cv,
-                                                            train_sizes=train_sizes)
-    end_time = time.time()
-    difference = end_time - start_time
-    print "KNN difference:", difference
-
-    recording_and_plotting(dataset_name, name="KNN1",
-                           alter=train_sizes,
-                           train=train_scores,
-                           validation=test_scores, x_title="Sample size", y_title="Score")
-
-
-def knn_experiment_2(dataset_name, X_train, y_train): # KNN experiment 2: n_neighbours vs. score
-    clf = neighbors.KNeighborsClassifier(n_neighbors=5, algorithm='auto')
-    start_time = time.time()
-    cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
-    # cv = None
-    param_range = range(1,50,2)
-    print param_range
-    train_scores, test_scores = validation_curve(clf, X_train, y_train,
-                                                 param_name="n_neighbors",
-                                                 param_range=param_range,
-                                                 cv=cv,
-                                                 scoring="accuracy",
-                                                 n_jobs=1)
-    end_time = time.time()
-    difference = end_time - start_time
-    print "KNN 2 difference:", difference
-
-    recording_and_plotting(dataset_name, name="KNN2",
-                           alter=param_range,
-                           train=train_scores,
-                           validation=test_scores, x_title="n_neighbors", y_title="Score")
-
-
-def knn_experiment_3(dataset_name, X_train, y_train): # Decision tree experiment 3: p vs score
-    clf = neighbors.KNeighborsClassifier(n_neighbors=5, algorithm = 'auto')
-    start_time = time.time()
-    cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
-    # cv = None
-    param_range = ['auto', 'ball_tree', 'kd_tree', 'brute']
-    print param_range
-    train_scores, test_scores = validation_curve(clf, X_train, y_train,
-                                                 param_name="algorithm",
-                                                 param_range=param_range,
-                                                 cv=cv,
-                                                 scoring="accuracy",
-                                                 n_jobs=1)
-    end_time = time.time()
-    difference = end_time - start_time
-    print "KNN 3 difference:", difference
-
-    recording_and_plotting(dataset_name, name="KNN3",
-                           alter=param_range,
-                           train=train_scores,
-                           validation=test_scores, x_title="algorithm", y_title="Score")
-
-
-def knn_experiment_4(dataset_name, X_train, y_train): # ANN experiment 1: Sample size vs Accuracy
-    clf = neighbors.KNeighborsClassifier(n_neighbors=8, algorithm='auto')
-    start_time = time.time()
-    cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
-    # cv = None
-
-    train_sizes = np.linspace(.01, 1.0, 25)
-    train_sizes, train_scores, test_scores = learning_curve(clf, X_train, y_train,
-                                                            cv=cv,
-                                                            train_sizes=train_sizes)
-    end_time = time.time()
-    difference = end_time - start_time
-    print "KNN difference:", difference
-
-    recording_and_plotting(dataset_name, name="KNN4",
-                           alter=train_sizes,
-                           train=train_scores,
-                           validation=test_scores, x_title="Sample size", y_title="Score")
-
-
-def svm_experiment_1(dataset_name, X_train, y_train): # SVM experiment 1: Sample size vs Accuracy
-    clf = svm.SVC(kernel='rbf')
-    start_time = time.time()
-    cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
-    # cv = None
-
-    train_sizes = np.linspace(.01, 1.0, 25)
-    print train_sizes
-    train_sizes, train_scores, test_scores = learning_curve(clf, X_train, y_train,
-                                                            cv=cv,
-                                                            train_sizes=train_sizes
-                                                            )
-    end_time = time.time()
-    difference = end_time - start_time
-    print "SVM difference:", difference
-
-    recording_and_plotting(dataset_name, name="SVM1",
-                           alter=train_sizes,
-                           train=train_scores,
-                           validation=test_scores, x_title="Sample size", y_title="Score")
-
-
-def svm_experiment_2(dataset_name, X_train, y_train): # SVM experiment 2: C
-    clf = svm.SVC(C = 1.0, kernel='rbf')
-    start_time = time.time()
-    cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
-    # cv = None
-    param_range = np.linspace(0.01, 50, 25)
-    print param_range
-    train_scores, test_scores = validation_curve(clf, X_train, y_train,
-                                                 param_name="C",
-                                                 param_range=param_range,
-                                                 cv=cv,
-                                                 scoring="accuracy",
-                                                 n_jobs=1)
-    end_time = time.time()
-    difference = end_time - start_time
-    print "SVM 2 difference:", difference
-
-    recording_and_plotting(dataset_name, name="SVM2",
-                           alter=param_range,
-                           train=train_scores,
-                           validation=test_scores, x_title="C", y_title="Score")
-
-
-def svm_experiment_3(dataset_name, X_train, y_train): # SVM experiment 2: C alternation
-    clf = svm.SVC(C = 1.0, kernel='rbf')
-    start_time = time.time()
-    cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
-    # cv = None
-    param_range = ['linear', 'poly', 'rbf', 'sigmoid']
-    train_scores, test_scores = validation_curve(clf, X_train, y_train,
-                                                 param_name="kernel",
-                                                 param_range=param_range,
-                                                 cv=cv,
-                                                 scoring="accuracy",
-                                                 n_jobs=1)
-    end_time = time.time()
-    difference = end_time - start_time
-    print "SVM 3 difference:", difference
-
-    recording_and_plotting(dataset_name, name="SVM3",
-                           alter=param_range,
-                           train=train_scores,
-                           validation=test_scores, x_title="kernel", y_title="Score")
-
-
-def svm_learning_curve_epoch(dataset_name, X_train, y_train): # SVM experiment 2: C alternation
-    clf = svm.SVC(C = 1.0, kernel='rbf')
-    start_time = time.time()
-    cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
-    # cv = None
-    param_range = range(10)
+    param_range = range(0, 100, 4)
     train_scores, test_scores = validation_curve(clf, X_train, y_train,
                                                  param_name="max_iter",
                                                  param_range=param_range,
@@ -729,9 +292,25 @@ def svm_learning_curve_epoch(dataset_name, X_train, y_train): # SVM experiment 2
                            train=train_scores,
                            validation=test_scores, x_title="max_iter", y_title="Score")
 
-
-def svm_experiment_5(dataset_name, X_train, y_train): # SVM experiment 1: Sample size vs Accuracy
-    clf = svm.SVC(kernel='rbf', C=4)
+def decision_tree_learning_curve_size_post(dataset_name, X_train, y_train, min_samples_leaf=25, max_depth=None):
+    clf = tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=min_samples_leaf, max_depth=max_depth)
+    start_time = time.time()
+    cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
+    # cv = None
+    train_sizes = np.linspace(.01, 1.0, 25)
+    train_sizes, train_scores, test_scores = learning_curve(clf, X_train, y_train,
+                                                            cv=cv,
+                                                            train_sizes=train_sizes,
+                                                            )
+    end_time = time.time()
+    difference = end_time - start_time
+    print "DT_learning_curve_size_post", difference
+    recording_and_plotting(dataset_name, name="DT_learning_curve_size_post",
+                           alter=train_sizes,
+                           train=train_scores,
+                           validation=test_scores, x_title="Sample size", y_title="Score")
+def boost_dt_learning_curve_size_post(dataset_name, X_train, y_train, min_samples_leaf=25, n_estimators=5, learning_rate = 1.0):
+    clf = AdaBoostClassifier(tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=min_samples_leaf), n_estimators=n_estimators, learning_rate=learning_rate)
     start_time = time.time()
     cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
     # cv = None
@@ -742,21 +321,426 @@ def svm_experiment_5(dataset_name, X_train, y_train): # SVM experiment 1: Sample
                                                             train_sizes=train_sizes)
     end_time = time.time()
     difference = end_time - start_time
-    print "SVM 5 difference:", difference
+    print "boost_dt_learning_curve_size_post", difference
 
-    recording_and_plotting(dataset_name, name="SVM5",
+    recording_and_plotting(dataset_name, name="boost_dt_learning_curve_size_post",
+                           alter=train_sizes,
+                           train=train_scores,
+                           validation=test_scores, x_title="Sample size", y_title="Score")
+def ann_learning_curve_size_post(dataset_name, X_train, y_train, hidden_layer_sizes=(5, ), max_iter=500, alpha=0.0001): # ANN experiment 1: Sample size vs Accuracy
+    clf = MLPClassifier(hidden_layer_sizes=hidden_layer_sizes, max_iter=max_iter, alpha=alpha, random_state=1)
+    start_time = time.time()
+    cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
+    # cv = None
+
+    train_sizes = np.linspace(.01, 1.0, 25)
+    train_sizes, train_scores, test_scores = learning_curve(clf, X_train, y_train,
+                                                            cv=cv,
+                                                            train_sizes=train_sizes)
+    end_time = time.time()
+    difference = end_time - start_time
+    print "ann_learning_curve_size_post", difference
+
+    recording_and_plotting(dataset_name, name="ann_learning_curve_size_post",
+                           alter=train_sizes,
+                           train=train_scores,
+                           validation=test_scores, x_title="Sample size", y_title="Score")
+def knn_learning_curve_size_post(dataset_name, X_train, y_train, n_neighbors=5, algorithm='auto'):
+    clf = neighbors.KNeighborsClassifier(n_neighbors=n_neighbors, algorithm=algorithm)
+    start_time = time.time()
+    cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
+    # cv = None
+
+    train_sizes = np.linspace(.01, 1.0, 25)
+    train_sizes, train_scores, test_scores = learning_curve(clf, X_train, y_train,
+                                                            cv=cv,
+                                                            train_sizes=train_sizes)
+    end_time = time.time()
+    difference = end_time - start_time
+    print "knn_learning_curve_size_post", difference
+
+    recording_and_plotting(dataset_name, name="knn_learning_curve_size_post",
+                           alter=train_sizes,
+                           train=train_scores,
+                           validation=test_scores, x_title="Sample size", y_title="Score")
+def svm_learning_curve_size_post(dataset_name, X_train, y_train, C=1.0, kernel='rbf', max_iter=-1):
+    clf = svm.SVC(C=C, kernel=kernel,  max_iter=max_iter)
+    start_time = time.time()
+    cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
+    # cv = None
+
+    train_sizes = np.linspace(.01, 1.0, 25)
+    train_sizes, train_scores, test_scores = learning_curve(clf, X_train, y_train,
+                                                            cv=cv,
+                                                            train_sizes=train_sizes
+                                                            )
+    end_time = time.time()
+    difference = end_time - start_time
+    print "svm_learning_curve_size_post", difference
+
+    recording_and_plotting(dataset_name, name="svm_learning_curve_size_post",
                            alter=train_sizes,
                            train=train_scores,
                            validation=test_scores, x_title="Sample size", y_title="Score")
 
+def boost_dt_learning_curve_epoch_post(dataset_name, X_train, y_train, min_samples_leaf=25, n_estimators=5, learning_rate = 1.0):
+    clf = AdaBoostClassifier(tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=min_samples_leaf), n_estimators=n_estimators, learning_rate=learning_rate)
+    start_time = time.time()
+    cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
+    # cv = None
+    param_range = range(1, 100, 4)
+    train_scores, test_scores = validation_curve(clf, X_train, y_train,
+                                                 param_name="n_estimators",
+                                                 param_range=param_range,
+                                                 cv=cv,
+                                                 scoring="accuracy",
+                                                 n_jobs=1)
+    end_time = time.time()
+    difference = end_time - start_time
+    print "boost_dt_learning_curve_epoch_post", difference
+
+    recording_and_plotting(dataset_name, name="boost_dt_learning_curve_epoch_post",
+                           alter=param_range,
+                           train=train_scores,
+                           validation=test_scores, x_title="n_estimators", y_title="Score")
+def ann_learning_curve_epoch_post(dataset_name, X, y, hidden_layer_sizes=(5, ), max_iter=500, alpha=0.0001): # ANN experiment 1: Sample size vs Accuracy
+    clf = MLPClassifier(hidden_layer_sizes=hidden_layer_sizes, max_iter=max_iter, alpha=alpha, random_state=1)
+    start_time = time.time()
+    rs = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
+
+    scores_train = []
+    scores_test = []
+    for train_index, validation_index in rs.split(X):
+
+        X_train = X[train_index]
+        X_test = X[validation_index]
+        y_train = y[train_index]
+        y_test = y[validation_index]
+        # print "y_train", y_train, '\n', "valid:", y_test
+
+        """ Home-made mini-batch learning
+            -> not to be used in out-of-core setting!
+        """
+
+        N_TRAIN_SAMPLES = X_train.shape[0]
+        N_EPOCHS = 25
+        N_BATCH = 128
+        N_CLASSES = np.unique(y_train)
+
+        scores_train_looper = []
+        scores_test_looper = []
+        n_alter_looper = []
+        # EPOCH
+        epoch = 0
+        while epoch < N_EPOCHS:
+            # print('epoch: ', epoch)
+            # SHUFFLING
+            random_perm = np.random.permutation(X_train.shape[0])
+            mini_batch_index = 0
+            while True:
+                # MINI-BATCH
+                indices = random_perm[mini_batch_index:mini_batch_index + N_BATCH]
+                clf.partial_fit(X_train[indices], y_train[indices], classes=N_CLASSES)
+                mini_batch_index += N_BATCH
+
+                if mini_batch_index >= N_TRAIN_SAMPLES:
+                    break
+
+            # SCORE TRAIN
+            scores_train_looper.append(clf.score(X_train, y_train))
+
+            # SCORE TEST
+            scores_test_looper.append(clf.score(X_test, y_test))
+
+            n_alter_looper.append(epoch)
+
+            epoch += 1
+            # print scores_train_looper
+        scores_train.append(scores_train_looper)
+        scores_test.append(scores_test_looper)
+        # n_alter.append(n_alter_looper)
+    end_time = time.time()
+    difference = end_time - start_time
+    print "ann_learning_curve_epoch_post", difference
+    n_alter = range(25)
+
+    # recording
+    name = 'ann_learning_curve_epoch_post'
+    # n_alter_mean = np.mean(n_alter, axis=1)
+    train_scores_mean = np.mean(scores_train, axis=0)
+    train_scores_std = np.std(scores_train, axis=0)
+    test_scores_mean = np.mean(scores_test, axis=0)
+    test_scores_std = np.std(scores_test, axis=0)
+    DT_1 = open('{}/{}.txt'.format(dataset_name, name), 'w')
+    DT_1.write('{}/{}'.format(dataset_name, name))
+    DT_1.write("\n\n")
+    DT_1.write(str(n_alter))
+    DT_1.write("\n\n")
+    DT_1.write(str(train_scores_mean))
+    DT_1.write("\n\n")
+    DT_1.write(str(test_scores_mean))
+
+    # plotting
+    plt.grid()
+    ylim = (0, 1.1)
+    plt.ylim(*ylim)
+    plt.fill_between(n_alter, train_scores_mean - train_scores_std,
+                     train_scores_mean + train_scores_std, alpha=0.1,
+                     color="r")
+    plt.fill_between(n_alter, test_scores_mean - test_scores_std,
+                     test_scores_mean + test_scores_std, alpha=0.1, color="g")
+    plt.plot(n_alter, train_scores_mean, color="r",
+             label="Training score")
+    plt.plot(n_alter, test_scores_mean, color="g",
+             label="Cross-validation score")
+    x_title = "Epochs"
+    y_title = "Score"
+    plt.xlabel(x_title)
+    plt.ylabel(y_title)
+    plt.legend(loc="best")
+    plt.savefig('{}/{}.png'.format(dataset_name, name))
+    # plt.savefig('22222.png')
+    plt.gcf().clear()
+def svm_learning_curve_epoch_post(dataset_name, X_train, y_train): # SVM experiment 2: C alternation
+    clf = svm.SVC(C = 1.0, kernel='rbf')
+    start_time = time.time()
+    cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
+    # cv = None
+    param_range = range(0, 100, 4)
+    train_scores, test_scores = validation_curve(clf, X_train, y_train,
+                                                 param_name="max_iter",
+                                                 param_range=param_range,
+                                                 cv=cv,
+                                                 scoring="accuracy",
+                                                 n_jobs=1)
+    end_time = time.time()
+    difference = end_time - start_time
+    print "SVM epoch difference:", difference
+
+    recording_and_plotting(dataset_name, name="SVM_learning_curve_epoch",
+                           alter=param_range,
+                           train=train_scores,
+                           validation=test_scores, x_title="max_iter", y_title="Score")
+
+def decision_tree_vld_curve_1(dataset_name, X_train, y_train, min_samples_leaf=25, max_depth=None):
+    clf = tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=min_samples_leaf, max_depth=max_depth)
+    start_time = time.time()
+    cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
+    # cv = 10
+    param_range = range(1, 50, 2)
+    train_scores, test_scores = validation_curve(clf, X_train, y_train,
+                                                 param_name="min_samples_leaf",
+                                                 param_range=param_range,
+                                                 cv=cv,
+                                                 scoring="accuracy",
+                                                 n_jobs=1)
+    end_time = time.time()
+    difference = end_time - start_time
+    print "DT_vlad_curve_1", difference
+
+    recording_and_plotting(dataset_name, name="DT_vlad_curve_1",
+                           alter=param_range,
+                           train=train_scores,
+                           validation=test_scores, x_title="min_samples_leaf", y_title="Score")
+def decision_tree_vld_curve_2(dataset_name, X_train, y_train, min_samples_leaf=25, max_depth=None):
+    clf = tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=min_samples_leaf, max_depth=max_depth)
+    start_time = time.time()
+    cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
+    # cv = None
+    param_range = range(1, 50, 2)
+    train_scores, test_scores = validation_curve(clf, X_train, y_train,
+                                                 param_name="max_depth",
+                                                 param_range=param_range,
+                                                 cv=cv,
+                                                 scoring="accuracy",
+                                                 n_jobs=1)
+    end_time = time.time()
+    difference = end_time - start_time
+    print "DT_vlad_curve_2", difference
+
+    recording_and_plotting(dataset_name, name="DT_vlad_curve_2",
+                           alter=param_range,
+                           train=train_scores,
+                           validation=test_scores, x_title="max_depth", y_title="Score")
+
+def boost_dt_vld_curve_1(dataset_name, X_train, y_train, min_samples_leaf=25, n_estimators=5, learning_rate = 1.0):
+    clf = AdaBoostClassifier(tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=min_samples_leaf), n_estimators=n_estimators, learning_rate=learning_rate)
+    start_time = time.time()
+    cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
+    # cv = None
+    param_range = []
+    alter_list = []
+    for i in range(1, 50, 2):
+        param_range.append(tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=i))
+        alter_list.append(i)
+    # print param_range
+    train_scores, test_scores = validation_curve(clf, X_train, y_train,
+                                                 param_name="base_estimator",
+                                                 param_range=param_range,
+                                                 cv=cv,
+                                                 scoring="accuracy",
+                                                 n_jobs=1)
+    end_time = time.time()
+    difference = end_time - start_time
+    print "boost_dt_vld_curve_1", difference
+
+    recording_and_plotting(dataset_name, name="boost_dt_vld_curve_1",
+                           alter=alter_list,
+                           train=train_scores,
+                           validation=test_scores, x_title="min_samples_leaf", y_title="Score")
+def boost_dt_vld_curve_2(dataset_name, X_train, y_train, min_samples_leaf=25, n_estimators=5, learning_rate = 1.0):
+    clf = AdaBoostClassifier(tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=min_samples_leaf), n_estimators=n_estimators, learning_rate=learning_rate)
+    start_time = time.time()
+    cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
+    # cv = None
+    param_range = np.linspace(0.01, 1, 25)
+    train_scores, test_scores = validation_curve(clf, X_train, y_train,
+                                                 param_name="learning_rate",
+                                                 param_range=param_range,
+                                                 cv=cv,
+                                                 scoring="accuracy",
+                                                 n_jobs=1)
+    end_time = time.time()
+    difference = end_time - start_time
+    print "BoostDT4 difference:", difference
+
+    recording_and_plotting(dataset_name, name="BoostDT4",
+                           alter=param_range,
+                           train=train_scores,
+                           validation=test_scores, x_title="learning_rate", y_title="Score")
+
+def ann_vld_curve_1(dataset_name, X_train, y_train, hidden_layer_sizes=(5, ), max_iter=500, alpha=0.0001): # ANN experiment 1: Sample size vs Accuracy
+    clf = MLPClassifier(hidden_layer_sizes=hidden_layer_sizes, max_iter=max_iter, alpha=alpha, random_state=1)
+    start_time = time.time()
+    cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
+    # cv = None
+    param_range = []
+    alter_list = []
+    for i in range(1,120,5):
+        param_range.append((i,))
+        alter_list.append(i)
+    train_scores, test_scores = validation_curve(clf, X_train, y_train,
+                                                 param_name="hidden_layer_sizes",
+                                                 param_range=param_range,
+                                                 cv=cv,
+                                                 scoring="accuracy",
+                                                 n_jobs=1)
+    end_time = time.time()
+    difference = end_time - start_time
+    print "ann_vld_curve_1", difference
+
+    recording_and_plotting(dataset_name, name="ann_vld_curve_1",
+                           alter=alter_list,
+                           train=train_scores,
+                           validation=test_scores, x_title="hidden_layer_sizes", y_title="Score")
+def ann_vld_curve_2(dataset_name, X_train, y_train, hidden_layer_sizes=(5, ), max_iter=500, alpha=0.0001): # ANN experiment 1: Sample size vs Accuracy
+    clf = MLPClassifier(hidden_layer_sizes=hidden_layer_sizes, max_iter=max_iter, alpha=alpha, random_state=1)
+    start_time = time.time()
+    cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
+    # cv = 5
+    param_range = np.linspace(0.00001, 10, 25)
+    train_scores, test_scores = validation_curve(clf, X_train, y_train,
+                                                 param_name="alpha",
+                                                 param_range=param_range,
+                                                 cv=cv,
+                                                 scoring="accuracy",
+                                                 n_jobs=1)
+    end_time = time.time()
+    difference = end_time - start_time
+    print "ann_vld_curve_2", difference
+
+    recording_and_plotting(dataset_name, name="ann_vld_curve_2",
+                           alter=param_range,
+                           train=train_scores,
+                           validation=test_scores, x_title="alpha", y_title="Score")
+
+def knn_vld_curve_1(dataset_name, X_train, y_train, n_neighbors=5, algorithm='auto'):
+    clf = neighbors.KNeighborsClassifier(n_neighbors=n_neighbors, algorithm=algorithm)
+    start_time = time.time()
+    cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
+    # cv = None
+    param_range = range(1,50,2)
+    train_scores, test_scores = validation_curve(clf, X_train, y_train,
+                                                 param_name="n_neighbors",
+                                                 param_range=param_range,
+                                                 cv=cv,
+                                                 scoring="accuracy",
+                                                 n_jobs=1)
+    end_time = time.time()
+    difference = end_time - start_time
+    print "knn_vld_curve_1", difference
+
+    recording_and_plotting(dataset_name, name="knn_vld_curve_1",
+                           alter=param_range,
+                           train=train_scores,
+                           validation=test_scores, x_title="n_neighbors", y_title="Score")
+def knn_vld_curve_2(dataset_name, X_train, y_train, n_neighbors=5, algorithm='auto'):
+    clf = neighbors.KNeighborsClassifier(n_neighbors=n_neighbors, algorithm=algorithm)
+    start_time = time.time()
+    cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
+    # cv = None
+    param_range = ['auto', 'ball_tree', 'kd_tree', 'brute']
+    train_scores, test_scores = validation_curve(clf, X_train, y_train,
+                                                 param_name="algorithm",
+                                                 param_range=param_range,
+                                                 cv=cv,
+                                                 scoring="accuracy",
+                                                 n_jobs=1)
+    end_time = time.time()
+    difference = end_time - start_time
+    print "knn_vld_curve_2", difference
+
+    recording_and_plotting(dataset_name, name="knn_vld_curve_2",
+                           alter=param_range,
+                           train=train_scores,
+                           validation=test_scores, x_title="algorithm", y_title="Score")
+
+def svm_vld_curve_1(dataset_name, X_train, y_train, C=1.0, kernel='rbf', max_iter=-1):
+    clf = svm.SVC(C=C, kernel=kernel,  max_iter=max_iter)
+    start_time = time.time()
+    cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
+    # cv = None
+    param_range = np.linspace(0.01, 50, 25)
+    train_scores, test_scores = validation_curve(clf, X_train, y_train,
+                                                 param_name="C",
+                                                 param_range=param_range,
+                                                 cv=cv,
+                                                 scoring="accuracy",
+                                                 n_jobs=1)
+    end_time = time.time()
+    difference = end_time - start_time
+    print "svm_vld_curve_1", difference
+
+    recording_and_plotting(dataset_name, name="svm_vld_curve_1",
+                           alter=param_range,
+                           train=train_scores,
+                           validation=test_scores, x_title="C", y_title="Score")
+def svm_vld_curve_2(dataset_name, X_train, y_train, C=1.0, kernel='rbf', max_iter=-1):
+    clf = svm.SVC(C=C, kernel=kernel,  max_iter=max_iter)
+    start_time = time.time()
+    cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
+    # cv = None
+    param_range = ['linear', 'poly', 'rbf', 'sigmoid']
+    train_scores, test_scores = validation_curve(clf, X_train, y_train,
+                                                 param_name="kernel",
+                                                 param_range=param_range,
+                                                 cv=cv,
+                                                 scoring="accuracy",
+                                                 n_jobs=1)
+    end_time = time.time()
+    difference = end_time - start_time
+    print "svm_vld_curve_2", difference
+
+    recording_and_plotting(dataset_name, name="svm_vld_curve_2",
+                           alter=param_range,
+                           train=train_scores,
+                           validation=test_scores, x_title="kernel", y_title="Score")
 
 if __name__=="__main__":
     '''load and standardize data set #1'''
 
     train = np.genfromtxt('fashion-mnist_train_minor.csv', delimiter=',')[1:, :]
     test = np.genfromtxt('fashion-mnist_test_minor.csv', delimiter=',')[1:, :]
-    # train = np.genfromtxt('fashion-mnist_train.csv', delimiter=',')[1:, :]
-    # test = np.genfromtxt('fashion-mnist_test.csv', delimiter=',')[1:, :]
 
     X_train = train[:, 1:]
     y_train = train[:, 0]
@@ -765,45 +749,70 @@ if __name__=="__main__":
 
     # standardize the original data - this is important but usually neglected by newbies.
     scaler = preprocessing.StandardScaler()
-    # print X_train[:5, :]
     X_train = scaler.fit_transform(X_train)
-    # print X_train[:5, :]
     X_test = scaler.transform(X_test)
-
     set1_name = "mnist"
 
-    # Decision tree experiment 1: Sample size vs Accuracy
-    # decision_tree_experiment_1(set1_name, X_train, y_train)
-    # decision_tree_experiment_2(set1_name, X_train, y_train)  # Leaf size vs Accuracy  (Pruning)
-    # decision_tree_experiment_3(set1_name, X_train, y_train)  # Max depth vs Accuracy
-    #
-    # # Boosted decision tree experiment 1: Sample size vs Accuracy
-    # boost_dt_experiment_1(set1_name, X_train, y_train)
-    # boost_dt_experiment_2(set1_name, X_train, y_train)
-    # boost_dt_experiment_3(set1_name, X_train, y_train)
-    # boost_dt_experiment_4(set1_name, X_train, y_train)
-    #
-    # # ANN experiment 1: Sample size vs Accuracy
-    # ann_experiment_1(set1_name, X_train, y_train)
-    # ann_experiment_2(set1_name, X_train, y_train)
-    # ann_experiment_3(set1_name, X_train, y_train)
-    #
-    # # KNN experiment 1: Sample size vs Accuracy
-    # knn_experiment_1(set1_name, X_train, y_train)
-    # knn_experiment_2(set1_name, X_train, y_train)  # n_neighbours vs. score
-    # knn_experiment_3(set1_name, X_train, y_train)  # algorithm vs. score
-    #
-    # # SVM experiment 1: Sample size vs Accuracy
-    # svm_experiment_1(set1_name, X_train, y_train)
-    # svm_experiment_3(set1_name, X_train, y_train)  # kernel vs. score
-    # svm_experiment_2(set1_name, X_train, y_train)  # C vs. score
+    # pre-parameter adjustment
+    decision_tree_learning_curve_size_pre(set1_name, X_train, y_train)
+    boost_dt_learning_curve_size_pre(set1_name, X_train, y_train)
+    ann_learning_curve_size_pre(set1_name, X_train, y_train)
+    knn_learning_curve_size_pre(set1_name, X_train, y_train)
+    svm_learning_curve_size_pre(set1_name, X_train, y_train)
 
-    # # Post-optimization learning curve
-    # decision_tree_experiment_4(set1_name, X_train, y_train)
-    # ann_experiment_4(set1_name, X_train, y_train)
-    # knn_experiment_4(set1_name, X_train, y_train)
-    ann_learning_curve_epoch(set1_name, X_train, y_train)
-    svm_learning_curve_epoch(set1_name, X_train, y_train)
+    boost_dt_learning_curve_epoch_pre(set1_name, X_train, y_train)
+    ann_learning_curve_epoch_pre(set1_name, X_train, y_train)
+    svm_learning_curve_epoch_pre(set1_name, X_train, y_train)
+
+    # # parameter validation curve
+    # decision_tree_vld_curve_1(set1_name, X_train, y_train)
+    # decision_tree_vld_curve_2(set1_name, X_train, y_train)
+    # boost_dt_vld_curve_1(set1_name, X_train, y_train)
+    # boost_dt_vld_curve_2(set1_name, X_train, y_train)
+    # ann_vld_curve_1(set1_name, X_train, y_train)
+    # ann_vld_curve_2(set1_name, X_train, y_train)
+    # knn_vld_curve_1(set1_name, X_train, y_train)
+    # knn_vld_curve_2(set1_name, X_train, y_train)
+    # svm_vld_curve_1(set1_name, X_train, y_train)
+    # svm_vld_curve_2(set1_name, X_train, y_train)
+    #
+    # # post-parameter adjustment
+    # decision_tree_learning_curve_size_post(set1_name, X_train, y_train)
+    # boost_dt_learning_curve_size_post(set1_name, X_train, y_train)
+    # ann_learning_curve_size_post(set1_name, X_train, y_train)
+    # knn_learning_curve_size_post(set1_name, X_train, y_train)
+    # svm_learning_curve_size_post(set1_name, X_train, y_train)
+    #
+    # boost_dt_learning_curve_epoch_post(set1_name, X_train, y_train)
+    # ann_learning_curve_epoch_post(set1_name, X_train, y_train)
+    # svm_learning_curve_epoch_post(set1_name, X_train, y_train)
+
+    '''===========for seizure========='''
+    set2 = np.genfromtxt('Epileptic_Seizure_Recognition.csv', delimiter=',', dtype=None)[1:601, :]
+    set2 = set2.astype(int)
+
+    # separating set2 into X and y, then train and test
+    X2 = set2[:, :-1]
+    scaler = preprocessing.StandardScaler()
+    X2 = scaler.fit_transform(X2)
+    y2 = set2[:, -1]
+    X2_train, X2_test, y2_train, y2_test = train_test_split(X2, y2, test_size=0.2, random_state=0)
+    #
+    set2_name = "seizure_5"
+
+    # pre-parameter adjustment
+    decision_tree_learning_curve_size_pre(set2_name, X2_train, y2_train)
+    boost_dt_learning_curve_size_pre(set2_name, X2_train, y2_train)
+    ann_learning_curve_size_pre(set2_name, X2_train, y2_train)
+    knn_learning_curve_size_pre(set2_name, X2_train, y2_train)
+    svm_learning_curve_size_pre(set2_name, X2_train, y2_train)
+
+    boost_dt_learning_curve_epoch_pre(set2_name, X2_train, y2_train)
+    ann_learning_curve_epoch_pre(set2_name, X2_train, y2_train)
+    svm_learning_curve_epoch_pre(set2_name, X2_train, y2_train)
+
+
+
 
     '''load and standardize data set #2'''
 
@@ -938,55 +947,10 @@ if __name__=="__main__":
     # svm_experiment_3(set1_name, X_train, y_train)  # kernel vs. score
     # svm_experiment_2(set1_name, X_train, y_train)  # C vs. score
 
-    '''===========for seizure========='''
-    # set2 = np.genfromtxt('Epileptic_Seizure_Recognition_binary.csv', delimiter=',', dtype=None)[1:1001, :]
-    set2 = np.genfromtxt('Epileptic_Seizure_Recognition.csv', delimiter=',', dtype=None)[1:6001, :]
-
-    set2 = set2.astype(int)
-
-    # separating set2 into X and y, then train and test
-    X2 = set2[:, :-1]
-    # print X2[:5, :]
-    scaler = preprocessing.StandardScaler()
-    X2 = scaler.fit_transform(X2)
-    # print X2[:5, :]
-    y2 = set2[:, -1]
-    # print y2
-    X2_train, X2_test, y2_train, y2_test = train_test_split(X2, y2, test_size=0.2, random_state=0)
-    #
-    set2_name = "seizure_5"
-
-    # # Decision tree experiment:
-    # decision_tree_experiment_1(set2_name, X2_train, y2_train)
-    # decision_tree_experiment_2(set2_name, X2_train, y2_train)  # Leaf size vs Accuracy  (Pruning)
-    # decision_tree_experiment_3(set2_name, X2_train, y2_train)  # Max depth vs Accuracy
-    #
-    # # Boosted decision tree experiment:
-    # boost_dt_experiment_1(set2_name, X2_train, y2_train)
-    # boost_dt_experiment_2(set2_name, X2_train, y2_train)
-    # boost_dt_experiment_3(set2_name, X2_train, y2_train)  # Leaf size vs Accuracy  (Pruning)
-    # boost_dt_experiment_4(set2_name, X2_train, y2_train)
-    #
-    # # ANN experiment 1: Sample size vs Accuracy
-    # ann_experiment_1(set2_name, X2_train, y2_train)
-    # ann_experiment_2(set2_name, X2_train, y2_train)
-    # ann_experiment_3(set2_name, X2_train, y2_train)
 
 
-    # # KNN experiment 1: Sample size vs Accuracy
-    # knn_experiment_1(set2_name, X2_train, y2_train)
-    # knn_experiment_2(set2_name, X2_train, y2_train)  # n_neighbours vs. score
-    # knn_experiment_3(set2_name, X2_train, y2_train)  # algorithm vs. score
-
-    # SVM experiment 1: Sample size vs Accuracy
-    svm_experiment_1(set2_name, X2_train, y2_train)
-    svm_experiment_2(set2_name, X2_train, y2_train)  # C vs. score
-    svm_experiment_3(set2_name, X2_train, y2_train)  # kernel vs. score
 
 
-    # boost_dt_learning_curve_epoch(set2_name, X2_train, y2_train)
-    ann_learning_curve_epoch(set2_name, X2_train, y2_train)
-    svm_learning_curve_epoch(set2_name, X2_train, y2_train)
 
 
 
