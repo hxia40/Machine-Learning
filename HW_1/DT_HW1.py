@@ -700,7 +700,7 @@ def svm_vld_curve_1(dataset_name, X_train, y_train, C=1.0, kernel='rbf', max_ite
     start_time = time.time()
     cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
     # cv = None
-    param_range = np.linspace(0.01, 100000, 25)
+    param_range = np.linspace(0.01, 50, 25)
 
     train_scores, test_scores = validation_curve(clf, X_train, y_train,
                                                  param_name="C",
@@ -821,19 +821,19 @@ if __name__=="__main__":
     # ann_vld_curve_2(set2_name, X2_train, y2_train)
     # knn_vld_curve_1(set2_name, X2_train, y2_train)
     # knn_vld_curve_2(set2_name, X2_train, y2_train)
-    svm_vld_curve_1(set2_name, X2_train, y2_train)
+    # svm_vld_curve_1(set2_name, X2_train, y2_train)
     # svm_vld_curve_2(set2_name, X2_train, y2_train)
 
     # # post-parameter adjustment
-    # decision_tree_learning_curve_size_post(set2_name, X2_train, y2_train, min_samples_leaf=33, max_depth=None)
-    # boost_dt_learning_curve_size_post(set2_name, X2_train, y2_train, min_samples_leaf=113, n_estimators=40, learning_rate = 0.5125)
-    # ann_learning_curve_size_post(set2_name, X2_train, y2_train, hidden_layer_sizes=(200, ), alpha=0.417)
-    # knn_learning_curve_size_post(set2_name, X2_train, y2_train, n_neighbors=1, algorithm='auto')
-    # svm_learning_curve_size_post(set2_name, X2_train, y2_train, C= , kernel='rbf', max_iter=-1)
+    decision_tree_learning_curve_size_post(set2_name, X2_train, y2_train, min_samples_leaf=33, max_depth=None)
+    boost_dt_learning_curve_size_post(set2_name, X2_train, y2_train, min_samples_leaf=113, n_estimators=40, learning_rate = 0.5125)
+    ann_learning_curve_size_post(set2_name, X2_train, y2_train, hidden_layer_sizes=(200, ), alpha=0.417)
+    knn_learning_curve_size_post(set2_name, X2_train, y2_train, n_neighbors=1, algorithm='auto')
+    svm_learning_curve_size_post(set2_name, X2_train, y2_train, C=50 , kernel='rbf', max_iter=-1)
     #
-    # boost_dt_learning_curve_epoch_post(set2_name, X2_train, y2_train, min_samples_leaf=113, n_estimators=40, learning_rate = 0.5125)
-    # ann_learning_curve_epoch_post(set2_name, X2_train, y2_train, hidden_layer_sizes=(200, ), alpha=0.417)
-    # svm_learning_curve_epoch_post(set2_name, X2_train, y2_train, C= , kernel='rbf', max_iter=-1)
+    boost_dt_learning_curve_epoch_post(set2_name, X2_train, y2_train, min_samples_leaf=113, n_estimators=40, learning_rate = 0.5125)
+    ann_learning_curve_epoch_post(set2_name, X2_train, y2_train, hidden_layer_sizes=(200, ), alpha=0.417)
+    svm_learning_curve_epoch_post(set2_name, X2_train, y2_train, C=50 , kernel='rbf', max_iter=-1)
 
 
     '''load and standardize data set #2'''
