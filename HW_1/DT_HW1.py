@@ -527,7 +527,7 @@ def decision_tree_vld_curve_1(dataset_name, X_train, y_train, min_samples_leaf=2
     start_time = time.time()
     cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
     # cv = 10
-    param_range = range(1, 50, 2)
+    param_range = range(1, 200, 8)
     train_scores, test_scores = validation_curve(clf, X_train, y_train,
                                                  param_name="min_samples_leaf",
                                                  param_range=param_range,
@@ -570,7 +570,7 @@ def boost_dt_vld_curve_1(dataset_name, X_train, y_train, min_samples_leaf=25, n_
     # cv = None
     param_range = []
     alter_list = []
-    for i in range(1, 50, 2):
+    for i in range(1, 200, 8):
         param_range.append(tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=i))
         alter_list.append(i)
     # print param_range
@@ -616,7 +616,7 @@ def ann_vld_curve_1(dataset_name, X_train, y_train, hidden_layer_sizes=(5, ), ma
     # cv = None
     param_range = []
     alter_list = []
-    for i in range(1,120,5):
+    for i in range(1,1000,50):
         param_range.append((i,))
         alter_list.append(i)
     train_scores, test_scores = validation_curve(clf, X_train, y_train,
@@ -638,7 +638,7 @@ def ann_vld_curve_2(dataset_name, X_train, y_train, hidden_layer_sizes=(5, ), ma
     start_time = time.time()
     cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
     # cv = 5
-    param_range = np.linspace(0.00001, 10, 25)
+    param_range = np.linspace(0.00001, 50, 25)
     train_scores, test_scores = validation_curve(clf, X_train, y_train,
                                                  param_name="alpha",
                                                  param_range=param_range,
@@ -765,16 +765,16 @@ if __name__=="__main__":
     # svm_learning_curve_epoch_pre(set1_name, X_train, y_train)
 
     # parameter validation curve
-    decision_tree_vld_curve_1(set1_name, X_train, y_train)
-    decision_tree_vld_curve_2(set1_name, X_train, y_train)
-    boost_dt_vld_curve_1(set1_name, X_train, y_train)
-    boost_dt_vld_curve_2(set1_name, X_train, y_train)
+    # decision_tree_vld_curve_1(set1_name, X_train, y_train)
+    # decision_tree_vld_curve_2(set1_name, X_train, y_train)
+    # boost_dt_vld_curve_1(set1_name, X_train, y_train)
+    # boost_dt_vld_curve_2(set1_name, X_train, y_train)
     ann_vld_curve_1(set1_name, X_train, y_train)
     ann_vld_curve_2(set1_name, X_train, y_train)
-    knn_vld_curve_1(set1_name, X_train, y_train)
-    knn_vld_curve_2(set1_name, X_train, y_train)
-    svm_vld_curve_1(set1_name, X_train, y_train)
-    svm_vld_curve_2(set1_name, X_train, y_train)
+    # knn_vld_curve_1(set1_name, X_train, y_train)
+    # knn_vld_curve_2(set1_name, X_train, y_train)
+    # svm_vld_curve_1(set1_name, X_train, y_train)
+    # svm_vld_curve_2(set1_name, X_train, y_train)
 
     # # post-parameter adjustment
     # decision_tree_learning_curve_size_post(set1_name, X_train, y_train)
@@ -812,16 +812,16 @@ if __name__=="__main__":
     # svm_learning_curve_epoch_pre(set2_name, X2_train, y2_train)
 
     # parameter validation curve
-    decision_tree_vld_curve_1(set2_name, X2_train, y2_train)
-    decision_tree_vld_curve_2(set2_name, X2_train, y2_train)
-    boost_dt_vld_curve_1(set2_name, X2_train, y2_train)
-    boost_dt_vld_curve_2(set2_name, X2_train, y2_train)
+    # decision_tree_vld_curve_1(set2_name, X2_train, y2_train)
+    # decision_tree_vld_curve_2(set2_name, X2_train, y2_train)
+    # boost_dt_vld_curve_1(set2_name, X2_train, y2_train)
+    # boost_dt_vld_curve_2(set2_name, X2_train, y2_train)
     ann_vld_curve_1(set2_name, X2_train, y2_train)
     ann_vld_curve_2(set2_name, X2_train, y2_train)
-    knn_vld_curve_1(set2_name, X2_train, y2_train)
-    knn_vld_curve_2(set2_name, X2_train, y2_train)
-    svm_vld_curve_1(set2_name, X2_train, y2_train)
-    svm_vld_curve_2(set2_name, X2_train, y2_train)
+    # knn_vld_curve_1(set2_name, X2_train, y2_train)
+    # knn_vld_curve_2(set2_name, X2_train, y2_train)
+    # svm_vld_curve_1(set2_name, X2_train, y2_train)
+    # svm_vld_curve_2(set2_name, X2_train, y2_train)
 
 
 
