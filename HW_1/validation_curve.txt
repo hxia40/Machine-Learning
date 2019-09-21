@@ -1,0 +1,31 @@
+/Users/huixia/PycharmProjects/api_av/venv/bin/python /Users/huixia/Documents/ML_2019Fall/HW_1/DT_HW1.py
+DT_vlad_curve_1 76.7268781662
+DT_vlad_curve_2 66.1006731987
+boost_dt_vld_curve_1 407.584661007
+BoostDT4 difference: 400.043126106
+/Users/huixia/PycharmProjects/api_av/venv/lib/python2.7/site-packages/sklearn/neural_network/multilayer_perceptron.py:562: ConvergenceWarning: Stochastic Optimizer: Maximum iterations (500) reached and the optimization hasn't converged yet.
+  % self.max_iter, ConvergenceWarning)
+ann_vld_curve_1 817.973111153
+ann_vld_curve_2 1121.24932504
+knn_vld_curve_1 829.822519064
+knn_vld_curve_2 94.9878160954
+/Users/huixia/PycharmProjects/api_av/venv/lib/python2.7/site-packages/sklearn/svm/base.py:196: FutureWarning: The default value of gamma will change from 'auto' to 'scale' in version 0.22 to account better for unscaled features. Set gamma explicitly to 'auto' or 'scale' to avoid this warning.
+  "avoid this warning.", FutureWarning)
+svm_vld_curve_1 731.976222038
+svm_vld_curve_2 95.7830600739
+/Users/huixia/Documents/ML_2019Fall/HW_1/DT_HW1.py:791: VisibleDeprecationWarning: Reading unicode strings without specifying the encoding argument is deprecated. Set the encoding, use None for the system default.
+  set2 = np.genfromtxt('Epileptic_Seizure_Recognition.csv', delimiter=',', dtype=None)[1:6001, :]
+/Users/huixia/PycharmProjects/api_av/venv/lib/python2.7/site-packages/sklearn/utils/validation.py:595: DataConversionWarning: Data with input dtype int64 was converted to float64 by StandardScaler.
+  warnings.warn(msg, DataConversionWarning)
+DT_vlad_curve_1 122.796175957
+DT_vlad_curve_2 93.8156440258
+boost_dt_vld_curve_1 503.237140894
+BoostDT4 difference: 563.626877069
+ann_vld_curve_1 2497.90224195
+ann_vld_curve_2 664.511348009
+knn_vld_curve_1 1243.28021312
+knn_vld_curve_2 147.110161781
+svm_vld_curve_1 1364.95834208
+svm_vld_curve_2 299.543936014
+
+Process finished with exit code 0
