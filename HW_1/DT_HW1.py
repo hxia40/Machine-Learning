@@ -616,7 +616,7 @@ def ann_vld_curve_1(dataset_name, X_train, y_train, hidden_layer_sizes=(5, ), ma
     # cv = None
     param_range = []
     alter_list = []
-    for i in range(1,400,20):
+    for i in range(1,120,20):
         param_range.append((i,))
         alter_list.append(i)
     train_scores, test_scores = validation_curve(clf, X_train, y_train,
@@ -827,12 +827,12 @@ if __name__=="__main__":
     # # post-parameter adjustment
     decision_tree_learning_curve_size_post(set2_name, X2_train, y2_train, min_samples_leaf=33, max_depth=None)
     boost_dt_learning_curve_size_post(set2_name, X2_train, y2_train, min_samples_leaf=113, n_estimators=40, learning_rate = 0.5125)
-    ann_learning_curve_size_post(set2_name, X2_train, y2_train, hidden_layer_sizes=(200, ), alpha=0.417)
+    ann_learning_curve_size_post(set2_name, X2_train, y2_train, hidden_layer_sizes=(50, ), alpha=0.417)
     knn_learning_curve_size_post(set2_name, X2_train, y2_train, n_neighbors=1, algorithm='auto')
     svm_learning_curve_size_post(set2_name, X2_train, y2_train, C=50 , kernel='rbf', max_iter=-1)
     #
     boost_dt_learning_curve_epoch_post(set2_name, X2_train, y2_train, min_samples_leaf=113, n_estimators=40, learning_rate = 0.5125)
-    ann_learning_curve_epoch_post(set2_name, X2_train, y2_train, hidden_layer_sizes=(200, ), alpha=0.417)
+    ann_learning_curve_epoch_post(set2_name, X2_train, y2_train, hidden_layer_sizes=(50, ), alpha=0.417)
     svm_learning_curve_epoch_post(set2_name, X2_train, y2_train, C=50 , kernel='rbf', max_iter=-1)
 
 
