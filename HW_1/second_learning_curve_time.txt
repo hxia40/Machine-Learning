@@ -8,73 +8,13 @@ boost_dt_learning_curve_epoch_post 6094.26963496
 ann_learning_curve_epoch_post 10.8323509693
 SVM epoch difference: 700.348671913
 
-DT_learning_curve_size_post 55.3844969273
-/Users/huixia/PycharmProjects/api_av/venv/bin/python /Users/huixia/Documents/ML_2019Fall/HW_1/DT_HW1.py
-/Users/huixia/Documents/ML_2019Fall/HW_1/DT_HW1.py:792: VisibleDeprecationWarning: Reading unicode strings without specifying the encoding argument is deprecated. Set the encoding, use None for the system default.
-  set2 = np.genfromtxt('Epileptic_Seizure_Recognition.csv', delimiter=',', dtype=None)[1:6001, :]
-/Users/huixia/PycharmProjects/api_av/venv/lib/python2.7/site-packages/sklearn/utils/validation.py:595: DataConversionWarning: Data with input dtype int64 was converted to float64 by StandardScaler.
-  warnings.warn(msg, DataConversionWarning)
+
 DT_learning_curve_size_post 50.7527599335
 boost_dt_learning_curve_size_post 1116.38811302
-/Users/huixia/PycharmProjects/api_av/venv/lib/python2.7/site-packages/sklearn/neural_network/multilayer_perceptron.py:562: ConvergenceWarning: Stochastic Optimizer: Maximum iterations (500) reached and the optimization hasn't converged yet.
-  % self.max_iter, ConvergenceWarning)
 ann_learning_curve_size_post 883.105210066
 knn_learning_curve_size_post 155.799668789
-/Users/huixia/PycharmProjects/api_av/venv/lib/python2.7/site-packages/sklearn/svm/base.py:196: FutureWarning: The default value of gamma will change from 'auto' to 'scale' in version 0.22 to account better for unscaled features. Set gamma explicitly to 'auto' or 'scale' to avoid this warning.
-  "avoid this warning.", FutureWarning)
 svm_learning_curve_size_post 473.205394983
 boost_dt_learning_curve_epoch_post 3393.51351404
 ann_learning_curve_epoch_post 14.7161660194
-/Users/huixia/PycharmProjects/api_av/venv/lib/python2.7/site-packages/sklearn/svm/base.py:244: ConvergenceWarning: Solver terminated early (max_iter=0).  Consider pre-processing your data with StandardScaler or MinMaxScaler.
-  % self.max_iter, ConvergenceWarning)
-/Users/huixia/PycharmProjects/api_av/venv/lib/python2.7/site-packages/sklearn/svm/base.py:244: ConvergenceWarning: Solver terminated early (max_iter=4).  Consider pre-processing your data with StandardScaler or MinMaxScaler.
-  % self.max_iter, ConvergenceWarning)
-/Users/huixia/PycharmProjects/api_av/venv/lib/python2.7/site-packages/sklearn/svm/base.py:244: ConvergenceWarning: Solver terminated early (max_iter=8).  Consider pre-processing your data with StandardScaler or MinMaxScaler.
-  % self.max_iter, ConvergenceWarning)
-/Users/huixia/PycharmProjects/api_av/venv/lib/python2.7/site-packages/sklearn/svm/base.py:244: ConvergenceWarning: Solver terminated early (max_iter=12).  Consider pre-processing your data with StandardScaler or MinMaxScaler.
-  % self.max_iter, ConvergenceWarning)
-/Users/huixia/PycharmProjects/api_av/venv/lib/python2.7/site-packages/sklearn/svm/base.py:244: ConvergenceWarning: Solver terminated early (max_iter=16).  Consider pre-processing your data with StandardScaler or MinMaxScaler.
-  % self.max_iter, ConvergenceWarning)
-/Users/huixia/PycharmProjects/api_av/venv/lib/python2.7/site-packages/sklearn/svm/base.py:244: ConvergenceWarning: Solver terminated early (max_iter=20).  Consider pre-processing your data with StandardScaler or MinMaxScaler.
-  % self.max_iter, ConvergenceWarning)
-/Users/huixia/PycharmProjects/api_av/venv/lib/python2.7/site-packages/sklearn/svm/base.py:244: ConvergenceWarning: Solver terminated early (max_iter=24).  Consider pre-processing your data with StandardScaler or MinMaxScaler.
-  % self.max_iter, ConvergenceWarning)
-/Users/huixia/PycharmProjects/api_av/venv/lib/python2.7/site-packages/sklearn/svm/base.py:244: ConvergenceWarning: Solver terminated early (max_iter=28).  Consider pre-processing your data with StandardScaler or MinMaxScaler.
-  % self.max_iter, ConvergenceWarning)
-/Users/huixia/PycharmProjects/api_av/venv/lib/python2.7/site-packages/sklearn/svm/base.py:244: ConvergenceWarning: Solver terminated early (max_iter=32).  Consider pre-processing your data with StandardScaler or MinMaxScaler.
-  % self.max_iter, ConvergenceWarning)
-/Users/huixia/PycharmProjects/api_av/venv/lib/python2.7/site-packages/sklearn/svm/base.py:244: ConvergenceWarning: Solver terminated early (max_iter=36).  Consider pre-processing your data with StandardScaler or MinMaxScaler.
-  % self.max_iter, ConvergenceWarning)
-/Users/huixia/PycharmProjects/api_av/venv/lib/python2.7/site-packages/sklearn/svm/base.py:244: ConvergenceWarning: Solver terminated early (max_iter=40).  Consider pre-processing your data with StandardScaler or MinMaxScaler.
-  % self.max_iter, ConvergenceWarning)
-/Users/huixia/PycharmProjects/api_av/venv/lib/python2.7/site-packages/sklearn/svm/base.py:244: ConvergenceWarning: Solver terminated early (max_iter=44).  Consider pre-processing your data with StandardScaler or MinMaxScaler.
-  % self.max_iter, ConvergenceWarning)
-/Users/huixia/PycharmProjects/api_av/venv/lib/python2.7/site-packages/sklearn/svm/base.py:244: ConvergenceWarning: Solver terminated early (max_iter=48).  Consider pre-processing your data with StandardScaler or MinMaxScaler.
-  % self.max_iter, ConvergenceWarning)
-/Users/huixia/PycharmProjects/api_av/venv/lib/python2.7/site-packages/sklearn/svm/base.py:244: ConvergenceWarning: Solver terminated early (max_iter=52).  Consider pre-processing your data with StandardScaler or MinMaxScaler.
-  % self.max_iter, ConvergenceWarning)
-/Users/huixia/PycharmProjects/api_av/venv/lib/python2.7/site-packages/sklearn/svm/base.py:244: ConvergenceWarning: Solver terminated early (max_iter=56).  Consider pre-processing your data with StandardScaler or MinMaxScaler.
-  % self.max_iter, ConvergenceWarning)
-/Users/huixia/PycharmProjects/api_av/venv/lib/python2.7/site-packages/sklearn/svm/base.py:244: ConvergenceWarning: Solver terminated early (max_iter=60).  Consider pre-processing your data with StandardScaler or MinMaxScaler.
-  % self.max_iter, ConvergenceWarning)
-/Users/huixia/PycharmProjects/api_av/venv/lib/python2.7/site-packages/sklearn/svm/base.py:244: ConvergenceWarning: Solver terminated early (max_iter=64).  Consider pre-processing your data with StandardScaler or MinMaxScaler.
-  % self.max_iter, ConvergenceWarning)
-/Users/huixia/PycharmProjects/api_av/venv/lib/python2.7/site-packages/sklearn/svm/base.py:244: ConvergenceWarning: Solver terminated early (max_iter=68).  Consider pre-processing your data with StandardScaler or MinMaxScaler.
-  % self.max_iter, ConvergenceWarning)
-/Users/huixia/PycharmProjects/api_av/venv/lib/python2.7/site-packages/sklearn/svm/base.py:244: ConvergenceWarning: Solver terminated early (max_iter=72).  Consider pre-processing your data with StandardScaler or MinMaxScaler.
-  % self.max_iter, ConvergenceWarning)
-/Users/huixia/PycharmProjects/api_av/venv/lib/python2.7/site-packages/sklearn/svm/base.py:244: ConvergenceWarning: Solver terminated early (max_iter=76).  Consider pre-processing your data with StandardScaler or MinMaxScaler.
-  % self.max_iter, ConvergenceWarning)
-/Users/huixia/PycharmProjects/api_av/venv/lib/python2.7/site-packages/sklearn/svm/base.py:244: ConvergenceWarning: Solver terminated early (max_iter=80).  Consider pre-processing your data with StandardScaler or MinMaxScaler.
-  % self.max_iter, ConvergenceWarning)
-/Users/huixia/PycharmProjects/api_av/venv/lib/python2.7/site-packages/sklearn/svm/base.py:244: ConvergenceWarning: Solver terminated early (max_iter=84).  Consider pre-processing your data with StandardScaler or MinMaxScaler.
-  % self.max_iter, ConvergenceWarning)
-/Users/huixia/PycharmProjects/api_av/venv/lib/python2.7/site-packages/sklearn/svm/base.py:244: ConvergenceWarning: Solver terminated early (max_iter=88).  Consider pre-processing your data with StandardScaler or MinMaxScaler.
-  % self.max_iter, ConvergenceWarning)
-/Users/huixia/PycharmProjects/api_av/venv/lib/python2.7/site-packages/sklearn/svm/base.py:244: ConvergenceWarning: Solver terminated early (max_iter=92).  Consider pre-processing your data with StandardScaler or MinMaxScaler.
-  % self.max_iter, ConvergenceWarning)
-/Users/huixia/PycharmProjects/api_av/venv/lib/python2.7/site-packages/sklearn/svm/base.py:244: ConvergenceWarning: Solver terminated early (max_iter=96).  Consider pre-processing your data with StandardScaler or MinMaxScaler.
-  % self.max_iter, ConvergenceWarning)
 SVM epoch difference: 216.545886993
 
-Process finished with exit code 0
