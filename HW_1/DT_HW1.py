@@ -751,6 +751,20 @@ def score_time(dataset_name, clf_name, clf, X_train, X_test, y_train, y_test):
     txt.write(str(difference))
     txt.write("\n\n")
 
+def score_time_default(dataset_name, clf_name, clf, X_train, X_test, y_train, y_test):
+    start_time = time.time()
+    clf.fit(X_train, y_train).predict(X_test)
+    score = accuracy_score(y_test, clf.fit(X_train, y_train).predict(X_test))
+    end_time = time.time()
+    difference = end_time - start_time
+    txt = open('Inter_model_comparison_default.txt', 'a')
+    txt.write('{}_{} score:'.format(dataset_name, clf_name))
+    txt.write(str(score))
+    txt.write("\n")
+    txt.write('{}_{} time:'.format(dataset_name, clf_name))
+    txt.write(str(difference))
+    txt.write("\n\n")
+
 if __name__=="__main__":
     '''load and standardize data set #1'''
 
@@ -890,6 +904,43 @@ if __name__=="__main__":
                X2_train, X2_test, y2_train, y2_test)
 
 
+    '''Inter-model comparison using default hyperparameters'''
+
+    open('Inter_model_comparison_default.txt', 'w')
+
+    score_time_default("MNIST", "Decision tree",
+               tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=25, max_depth=None),
+               X_train, X_test, y_train, y_test)
+    score_time_default("MNIST", "Boosting",
+               AdaBoostClassifier(tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=25),
+                                      n_estimators=5, learning_rate=1),
+               X_train, X_test, y_train, y_test)
+    score_time_default("MNIST", "ANN",
+               MLPClassifier(hidden_layer_sizes=(5, ), max_iter=500, alpha=0.0001, random_state=1),
+               X_train, X_test, y_train, y_test)
+    score_time_default("MNIST", "kNN",
+               neighbors.KNeighborsClassifier(n_neighbors=5, algorithm='auto'),
+               X_train, X_test, y_train, y_test)
+    score_time_default("MNIST", "SVM",
+               svm.SVC(C=1, kernel='rbf', max_iter=-1),
+               X_train, X_test, y_train, y_test)
+
+    score_time_default("ESR", "Decision tree",
+               tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=25, max_depth=None),
+               X2_train, X2_test, y2_train, y2_test)
+    score_time_default("ESR", "Boosting",
+               AdaBoostClassifier(tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=25),
+                                      n_estimators=5, learning_rate=1),
+               X2_train, X2_test, y2_train, y2_test)
+    score_time_default("ESR", "ANN",
+               MLPClassifier(hidden_layer_sizes=(5, ), max_iter=500, alpha=0.0001, random_state=1),
+               X2_train, X2_test, y2_train, y2_test)
+    score_time_default("ESR", "kNN",
+               neighbors.KNeighborsClassifier(n_neighbors=5, algorithm='auto'),
+               X2_train, X2_test, y2_train, y2_test)
+    score_time_default("ESR", "SVM",
+               svm.SVC(C=1, kernel='rbf', max_iter=-1),
+               X2_train, X2_test, y2_train, y2_test)
 
 
 
