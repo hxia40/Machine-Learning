@@ -14,18 +14,6 @@ from sklearn import neighbors
 from sklearn import svm
 
 
-''' 
-From Office Hour 1:
-Each of the agrithm have several hyperparameters, for this assignment.  Grid search is sth ppl can do, in their live. But in this secific assignment, 
-we want u to pick at least one, usually 2, hyperparameter of ur problem, and actually do the model complexity anaylsis for it. which means u actually change 
-the values of these hyperparameters, plot the curve for training set, and also validation curve,  and then u compare u find ur best value for that HP.We
-dont need u to do that for all the HP, for something like neuron analysis, that could be many, but of course if u want to learn the best, you know, model, u will have to do that anyways. 
-But in ur analysis as long as u  provide the chart and  analysis for 2 of the HP, that would be good enough . 
-
-For the rest of the them u can say w/e u did if u did , u know, model complexsity analysis,but u dont have to provide the chart, u just say that the result was, 
-but we need to see the the some sort of the model complexity analysis for two of the HP parameters. '''
-
-
 def recording_and_plotting(dataset_name, name, alter, train, validation,
                            x_title="Sample size", y_title="Score"):
     train_scores_mean = np.mean(train, axis=1)
@@ -753,7 +741,6 @@ def score_time(dataset_name, clf_name, clf, X_train, X_test, y_train, y_test):
     txt.write('{}_{} time:'.format(dataset_name, clf_name))
     txt.write(str(difference/10))
     txt.write("\n\n")
-
 def score_time_default(dataset_name, clf_name, clf, X_train, X_test, y_train, y_test):
     start_time = time.time()
     score = 0
@@ -773,7 +760,7 @@ def score_time_default(dataset_name, clf_name, clf, X_train, X_test, y_train, y_
     txt.write("\n\n")
 
 if __name__=="__main__":
-    '''load and standardize data set #1'''
+    '''Load and standardize data set MNIST'''
 
     train = np.genfromtxt('fashion-mnist_train_minor.csv', delimiter=',')[1:, :]
     test = np.genfromtxt('fashion-mnist_test_minor.csv', delimiter=',')[1:, :]
@@ -789,43 +776,43 @@ if __name__=="__main__":
     X_test = scaler.transform(X_test)
     set1_name = "mnist"
 
-    # # pre-parameter adjustment
-    # decision_tree_learning_curve_size_pre(set1_name, X_train, y_train)
-    # boost_dt_learning_curve_size_pre(set1_name, X_train, y_train)
-    # ann_learning_curve_size_pre(set1_name, X_train, y_train)
-    # knn_learning_curve_size_pre(set1_name, X_train, y_train)
-    # svm_learning_curve_size_pre(set1_name, X_train, y_train)
+    '''MNIST - pre-parameter adjustment'''
+    decision_tree_learning_curve_size_pre(set1_name, X_train, y_train)
+    boost_dt_learning_curve_size_pre(set1_name, X_train, y_train)
+    ann_learning_curve_size_pre(set1_name, X_train, y_train)
+    knn_learning_curve_size_pre(set1_name, X_train, y_train)
+    svm_learning_curve_size_pre(set1_name, X_train, y_train)
+
+    boost_dt_learning_curve_epoch_pre(set1_name, X_train, y_train)
+    ann_learning_curve_epoch_pre(set1_name, X_train, y_train)
+    svm_learning_curve_epoch_pre(set1_name, X_train, y_train)
+
+    '''MNIST - parameter validation curve'''
+    decision_tree_vld_curve_1(set1_name, X_train, y_train)
+    decision_tree_vld_curve_2(set1_name, X_train, y_train)
+    boost_dt_vld_curve_1(set1_name, X_train, y_train)
+    boost_dt_vld_curve_2(set1_name, X_train, y_train)
+    ann_vld_curve_1(set1_name, X_train, y_train)
+    ann_vld_curve_2(set1_name, X_train, y_train)
+    knn_vld_curve_1(set1_name, X_train, y_train)
+    knn_vld_curve_2(set1_name, X_train, y_train)
+    svm_vld_curve_1(set1_name, X_train, y_train)
+    svm_vld_curve_2(set1_name, X_train,  y_train)
+
+    '''MNIST - post-parameter adjustment'''
+    decision_tree_learning_curve_size_post(set1_name, X_train, y_train, min_samples_leaf=1, max_depth=None)
+    boost_dt_learning_curve_size_post(set1_name, X_train, y_train, min_samples_leaf=9, n_estimators=40, learning_rate = 0.0925)
+    ann_learning_curve_size_post(set1_name, X_train, y_train, hidden_layer_sizes=(50, ), alpha=6.25)
+    knn_learning_curve_size_post(set1_name, X_train, y_train, n_neighbors=5, algorithm='auto')
+    svm_learning_curve_size_post(set1_name, X_train, y_train, C=0.418, kernel='rbf', max_iter=-1)
+
+    boost_dt_learning_curve_epoch_post(set1_name, X_train, y_train, min_samples_leaf=9, n_estimators=40, learning_rate = 0.0925)
+    ann_learning_curve_epoch_post(set1_name, X_train, y_train, hidden_layer_sizes=(50, ), alpha=6.25)
+    svm_learning_curve_epoch_post(set1_name, X_train, y_train, C=0.418, kernel='rbf', max_iter=-1)
+
     #
-    # boost_dt_learning_curve_epoch_pre(set1_name, X_train, y_train)
-    # ann_learning_curve_epoch_pre(set1_name, X_train, y_train)
-    # svm_learning_curve_epoch_pre(set1_name, X_train, y_train)
 
-    # parameter validation curve
-    # decision_tree_vld_curve_1(set1_name, X_train, y_train)
-    # decision_tree_vld_curve_2(set1_name, X_train, y_train)
-    # boost_dt_vld_curve_1(set1_name, X_train, y_train)
-    # boost_dt_vld_curve_2(set1_name, X_train, y_train)
-    # ann_vld_curve_1(set1_name, X_train, y_train)
-    # ann_vld_curve_2(set1_name, X_train, y_train)
-    # knn_vld_curve_1(set1_name, X_train, y_train)
-    # knn_vld_curve_2(set1_name, X_train, y_train)
-    # svm_vld_curve_1(set1_name, X_train, y_train)
-    # svm_vld_curve_2(set1_name, X_train,  y_train)
-
-    # # # post-parameter adjustment
-    # decision_tree_learning_curve_size_post(set1_name, X_train, y_train, min_samples_leaf=1, max_depth=None)
-    # boost_dt_learning_curve_size_post(set1_name, X_train, y_train, min_samples_leaf=9, n_estimators=40, learning_rate = 0.0925)
-    # ann_learning_curve_size_post(set1_name, X_train, y_train, hidden_layer_sizes=(50, ), alpha=6.25)
-    # knn_learning_curve_size_post(set1_name, X_train, y_train, n_neighbors=5, algorithm='auto')
-    # svm_learning_curve_size_post(set1_name, X_train, y_train, C=0.418, kernel='rbf', max_iter=-1)
-    #
-    # boost_dt_learning_curve_epoch_post(set1_name, X_train, y_train, min_samples_leaf=9, n_estimators=40, learning_rate = 0.0925)
-    # ann_learning_curve_epoch_post(set1_name, X_train, y_train, hidden_layer_sizes=(50, ), alpha=6.25)
-    # svm_learning_curve_epoch_post(set1_name, X_train, y_train, C=0.418, kernel='rbf', max_iter=-1)
-
-    #
-
-    '''===========for ESR========='''
+    '''Load and standardize data set ESR'''
     set2 = np.genfromtxt('Epileptic_Seizure_Recognition.csv', delimiter=',', dtype=None)[1:6001, :]
     set2 = set2.astype(int)
 
@@ -838,39 +825,39 @@ if __name__=="__main__":
     #
     set2_name = "ESR"
 
-    # # pre-parameter adjustment
-    # decision_tree_learning_curve_size_pre(set2_name, X2_train, y2_train)
-    # boost_dt_learning_curve_size_pre(set2_name, X2_train, y2_train)
-    # ann_learning_curve_size_pre(set2_name, X2_train, y2_train)
-    # knn_learning_curve_size_pre(set2_name, X2_train, y2_train)
-    # svm_learning_curve_size_pre(set2_name, X2_train, y2_train)
+    '''ESR - pre-parameter adjustment'''
+    decision_tree_learning_curve_size_pre(set2_name, X2_train, y2_train)
+    boost_dt_learning_curve_size_pre(set2_name, X2_train, y2_train)
+    ann_learning_curve_size_pre(set2_name, X2_train, y2_train)
+    knn_learning_curve_size_pre(set2_name, X2_train, y2_train)
+    svm_learning_curve_size_pre(set2_name, X2_train, y2_train)
+
+    boost_dt_learning_curve_epoch_pre(set2_name, X2_train, y2_train)
+    ann_learning_curve_epoch_pre(set2_name, X2_train, y2_train)
+    svm_learning_curve_epoch_pre(set2_name, X2_train, y2_train)
+
+    '''ESR - parameter validation curve'''
+    decision_tree_vld_curve_1(set2_name, X2_train, y2_train)
+    decision_tree_vld_curve_2(set2_name, X2_train, y2_train)
+    boost_dt_vld_curve_1(set2_name, X2_train, y2_train)
+    boost_dt_vld_curve_2(set2_name, X2_train, y2_train)
+    ann_vld_curve_1(set2_name, X2_train, y2_train)
+    ann_vld_curve_2(set2_name, X2_train, y2_train)
+    knn_vld_curve_1(set2_name, X2_train, y2_train)
+    knn_vld_curve_2(set2_name, X2_train, y2_train)
+    svm_vld_curve_1(set2_name, X2_train, y2_train)
+    svm_vld_curve_2(set2_name, X2_train, y2_train)
+
+    '''ESR - post-parameter adjustment'''
+    decision_tree_learning_curve_size_post(set2_name, X2_train, y2_train, min_samples_leaf=33, max_depth=None)
+    boost_dt_learning_curve_size_post(set2_name, X2_train, y2_train, min_samples_leaf=113, n_estimators=40, learning_rate = 0.5125)
+    ann_learning_curve_size_post(set2_name, X2_train, y2_train, hidden_layer_sizes=(50, ), alpha=0.417)
+    knn_learning_curve_size_post(set2_name, X2_train, y2_train, n_neighbors=1, algorithm='auto')
+    svm_learning_curve_size_post(set2_name, X2_train, y2_train, C=50 , kernel='rbf', max_iter=-1)
     #
-    # boost_dt_learning_curve_epoch_pre(set2_name, X2_train, y2_train)
-    # ann_learning_curve_epoch_pre(set2_name, X2_train, y2_train)
-    # svm_learning_curve_epoch_pre(set2_name, X2_train, y2_train)
-
-    # parameter validation curve
-    # decision_tree_vld_curve_1(set2_name, X2_train, y2_train)
-    # decision_tree_vld_curve_2(set2_name, X2_train, y2_train)
-    # boost_dt_vld_curve_1(set2_name, X2_train, y2_train)
-    # boost_dt_vld_curve_2(set2_name, X2_train, y2_train)
-    # ann_vld_curve_1(set2_name, X2_train, y2_train)
-    # ann_vld_curve_2(set2_name, X2_train, y2_train)
-    # knn_vld_curve_1(set2_name, X2_train, y2_train)
-    # knn_vld_curve_2(set2_name, X2_train, y2_train)
-    # svm_vld_curve_1(set2_name, X2_train, y2_train)
-    # svm_vld_curve_2(set2_name, X2_train, y2_train)
-
-    # # post-parameter adjustment
-    # decision_tree_learning_curve_size_post(set2_name, X2_train, y2_train, min_samples_leaf=33, max_depth=None)
-    # boost_dt_learning_curve_size_post(set2_name, X2_train, y2_train, min_samples_leaf=113, n_estimators=40, learning_rate = 0.5125)
-    # ann_learning_curve_size_post(set2_name, X2_train, y2_train, hidden_layer_sizes=(50, ), alpha=0.417)
-    # knn_learning_curve_size_post(set2_name, X2_train, y2_train, n_neighbors=1, algorithm='auto')
-    # svm_learning_curve_size_post(set2_name, X2_train, y2_train, C=50 , kernel='rbf', max_iter=-1)
-    # #
-    # boost_dt_learning_curve_epoch_post(set2_name, X2_train, y2_train, min_samples_leaf=113, n_estimators=40, learning_rate = 0.5125)
-    # ann_learning_curve_epoch_post(set2_name, X2_train, y2_train, hidden_layer_sizes=(50, ), alpha=0.417)
-    # svm_learning_curve_epoch_post(set2_name, X2_train, y2_train, C=50 , kernel='rbf', max_iter=-1)
+    boost_dt_learning_curve_epoch_post(set2_name, X2_train, y2_train, min_samples_leaf=113, n_estimators=40, learning_rate = 0.5125)
+    ann_learning_curve_epoch_post(set2_name, X2_train, y2_train, hidden_layer_sizes=(50, ), alpha=0.417)
+    svm_learning_curve_epoch_post(set2_name, X2_train, y2_train, C=50 , kernel='rbf', max_iter=-1)
 
     '''Inter-model comparison'''
 
