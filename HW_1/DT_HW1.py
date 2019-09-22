@@ -515,9 +515,9 @@ def svm_learning_curve_epoch_post(dataset_name, X_train, y_train, C=1.0, kernel=
                                                  n_jobs=1)
     end_time = time.time()
     difference = end_time - start_time
-    print "SVM epoch difference:", difference
+    print "SVM_learning_curve_epoch_post", difference
 
-    recording_and_plotting(dataset_name, name="SVM_learning_curve_epoch",
+    recording_and_plotting(dataset_name, name="SVM_learning_curve_epoch_post",
                            alter=param_range,
                            train=train_scores,
                            validation=test_scores, x_title="max_iter", y_title="Score")
@@ -527,7 +527,7 @@ def decision_tree_vld_curve_1(dataset_name, X_train, y_train, min_samples_leaf=2
     start_time = time.time()
     cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
     # cv = 10
-    param_range = range(1, 200, 8)
+    param_range = range(1, 120, 5)
     train_scores, test_scores = validation_curve(clf, X_train, y_train,
                                                  param_name="min_samples_leaf",
                                                  param_range=param_range,
@@ -770,7 +770,7 @@ if __name__=="__main__":
     # decision_tree_vld_curve_2(set1_name, X_train, y_train)
     # boost_dt_vld_curve_1(set1_name, X_train, y_train)
     # boost_dt_vld_curve_2(set1_name, X_train, y_train)
-    # ann_vld_curve_1(set1_name, X_train, y_train)
+    ann_vld_curve_1(set1_name, X_train, y_train)
     # ann_vld_curve_2(set1_name, X_train, y_train)
     # knn_vld_curve_1(set1_name, X_train, y_train)
     # knn_vld_curve_2(set1_name, X_train, y_train)
@@ -817,7 +817,7 @@ if __name__=="__main__":
     # decision_tree_vld_curve_2(set2_name, X2_train, y2_train)
     # boost_dt_vld_curve_1(set2_name, X2_train, y2_train)
     # boost_dt_vld_curve_2(set2_name, X2_train, y2_train)
-    # ann_vld_curve_1(set2_name, X2_train, y2_train)
+    ann_vld_curve_1(set2_name, X2_train, y2_train)
     # ann_vld_curve_2(set2_name, X2_train, y2_train)
     # knn_vld_curve_1(set2_name, X2_train, y2_train)
     # knn_vld_curve_2(set2_name, X2_train, y2_train)
@@ -825,15 +825,15 @@ if __name__=="__main__":
     # svm_vld_curve_2(set2_name, X2_train, y2_train)
 
     # # post-parameter adjustment
-    decision_tree_learning_curve_size_post(set2_name, X2_train, y2_train, min_samples_leaf=33, max_depth=None)
-    boost_dt_learning_curve_size_post(set2_name, X2_train, y2_train, min_samples_leaf=113, n_estimators=40, learning_rate = 0.5125)
-    ann_learning_curve_size_post(set2_name, X2_train, y2_train, hidden_layer_sizes=(50, ), alpha=0.417)
-    knn_learning_curve_size_post(set2_name, X2_train, y2_train, n_neighbors=1, algorithm='auto')
-    svm_learning_curve_size_post(set2_name, X2_train, y2_train, C=50 , kernel='rbf', max_iter=-1)
-    #
-    boost_dt_learning_curve_epoch_post(set2_name, X2_train, y2_train, min_samples_leaf=113, n_estimators=40, learning_rate = 0.5125)
-    ann_learning_curve_epoch_post(set2_name, X2_train, y2_train, hidden_layer_sizes=(50, ), alpha=0.417)
-    svm_learning_curve_epoch_post(set2_name, X2_train, y2_train, C=50 , kernel='rbf', max_iter=-1)
+    # decision_tree_learning_curve_size_post(set2_name, X2_train, y2_train, min_samples_leaf=33, max_depth=None)
+    # boost_dt_learning_curve_size_post(set2_name, X2_train, y2_train, min_samples_leaf=113, n_estimators=40, learning_rate = 0.5125)
+    # ann_learning_curve_size_post(set2_name, X2_train, y2_train, hidden_layer_sizes=(50, ), alpha=0.417)
+    # knn_learning_curve_size_post(set2_name, X2_train, y2_train, n_neighbors=1, algorithm='auto')
+    # svm_learning_curve_size_post(set2_name, X2_train, y2_train, C=50 , kernel='rbf', max_iter=-1)
+    # #
+    # boost_dt_learning_curve_epoch_post(set2_name, X2_train, y2_train, min_samples_leaf=113, n_estimators=40, learning_rate = 0.5125)
+    # ann_learning_curve_epoch_post(set2_name, X2_train, y2_train, hidden_layer_sizes=(50, ), alpha=0.417)
+    # svm_learning_curve_epoch_post(set2_name, X2_train, y2_train, C=50 , kernel='rbf', max_iter=-1)
 
 
     '''load and standardize data set #2'''
