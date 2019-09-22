@@ -739,30 +739,37 @@ def svm_vld_curve_2(dataset_name, X_train, y_train, C=1.0, kernel='rbf', max_ite
 
 def score_time(dataset_name, clf_name, clf, X_train, X_test, y_train, y_test):
     start_time = time.time()
-    clf.fit(X_train, y_train).predict(X_test)
-    score = accuracy_score(y_test, clf.fit(X_train, y_train).predict(X_test))
-    end_time = time.time()
-    difference = end_time - start_time
+    score = 0
+    difference = 0
+    for i in range(10):
+        clf.fit(X_train, y_train).predict(X_test)
+        score += accuracy_score(y_test, clf.fit(X_train, y_train).predict(X_test))
+        end_time = time.time()
+        difference += (end_time - start_time)
     txt = open('Inter_model_comparison.txt', 'a')
     txt.write('{}_{} score:'.format(dataset_name, clf_name))
-    txt.write(str(score))
+    txt.write(str(score/10))
     txt.write("\n")
     txt.write('{}_{} time:'.format(dataset_name, clf_name))
-    txt.write(str(difference))
+    txt.write(str(difference/10))
     txt.write("\n\n")
 
 def score_time_default(dataset_name, clf_name, clf, X_train, X_test, y_train, y_test):
     start_time = time.time()
-    clf.fit(X_train, y_train).predict(X_test)
-    score = accuracy_score(y_test, clf.fit(X_train, y_train).predict(X_test))
-    end_time = time.time()
-    difference = end_time - start_time
+    score = 0
+    difference = 0
+    for i in range(10):
+
+        clf.fit(X_train, y_train).predict(X_test)
+        score += accuracy_score(y_test, clf.fit(X_train, y_train).predict(X_test))
+        end_time = time.time()
+        difference += (end_time - start_time)
     txt = open('Inter_model_comparison_default.txt', 'a')
     txt.write('{}_{} score:'.format(dataset_name, clf_name))
-    txt.write(str(score))
+    txt.write(str(score/10))
     txt.write("\n")
     txt.write('{}_{} time:'.format(dataset_name, clf_name))
-    txt.write(str(difference))
+    txt.write(str(difference/10))
     txt.write("\n\n")
 
 if __name__=="__main__":
@@ -942,7 +949,7 @@ if __name__=="__main__":
                svm.SVC(C=1, kernel='rbf', max_iter=-1),
                X2_train, X2_test, y2_train, y2_test)
 
-
+    #
 
 
 
