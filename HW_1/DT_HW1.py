@@ -6,7 +6,7 @@ matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 from sklearn import preprocessing, metrics
 from sklearn.model_selection import train_test_split, learning_curve, validation_curve, ShuffleSplit, cross_val_score, cross_validate
-
+from sklearn.metrics import accuracy_score
 from sklearn import tree
 from sklearn.ensemble import AdaBoostClassifier
 from sklearn.neural_network import MLPClassifier
@@ -737,6 +737,20 @@ def svm_vld_curve_2(dataset_name, X_train, y_train, C=1.0, kernel='rbf', max_ite
                            train=train_scores,
                            validation=test_scores, x_title="kernel", y_title="Score")
 
+def score_time(dataset_name, clf_name, clf, X_train, X_test, y_train, y_test):
+    start_time = time.time()
+    clf.fit(X_train, y_train).predict(X_test)
+    score = accuracy_score(y_test, clf.fit(X_train, y_train).predict(X_test))
+    end_time = time.time()
+    difference = end_time - start_time
+    txt = open('Inter_model_comparison.txt', 'a')
+    txt.write('{}_{} score:'.format(dataset_name, clf_name))
+    txt.write(str(score))
+    txt.write("\n")
+    txt.write('{}_{} time:'.format(dataset_name, clf_name))
+    txt.write(str(difference))
+    txt.write("\n\n")
+
 if __name__=="__main__":
     '''load and standardize data set #1'''
 
@@ -770,7 +784,7 @@ if __name__=="__main__":
     # decision_tree_vld_curve_2(set1_name, X_train, y_train)
     # boost_dt_vld_curve_1(set1_name, X_train, y_train)
     # boost_dt_vld_curve_2(set1_name, X_train, y_train)
-    ann_vld_curve_1(set1_name, X_train, y_train)
+    # ann_vld_curve_1(set1_name, X_train, y_train)
     # ann_vld_curve_2(set1_name, X_train, y_train)
     # knn_vld_curve_1(set1_name, X_train, y_train)
     # knn_vld_curve_2(set1_name, X_train, y_train)
@@ -788,7 +802,9 @@ if __name__=="__main__":
     # ann_learning_curve_epoch_post(set1_name, X_train, y_train, hidden_layer_sizes=(50, ), alpha=6.25)
     # svm_learning_curve_epoch_post(set1_name, X_train, y_train, C=0.418, kernel='rbf', max_iter=-1)
 
-    '''===========for seizure========='''
+    #
+
+    '''===========for ESR========='''
     set2 = np.genfromtxt('Epileptic_Seizure_Recognition.csv', delimiter=',', dtype=None)[1:6001, :]
     set2 = set2.astype(int)
 
@@ -799,7 +815,7 @@ if __name__=="__main__":
     y2 = set2[:, -1]
     X2_train, X2_test, y2_train, y2_test = train_test_split(X2, y2, test_size=0.2, random_state=0)
     #
-    set2_name = "seizure_5"
+    set2_name = "ESR"
 
     # # pre-parameter adjustment
     # decision_tree_learning_curve_size_pre(set2_name, X2_train, y2_train)
@@ -817,7 +833,7 @@ if __name__=="__main__":
     # decision_tree_vld_curve_2(set2_name, X2_train, y2_train)
     # boost_dt_vld_curve_1(set2_name, X2_train, y2_train)
     # boost_dt_vld_curve_2(set2_name, X2_train, y2_train)
-    ann_vld_curve_1(set2_name, X2_train, y2_train)
+    # ann_vld_curve_1(set2_name, X2_train, y2_train)
     # ann_vld_curve_2(set2_name, X2_train, y2_train)
     # knn_vld_curve_1(set2_name, X2_train, y2_train)
     # knn_vld_curve_2(set2_name, X2_train, y2_train)
@@ -835,139 +851,44 @@ if __name__=="__main__":
     # ann_learning_curve_epoch_post(set2_name, X2_train, y2_train, hidden_layer_sizes=(50, ), alpha=0.417)
     # svm_learning_curve_epoch_post(set2_name, X2_train, y2_train, C=50 , kernel='rbf', max_iter=-1)
 
+    '''Inter-model comparison'''
 
-    '''load and standardize data set #2'''
+    open('Inter_model_comparison.txt', 'w')
 
-    # set2 = np.genfromtxt('bank-full.csv', delimiter=';', dtype=None)[1:, :]
-    #
-    # set2[set2 == '"unknown"'] = 0
-    # set2[set2 == '"admin."'] = 1
-    # set2[set2 == '"unemployed"'] = 2
-    # set2[set2 == '"management"'] = 3
-    # set2[set2 == '"housemaid"'] = 4
-    # set2[set2 == '"entrepreneur"'] = 5
-    # set2[set2 == '"student"'] = 6
-    # set2[set2 == '"blue-collar"'] = 7
-    # set2[set2 == '"self-employed"'] = 8
-    # set2[set2 == '"retired"'] = 9
-    # set2[set2 == '"technician"'] = 10
-    # set2[set2 == '"services"'] = 11
-    #
-    # set2[set2 == '"married"'] = 0
-    # set2[set2 == '"divorced"'] = 1
-    # set2[set2 == '"single"'] = 2
-    #
-    # set2[set2 == '"jan"'] = 0
-    # set2[set2 == '"feb"'] = 1
-    # set2[set2 == '"mar"'] = 2
-    # set2[set2 == '"apr"'] = 3
-    # set2[set2 == '"may"'] = 4
-    # set2[set2 == '"jun"'] = 5
-    # set2[set2 == '"jul"'] = 6
-    # set2[set2 == '"aug"'] = 7
-    # set2[set2 == '"sep"'] = 8
-    # set2[set2 == '"oct"'] = 9
-    # set2[set2 == '"nov"'] = 10
-    # set2[set2 == '"dec"'] = 11
-    #
-    # set2[set2 == '"yes"'] = 1
-    # set2[set2 == '"no"'] = 0
-    #
-    # set2[set2 == '"secondary"'] = 1
-    # set2[set2 == '"primary"'] = 2
-    # set2[set2 == '"tertiary"'] = 3
-    #
-    # set2[set2 == '"telephone"'] = 1
-    # set2[set2 == '"cellular"'] = 2
-    #
-    # set2[set2 == '"other"'] = 1
-    # set2[set2 == '"failure"'] = 2
-    # set2[set2 == '"success"'] = 3
-    #
-    # set2 = set2.astype(int)
-    #
-    # # separating set2 into X and y, then train and test
-    # X2 = set2[:, :-1]
-    # # print X2[:5, :]
-    # scaler = preprocessing.StandardScaler()
-    # X2 = scaler.fit_transform(X2)
-    # # print X2[:5, :]
-    # y2 = set2[:, -1]
-    # # print y2
-    # X2_train, X2_test, y2_train, y2_test = train_test_split(X2, y2, test_size=0.2, random_state=0)
-    # #
-    # set2_name = "bank"
-    #
-    # # Decision tree experiment:
-    # decision_tree_experiment_1(set2_name, X2_train, y2_train)
-    # decision_tree_experiment_2(set2_name, X2_train, y2_train)  # Leaf size vs Accuracy  (Pruning)
-    # decision_tree_experiment_3(set2_name, X2_train, y2_train)  # Max depth vs Accuracy
-    #
-    # # Boosted decision tree experiment:
-    # boost_dt_experiment_1(set2_name, X2_train, y2_train)
-    # boost_dt_experiment_2(set2_name, X2_train, y2_train)
-    # boost_dt_experiment_3(set2_name, X2_train, y2_train)  # Leaf size vs Accuracy  (Pruning)
-    # boost_dt_experiment_4(set2_name, X2_train, y2_train)
-    #
-    # # ANN experiment 1: Sample size vs Accuracy
-    # ann_experiment_1(set2_name, X2_train, y2_train)
-    # ann_experiment_2(set2_name, X2_train, y2_train)
-    # ann_experiment_3(set2_name, X2_train, y2_train)
-    #
-    # # KNN experiment 1: Sample size vs Accuracy
-    # knn_experiment_1(set2_name, X2_train, y2_train)
-    # knn_experiment_2(set2_name, X2_train, y2_train)  # n_neighbours vs. score
-    # knn_experiment_3(set2_name, X2_train, y2_train)  # algorithm vs. score
-    #
-    # # SVM experiment 1: Sample size vs Accuracy
-    # svm_experiment_1(set2_name, X2_train, y2_train)
-    # svm_experiment_2(set2_name, X2_train, y2_train)  # C vs. score
-    # svm_experiment_3(set2_name, X2_train, y2_train)  # kernel vs. score
-    '''==================for the loc================'''
-    # train = np.genfromtxt('trainingData.csv', delimiter=',')[1:5000, :]
-    # test = np.genfromtxt('validationData.csv', delimiter=',')[1:1000, :]
-    # # train = np.genfromtxt('fashion-mnist_train.csv', delimiter=',')[1:, :]
-    # # test = np.genfromtxt('fashion-mnist_test.csv', delimiter=',')[1:, :]
-    #
-    # X_train = train[:, :-9]
-    # y_train = 10 * train[:, -6] + train[:, -7]
-    # X_test = test[:, :-9]
-    # y_test = 10 * test[:, -6] + test[:, -7]
-    #
-    # # standardize the original data - this is important but usually neglected by newbies.
-    # scaler = preprocessing.StandardScaler()
-    # # print X_train[:5, :]
-    # X_train = scaler.fit_transform(X_train)
-    # # print X_train[:5, :]
-    # X_test = scaler.transform(X_test)
-    #
-    # set1_name = "loc"
-    #
-    # # Decision tree experiment 1: Sample size vs Accuracy
-    # decision_tree_experiment_1(set1_name, X_train, y_train)
-    # decision_tree_experiment_2(set1_name, X_train, y_train)  # Leaf size vs Accuracy  (Pruning)
-    # decision_tree_experiment_3(set1_name, X_train, y_train)  # Max depth vs Accuracy
-    #
-    # # Boosted decision tree experiment 1: Sample size vs Accuracy
-    # boost_dt_experiment_1(set1_name, X_train, y_train)
-    # boost_dt_experiment_2(set1_name, X_train, y_train)
-    # boost_dt_experiment_3(set1_name, X_train, y_train)
-    # boost_dt_experiment_4(set1_name, X_train, y_train)
-    #
-    # # ANN experiment 1: Sample size vs Accuracy
-    # ann_experiment_1(set1_name, X_train, y_train)
-    # ann_experiment_2(set1_name, X_train, y_train)
-    # ann_experiment_3(set1_name, X_train, y_train)
-    #
-    # # KNN experiment 1: Sample size vs Accuracy
-    # knn_experiment_1(set1_name, X_train, y_train)
-    # knn_experiment_2(set1_name, X_train, y_train)  # n_neighbours vs. score
-    # knn_experiment_3(set1_name, X_train, y_train)  # algorithm vs. score
-    #
-    # # SVM experiment 1: Sample size vs Accuracy
-    # svm_experiment_1(set1_name, X_train, y_train)
-    # svm_experiment_3(set1_name, X_train, y_train)  # kernel vs. score
-    # svm_experiment_2(set1_name, X_train, y_train)  # C vs. score
+    score_time("MNIST", "Decision tree",
+               tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=1, max_depth=None),
+               X_train, X_test, y_train, y_test)
+    score_time("MNIST", "Boosting",
+               AdaBoostClassifier(tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=9),
+                                      n_estimators=40, learning_rate=0.0925),
+               X_train, X_test, y_train, y_test)
+    score_time("MNIST", "ANN",
+               MLPClassifier(hidden_layer_sizes=(50, ), max_iter=500, alpha=6.25, random_state=1),
+               X_train, X_test, y_train, y_test)
+    score_time("MNIST", "kNN",
+               neighbors.KNeighborsClassifier(n_neighbors=5, algorithm='auto'),
+               X_train, X_test, y_train, y_test)
+    score_time("MNIST", "SVM",
+               svm.SVC(C=0.418, kernel='rbf', max_iter=-1),
+               X_train, X_test, y_train, y_test)
+
+    score_time("ESR", "Decision tree",
+               tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=33, max_depth=None),
+               X2_train, X2_test, y2_train, y2_test)
+    score_time("ESR", "Boosting",
+               AdaBoostClassifier(tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=113),
+                                      n_estimators=40, learning_rate=0.5125),
+               X2_train, X2_test, y2_train, y2_test)
+    score_time("ESR", "ANN",
+               MLPClassifier(hidden_layer_sizes=(50, ), max_iter=500, alpha=0.417, random_state=1),
+               X2_train, X2_test, y2_train, y2_test)
+    score_time("ESR", "kNN",
+               neighbors.KNeighborsClassifier(n_neighbors=1, algorithm='auto'),
+               X2_train, X2_test, y2_train, y2_test)
+    score_time("ESR", "SVM",
+               svm.SVC(C=50, kernel='rbf', max_iter=-1),
+               X2_train, X2_test, y2_train, y2_test)
+
 
 
 
