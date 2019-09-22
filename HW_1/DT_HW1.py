@@ -777,16 +777,16 @@ if __name__=="__main__":
     # svm_vld_curve_1(set1_name, X_train, y_train)
     # svm_vld_curve_2(set1_name, X_train,  y_train)
 
-    # # post-parameter adjustment
-    decision_tree_learning_curve_size_post(set1_name, X_train, y_train, min_samples_leaf=1, max_depth=None)
-    boost_dt_learning_curve_size_post(set1_name, X_train, y_train, min_samples_leaf=9, n_estimators=40, learning_rate = 0.0925)
-    ann_learning_curve_size_post(set1_name, X_train, y_train, hidden_layer_sizes=(50, ), alpha=6.25)
-    knn_learning_curve_size_post(set1_name, X_train, y_train, n_neighbors=5, algorithm='auto')
-    svm_learning_curve_size_post(set1_name, X_train, y_train, C=0.418, kernel='rbf', max_iter=-1)
-
-    boost_dt_learning_curve_epoch_post(set1_name, X_train, y_train, min_samples_leaf=9, n_estimators=40, learning_rate = 0.0925)
-    ann_learning_curve_epoch_post(set1_name, X_train, y_train, hidden_layer_sizes=(50, ), alpha=6.25)
-    svm_learning_curve_epoch_post(set1_name, X_train, y_train, C=0.418, kernel='rbf', max_iter=-1)
+    # # # post-parameter adjustment
+    # decision_tree_learning_curve_size_post(set1_name, X_train, y_train, min_samples_leaf=1, max_depth=None)
+    # boost_dt_learning_curve_size_post(set1_name, X_train, y_train, min_samples_leaf=9, n_estimators=40, learning_rate = 0.0925)
+    # ann_learning_curve_size_post(set1_name, X_train, y_train, hidden_layer_sizes=(50, ), alpha=6.25)
+    # knn_learning_curve_size_post(set1_name, X_train, y_train, n_neighbors=5, algorithm='auto')
+    # svm_learning_curve_size_post(set1_name, X_train, y_train, C=0.418, kernel='rbf', max_iter=-1)
+    #
+    # boost_dt_learning_curve_epoch_post(set1_name, X_train, y_train, min_samples_leaf=9, n_estimators=40, learning_rate = 0.0925)
+    # ann_learning_curve_epoch_post(set1_name, X_train, y_train, hidden_layer_sizes=(50, ), alpha=6.25)
+    # svm_learning_curve_epoch_post(set1_name, X_train, y_train, C=0.418, kernel='rbf', max_iter=-1)
 
     '''===========for seizure========='''
     set2 = np.genfromtxt('Epileptic_Seizure_Recognition.csv', delimiter=',', dtype=None)[1:6001, :]
