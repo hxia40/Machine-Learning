@@ -7,6 +7,9 @@ Use this Dropbox link to find the code and dataset files, and other associated f
 
 https://www.dropbox.com/sh/tcyqnync50xmp7o/AAAJH-kokjYgRyLp9_gAO7GRa?dl=0
 
+
+====================== Useful Information ====================
+
 The code file:
 	HW1.py
 
@@ -31,9 +34,12 @@ The version of these packages are:
 	scikit-learn - 0.20.4
 	Spicy - 1.2.2
 
-To run the code, copy all the above-mentioned dataset files (*.csv), the code (HW1.py), and the folders (i.e. copy everything from the provided dropbox folder) into a same folder. After that, simply run the code. 
+To run the code, copy all the above-mentioned dataset files (*.csv), the code (HW1.py), and all the three folders (i.e. copy everything from the provided dropbox folder) into same folder. After that, simply run the code. 
 
-Note that it may take up to 24 hours to finish running all the code. 
+Note: 
+
+It may take up to 24 hours to finish running all the code. To facilitate the reviewing process, the figures (*.png) and the corresponding data (*.txt) are included in the folders 'mnist' and 'ESR' for the respective detesets. You do not need the contents in these two folders to run the code (however you do need two empty folders "mnist" and "ESR"  exist to run the code).
+
 If needed, the code can be run in sections by choice. Just comment out the sections that are not of interest, only run the rest. Not that you will always need to run the sections "Load and standardize data set MNIST" and "Load and standardize data set ESR" to enable the rest. 
 
 There are sections in total . You can find them after line 762 of the code file. 
@@ -50,7 +56,7 @@ The sections are:
 	Inter-model comparison
 	Inter-model comparison using default hyperparameters
 
-To facilitate the reviewing process, selected figures and *.txt files generated using the code are included in the sub-folder "figures_and_data". These files are:
+To facilitate the reviewing process, figures and data files used to write the report are included in the sub-folder "figures_and_data". These files are:
 
 	Figure 1.png
 	Figure 2.png
