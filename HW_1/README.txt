@@ -32,7 +32,6 @@ The version of these packages are:
 	pandas - 0.24.2
 	matplotlib - 2.2.4
 	scikit-learn - 0.20.4
-	Spicy - 1.2.2
 
 To run the code, copy all the above-mentioned dataset files (*.csv), the code (HW1.py), and all the three folders (i.e. copy everything from the provided dropbox folder) into same folder. After that, simply run the code. 
 
