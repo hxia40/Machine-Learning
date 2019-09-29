@@ -1,0 +1,12 @@
+no of variable (base);23
+scores_test_ANN_base;0.676189670
+elasped_time_1;9.935544014
+no of variable (PCA);2
+scores_test_ANN_PCA;0.698497153
+elasped_time_1;4.706973076
+no of variable (ICA);11
+scores_test_ANN_ICA;0.811968905
+elasped_time_1;46.258244991
+no of variable (RP);16
+scores_test_ANN_RP;0.777133525
+elasped_time_1;30.067560196

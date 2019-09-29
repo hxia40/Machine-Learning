@@ -1,0 +1,22 @@
+http://scikit-learn.org/stable/modules/generated/sklearn.cluster.KMeans.html
+http://scikit-learn.org/stable/modules/mixture.html
+
+http://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html
+http://scikit-learn.org/stable/modules/generated/sklearn.decomposition.FastICA.html
+http://scikit-learn.org/stable/modules/random_projection.html
+http://scikit-learn.org/stable/modules/lda_qda.html
+http://scikit-learn.org/stable/modules/generated/sklearn.decomposition.FactorAnalysis.html
+
+k-mean clustering
+Expectation Maximization
+
+Principal component analysis 
+Independent component analysis 
+Randomized Projections
+Linear Discriminant Analysis
+
+
+
+
+https://stackoverflow.com/questions/32370543/understanding-score-returned-by-scikit-learn-kmeans
+https://medium.com/@univprofblog1/independent-component-analysis-r-and-python-codes-all-you-have-to-do-is-just-preparing-data-set-2c8e8759cdcd
