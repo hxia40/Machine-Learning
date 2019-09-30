@@ -826,115 +826,115 @@ if __name__=="__main__":
     set2_name = "ESR"
 
     '''ESR - pre-parameter adjustment'''
-    decision_tree_learning_curve_size_pre(set2_name, X2_train, y2_train)
-    boost_dt_learning_curve_size_pre(set2_name, X2_train, y2_train)
-    ann_learning_curve_size_pre(set2_name, X2_train, y2_train)
-    knn_learning_curve_size_pre(set2_name, X2_train, y2_train)
-    svm_learning_curve_size_pre(set2_name, X2_train, y2_train)
+    # decision_tree_learning_curve_size_pre(set2_name, X2_train, y2_train)
+    # boost_dt_learning_curve_size_pre(set2_name, X2_train, y2_train)
+    # ann_learning_curve_size_pre(set2_name, X2_train, y2_train)
+    # knn_learning_curve_size_pre(set2_name, X2_train, y2_train)
+    # svm_learning_curve_size_pre(set2_name, X2_train, y2_train)
 
-    boost_dt_learning_curve_epoch_pre(set2_name, X2_train, y2_train)
-    ann_learning_curve_epoch_pre(set2_name, X2_train, y2_train)
-    svm_learning_curve_epoch_pre(set2_name, X2_train, y2_train)
+    # boost_dt_learning_curve_epoch_pre(set2_name, X2_train, y2_train)
+    # ann_learning_curve_epoch_pre(set2_name, X2_train, y2_train)
+    # svm_learning_curve_epoch_pre(set2_name, X2_train, y2_train)
 
     '''ESR - parameter validation curve'''
     decision_tree_vld_curve_1(set2_name, X2_train, y2_train)
-    decision_tree_vld_curve_2(set2_name, X2_train, y2_train)
-    boost_dt_vld_curve_1(set2_name, X2_train, y2_train)
-    boost_dt_vld_curve_2(set2_name, X2_train, y2_train)
-    ann_vld_curve_1(set2_name, X2_train, y2_train)
-    ann_vld_curve_2(set2_name, X2_train, y2_train)
-    knn_vld_curve_1(set2_name, X2_train, y2_train)
-    knn_vld_curve_2(set2_name, X2_train, y2_train)
-    svm_vld_curve_1(set2_name, X2_train, y2_train)
-    svm_vld_curve_2(set2_name, X2_train, y2_train)
+    # decision_tree_vld_curve_2(set2_name, X2_train, y2_train)
+    # boost_dt_vld_curve_1(set2_name, X2_train, y2_train)
+    # boost_dt_vld_curve_2(set2_name, X2_train, y2_train)
+    # ann_vld_curve_1(set2_name, X2_train, y2_train)
+    # ann_vld_curve_2(set2_name, X2_train, y2_train)
+    # knn_vld_curve_1(set2_name, X2_train, y2_train)
+    # knn_vld_curve_2(set2_name, X2_train, y2_train)
+    # svm_vld_curve_1(set2_name, X2_train, y2_train)
+    # svm_vld_curve_2(set2_name, X2_train, y2_train)
 
     '''ESR - post-parameter adjustment'''
-    decision_tree_learning_curve_size_post(set2_name, X2_train, y2_train, min_samples_leaf=33, max_depth=None)
-    boost_dt_learning_curve_size_post(set2_name, X2_train, y2_train, min_samples_leaf=113, n_estimators=40, learning_rate = 0.5125)
-    ann_learning_curve_size_post(set2_name, X2_train, y2_train, hidden_layer_sizes=(50, ), alpha=0.417)
-    knn_learning_curve_size_post(set2_name, X2_train, y2_train, n_neighbors=1, algorithm='auto')
-    svm_learning_curve_size_post(set2_name, X2_train, y2_train, C=50 , kernel='rbf', max_iter=-1)
-    #
-    boost_dt_learning_curve_epoch_post(set2_name, X2_train, y2_train, min_samples_leaf=113, n_estimators=40, learning_rate = 0.5125)
-    ann_learning_curve_epoch_post(set2_name, X2_train, y2_train, hidden_layer_sizes=(50, ), alpha=0.417)
-    svm_learning_curve_epoch_post(set2_name, X2_train, y2_train, C=50 , kernel='rbf', max_iter=-1)
+    # decision_tree_learning_curve_size_post(set2_name, X2_train, y2_train, min_samples_leaf=33, max_depth=None)
+    # boost_dt_learning_curve_size_post(set2_name, X2_train, y2_train, min_samples_leaf=113, n_estimators=40, learning_rate = 0.5125)
+    # ann_learning_curve_size_post(set2_name, X2_train, y2_train, hidden_layer_sizes=(50, ), alpha=0.417)
+    # knn_learning_curve_size_post(set2_name, X2_train, y2_train, n_neighbors=1, algorithm='auto')
+    # svm_learning_curve_size_post(set2_name, X2_train, y2_train, C=50 , kernel='rbf', max_iter=-1)
+    # #
+    # boost_dt_learning_curve_epoch_post(set2_name, X2_train, y2_train, min_samples_leaf=113, n_estimators=40, learning_rate = 0.5125)
+    # ann_learning_curve_epoch_post(set2_name, X2_train, y2_train, hidden_layer_sizes=(50, ), alpha=0.417)
+    # svm_learning_curve_epoch_post(set2_name, X2_train, y2_train, C=50 , kernel='rbf', max_iter=-1)
 
-    '''Inter-model comparison'''
+    # '''Inter-model comparison'''
 
-    open('Inter_model_comparison.txt', 'w')
+    # open('Inter_model_comparison.txt', 'w')
 
-    score_time("MNIST", "Decision tree",
-               tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=1, max_depth=None),
-               X_train, X_test, y_train, y_test)
-    score_time("MNIST", "Boosting",
-               AdaBoostClassifier(tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=9),
-                                      n_estimators=40, learning_rate=0.0925),
-               X_train, X_test, y_train, y_test)
-    score_time("MNIST", "ANN",
-               MLPClassifier(hidden_layer_sizes=(50, ), max_iter=500, alpha=6.25, random_state=1),
-               X_train, X_test, y_train, y_test)
-    score_time("MNIST", "kNN",
-               neighbors.KNeighborsClassifier(n_neighbors=5, algorithm='auto'),
-               X_train, X_test, y_train, y_test)
-    score_time("MNIST", "SVM",
-               svm.SVC(C=0.418, kernel='rbf', max_iter=-1),
-               X_train, X_test, y_train, y_test)
+    # score_time("MNIST", "Decision tree",
+    #            tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=1, max_depth=None),
+    #            X_train, X_test, y_train, y_test)
+    # score_time("MNIST", "Boosting",
+    #            AdaBoostClassifier(tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=9),
+    #                                   n_estimators=40, learning_rate=0.0925),
+    #            X_train, X_test, y_train, y_test)
+    # score_time("MNIST", "ANN",
+    #            MLPClassifier(hidden_layer_sizes=(50, ), max_iter=500, alpha=6.25, random_state=1),
+    #            X_train, X_test, y_train, y_test)
+    # score_time("MNIST", "kNN",
+    #            neighbors.KNeighborsClassifier(n_neighbors=5, algorithm='auto'),
+    #            X_train, X_test, y_train, y_test)
+    # score_time("MNIST", "SVM",
+    #            svm.SVC(C=0.418, kernel='rbf', max_iter=-1),
+    #            X_train, X_test, y_train, y_test)
 
-    score_time("ESR", "Decision tree",
-               tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=33, max_depth=None),
-               X2_train, X2_test, y2_train, y2_test)
-    score_time("ESR", "Boosting",
-               AdaBoostClassifier(tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=113),
-                                      n_estimators=40, learning_rate=0.5125),
-               X2_train, X2_test, y2_train, y2_test)
-    score_time("ESR", "ANN",
-               MLPClassifier(hidden_layer_sizes=(50, ), max_iter=500, alpha=0.417, random_state=1),
-               X2_train, X2_test, y2_train, y2_test)
-    score_time("ESR", "kNN",
-               neighbors.KNeighborsClassifier(n_neighbors=1, algorithm='auto'),
-               X2_train, X2_test, y2_train, y2_test)
-    score_time("ESR", "SVM",
-               svm.SVC(C=50, kernel='rbf', max_iter=-1),
-               X2_train, X2_test, y2_train, y2_test)
+    # score_time("ESR", "Decision tree",
+    #            tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=33, max_depth=None),
+    #            X2_train, X2_test, y2_train, y2_test)
+    # score_time("ESR", "Boosting",
+    #            AdaBoostClassifier(tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=113),
+    #                                   n_estimators=40, learning_rate=0.5125),
+    #            X2_train, X2_test, y2_train, y2_test)
+    # score_time("ESR", "ANN",
+    #            MLPClassifier(hidden_layer_sizes=(50, ), max_iter=500, alpha=0.417, random_state=1),
+    #            X2_train, X2_test, y2_train, y2_test)
+    # score_time("ESR", "kNN",
+    #            neighbors.KNeighborsClassifier(n_neighbors=1, algorithm='auto'),
+    #            X2_train, X2_test, y2_train, y2_test)
+    # score_time("ESR", "SVM",
+    #            svm.SVC(C=50, kernel='rbf', max_iter=-1),
+    #            X2_train, X2_test, y2_train, y2_test)
 
 
-    '''Inter-model comparison using default hyperparameters'''
+    # '''Inter-model comparison using default hyperparameters'''
 
-    open('Inter_model_comparison_default.txt', 'w')
+    # open('Inter_model_comparison_default.txt', 'w')
 
-    score_time_default("MNIST", "Decision tree",
-               tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=25, max_depth=None),
-               X_train, X_test, y_train, y_test)
-    score_time_default("MNIST", "Boosting",
-               AdaBoostClassifier(tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=25),
-                                      n_estimators=5, learning_rate=1),
-               X_train, X_test, y_train, y_test)
-    score_time_default("MNIST", "ANN",
-               MLPClassifier(hidden_layer_sizes=(5, ), max_iter=500, alpha=0.0001, random_state=1),
-               X_train, X_test, y_train, y_test)
-    score_time_default("MNIST", "kNN",
-               neighbors.KNeighborsClassifier(n_neighbors=5, algorithm='auto'),
-               X_train, X_test, y_train, y_test)
-    score_time_default("MNIST", "SVM",
-               svm.SVC(C=1, kernel='rbf', max_iter=-1),
-               X_train, X_test, y_train, y_test)
+    # score_time_default("MNIST", "Decision tree",
+    #            tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=25, max_depth=None),
+    #            X_train, X_test, y_train, y_test)
+    # score_time_default("MNIST", "Boosting",
+    #            AdaBoostClassifier(tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=25),
+    #                                   n_estimators=5, learning_rate=1),
+    #            X_train, X_test, y_train, y_test)
+    # score_time_default("MNIST", "ANN",
+    #            MLPClassifier(hidden_layer_sizes=(5, ), max_iter=500, alpha=0.0001, random_state=1),
+    #            X_train, X_test, y_train, y_test)
+    # score_time_default("MNIST", "kNN",
+    #            neighbors.KNeighborsClassifier(n_neighbors=5, algorithm='auto'),
+    #            X_train, X_test, y_train, y_test)
+    # score_time_default("MNIST", "SVM",
+    #            svm.SVC(C=1, kernel='rbf', max_iter=-1),
+    #            X_train, X_test, y_train, y_test)
 
-    score_time_default("ESR", "Decision tree",
-               tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=25, max_depth=None),
-               X2_train, X2_test, y2_train, y2_test)
-    score_time_default("ESR", "Boosting",
-               AdaBoostClassifier(tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=25),
-                                      n_estimators=5, learning_rate=1),
-               X2_train, X2_test, y2_train, y2_test)
-    score_time_default("ESR", "ANN",
-               MLPClassifier(hidden_layer_sizes=(5, ), max_iter=500, alpha=0.0001, random_state=1),
-               X2_train, X2_test, y2_train, y2_test)
-    score_time_default("ESR", "kNN",
-               neighbors.KNeighborsClassifier(n_neighbors=5, algorithm='auto'),
-               X2_train, X2_test, y2_train, y2_test)
-    score_time_default("ESR", "SVM",
-               svm.SVC(C=1, kernel='rbf', max_iter=-1),
-               X2_train, X2_test, y2_train, y2_test)
+    # score_time_default("ESR", "Decision tree",
+    #            tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=25, max_depth=None),
+    #            X2_train, X2_test, y2_train, y2_test)
+    # score_time_default("ESR", "Boosting",
+    #            AdaBoostClassifier(tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=25),
+    #                                   n_estimators=5, learning_rate=1),
+    #            X2_train, X2_test, y2_train, y2_test)
+    # score_time_default("ESR", "ANN",
+    #            MLPClassifier(hidden_layer_sizes=(5, ), max_iter=500, alpha=0.0001, random_state=1),
+    #            X2_train, X2_test, y2_train, y2_test)
+    # score_time_default("ESR", "kNN",
+    #            neighbors.KNeighborsClassifier(n_neighbors=5, algorithm='auto'),
+    #            X2_train, X2_test, y2_train, y2_test)
+    # score_time_default("ESR", "SVM",
+    #            svm.SVC(C=1, kernel='rbf', max_iter=-1),
+    #            X2_train, X2_test, y2_train, y2_test)
 
     #
 
