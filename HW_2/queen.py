@@ -1,19 +1,9 @@
 import mlrose
 import numpy as np
 
-coords = [(0, 0), (3, 0), (3, 2), (2, 4), (1, 3)]
-# dists = [(0, 1, 3), (0, 2, 5), (0, 3, 1), (0, 4, 7), (1, 3, 6),
-# (4, 1, 9), (2, 3, 8), (2, 4, 2), (3, 2, 8), (3, 4, 4)]
-# fitness_coords = mlrose.TravellingSales(coords=coords)
-# state = np.array([0, 1, 4, 3, 2])
-# fitness_coords.evaluate(state)
 
-# fitness_dists = mlrose.TravellingSales(distances=dists)
-# fitness_dists.evaluate(state)
-fitness = mlrose.TravellingSales(coords=coords)
-problem = mlrose.DiscreteOpt(length = 8, fitness_fn = fitness, maximize = False,
-							 # max_val = 8
-							 )
+fitness = mlrose.Queens()
+problem = mlrose.DiscreteOpt(length = 8, fitness_fn = fitness, maximize = False, max_val = 8)
 
 "========Queens - simulated annealing========"
 # Define decay schedule
