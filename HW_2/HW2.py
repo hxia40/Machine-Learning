@@ -3,6 +3,7 @@ import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 import mlrose
+import time
 """
 4:20
 Q:  Can we use a stochastic fitness function instead of a deterministic one for the bitstring evaluation? I mean that 
@@ -31,7 +32,8 @@ about the time, like how long and how many iterations .Cause if you keep to runn
 Q2.  On a related note, when we vary the input size of a problem, should we keep the parameters (eg population size) of 
 the algorithm constant at different input problem sizes?
 
-A: Yeah, i would pro do that. u can start with like w/e setting of the problem, find to make these methods better, just stick w/ them. 
+A: Yeah, i would pro do that. u can start with like w/e setting of the problem, find to make these methods better, just 
+stick w/ them. 
 Cause we dont really want u to change everything. For example, when u are modifying input size e.g. its getting bigger,
  u would want to keep h-parameter constant, u may see some part interesting behaviors here, how the problems getting 
  harder, and our algorithms responding in different ways. 
@@ -85,11 +87,12 @@ A: Ok, yeah, in terms of graphs and chart, if u think about the goal here, u nee
  this is rather discussion, rather than chart. 
 """
 
-def nCityTSP(city_num=10):
+
+def nCityTSP(city_num=10, random_seed = 0):
     '''Problem 1: n-city TSP: over a map of given size,
     generate N cities for a salesman to travel through each city and find the shortest route'''
     # Create list of city coordinates
-    np.random.seed(0)
+    np.random.seed(random_seed)
     coords_list = []
     for i in range(city_num):
         coords_list.append((np.random.random_sample(), np.random.random_sample()))
@@ -100,16 +103,67 @@ def nCityTSP(city_num=10):
     # Define optimization problem object
     problem = mlrose.TSPOpt(length=city_num, fitness_fn=fitness_coords, maximize=False)
 
+    "========random hill climbing========"
+    best_fitness_RHC_list = []
+    best_fitness_RHC_att_list = []
+    alter_list_RHC = []
+
+    # Solve problem using simulated annealing
+    for i in range(1, 1000, 100):
+        print("RHC:", i)
+        best_state_RHC, best_fitness_RHC = mlrose.random_hill_climb(problem,
+                                                                    max_attempts=1000,
+                                                                    max_iters=i,
+                                                                    restarts=0,
+                                                                    init_state=None,
+                                                                    curve=False,
+                                                                    random_state=1)
+        best_state_RHC_att, best_fitness_RHC_att = mlrose.random_hill_climb(problem,
+                                                                            max_attempts=i,
+                                                                            max_iters=1000,
+                                                                            restarts=0,
+                                                                            init_state=None,
+                                                                            curve=False,
+                                                                            random_state=1)
+        best_fitness_RHC_list.append(best_fitness_RHC)
+        best_fitness_RHC_att_list.append(best_fitness_RHC_att)
+        alter_list_RHC.append(i)
+
+    # plotting
+
+    plt.plot(alter_list_RHC, best_fitness_RHC_list, color="r",
+             # label="max_iters"
+             )
+    x_title = "max_iters"
+    y_title = "best_fitness"
+    plt.xlabel(x_title)
+    plt.ylabel(y_title)
+    plt.legend(loc="best")
+    plt.savefig('RHC_max_iter.png')
+    plt.gcf().clear()
+
+    plt.plot(alter_list_RHC, best_fitness_RHC_att_list, color="r",
+             # label="max_iters"
+             )
+    x_title = "max_attempts"
+    y_title = "best_fitness"
+    plt.xlabel(x_title)
+    plt.ylabel(y_title)
+    plt.legend(loc="best")
+    plt.savefig('RHC_max_attempt.png')
+    plt.gcf().clear()
+
     "========simulated annealing========"
     best_fitness_SA_list = []
     best_fitness_SA_att_list = []
-    alter_list = []
+    alter_list_SA = []
 
     # Solve problem using simulated annealing
-    for i in range(1, 1000, 50):
+    for i in range(1, 1000, 100):
+        print("SA:", i)
         best_state_SA, best_fitness_SA = mlrose.simulated_annealing(problem,
                                                                     schedule=mlrose.ExpDecay(),
-                                                                    max_attempts=100,
+                                                                    max_attempts=1000,
                                                                     max_iters=i,
                                                                     random_state=1)
         best_state_SA_att, best_fitness_SA_att = mlrose.simulated_annealing(problem,
@@ -119,17 +173,12 @@ def nCityTSP(city_num=10):
                                                                             random_state=1)
         best_fitness_SA_list.append(best_fitness_SA)
         best_fitness_SA_att_list.append(best_fitness_SA_att)
-        alter_list.append(i)
+        alter_list_SA.append(i)
+    # return alter_list_SA, best_fitness_SA_list, best_fitness_SA_att_list
     # plotting
     plt.grid()
-    # ylim = (0, 1.1)
-    # plt.ylim(*ylim)
-    # plt.fill_between(alter, train_scores_mean - train_scores_std,
-    #                  train_scores_mean + train_scores_std, alpha=0.1,
-    #                  color="r")
-    # plt.fill_between(alter, test_scores_mean - test_scores_std,
-    #                  test_scores_mean + test_scores_std, alpha=0.1, color="g")
-    plt.plot(alter_list, best_fitness_SA_list, color="r",
+
+    plt.plot(alter_list_SA, best_fitness_SA_list, color="r",
              # label="max_iters"
              )
     x_title = "max_iters"
@@ -140,7 +189,7 @@ def nCityTSP(city_num=10):
     plt.savefig('SA_max_iter.png')
     plt.gcf().clear()
 
-    plt.plot(alter_list, best_fitness_SA_att_list, color="r",
+    plt.plot(alter_list_SA, best_fitness_SA_att_list, color="r",
              # label="max_iters"
              )
     x_title = "max_attempts"
@@ -150,31 +199,185 @@ def nCityTSP(city_num=10):
     plt.legend(loc="best")
     plt.savefig('SA_max_attempt.png')
     plt.gcf().clear()
-    "========MIMIC========"
-    # best_state_MI, best_fitness_MI = mlrose.algorithms.mimic(problem,
-    #                                                    pop_size=200,
-    #                                                    keep_pct=0.2,
-    #                                                    max_attempts=100,
-    #                                                    max_iters=np.inf,
-    #                                                    curve=False,
-    #                                                    random_state = 1)
-    # print(best_state_MI, best_fitness_MI)
+
     "========GA========"
-    # best_state, best_fitness = mlrose.genetic_alg(problem,
-    #                                               pop_size=200,
-    #                                               mutation_prob=0.1,
-    #                                               max_attempts=1000,
-    #                                               max_iters=np.inf,
-    #                                               curve=False,
-    #                                               random_state=0)
-    "========random hill climbing========"
-    # best_state, best_fitness = mlrose.random_hill_climb(problem,
-    #                                                     max_attempts=1000,
-    #                                                     max_iters=np.inf,
-    #                                                     restarts=0,
-    #                                                     init_state=None,
-    #                                                     curve=False,
-    #                                                     random_state=1)
+    best_fitness_GA_list = []
+    best_fitness_GA_att_list = []
+    best_fitness_GA_pop_list = []
+    best_fitness_GA_mutpb_list = []
+    alter_list_GA = []
+
+    # Solve problem using simulated annealing
+    for i in range(1, 1000, 100):
+        print("GA:", i)
+        start_time = time.time()
+        best_state_GA, best_fitness_GA = mlrose.genetic_alg(problem,
+                                                            pop_size=200,
+                                                            mutation_prob=0.1,
+                                                            max_attempts=1000,
+                                                            max_iters=i,
+                                                            curve=False,
+                                                            random_state=0)
+        best_state_GA_att, best_fitness_GA_att = mlrose.genetic_alg(problem,
+                                                                    pop_size=200,
+                                                                    mutation_prob=0.1,
+                                                                    max_attempts=i,
+                                                                    max_iters=1000,
+                                                                    curve=False,
+                                                                    random_state=0)
+        best_state_GA_pop, best_fitness_GA_pop = mlrose.genetic_alg(problem,
+                                                                    pop_size=max(1, int(i / 5)),
+                                                                    mutation_prob=0.1,
+                                                                    max_attempts=1000,
+                                                                    max_iters=1000,
+                                                                    curve=False,
+                                                                    random_state=1)
+        best_state_GA_mutpb, best_fitness_GA_mutpb = mlrose.genetic_alg(problem,
+                                                                        pop_size=200,
+                                                                        mutation_prob=i/1000,
+                                                                        max_attempts=1000,
+                                                                        max_iters=1000,
+                                                                        curve=False,
+                                                                        random_state=1)
+        best_fitness_GA_list.append(best_fitness_GA)
+        best_fitness_GA_att_list.append(best_fitness_GA_att)
+        best_fitness_GA_pop_list.append(best_fitness_GA_pop)
+        best_fitness_GA_mutpb_list.append(best_fitness_GA_mutpb)
+        alter_list_GA.append(i)
+        end_time = time.time()
+        print(end_time - start_time)
+    # plotting
+    plt.grid()
+
+    plt.plot(alter_list_GA, best_fitness_MI_list, color="r",
+             # label="max_iters"
+             )
+    x_title = "max_iters"
+    y_title = "best_fitness"
+    plt.xlabel(x_title)
+    plt.ylabel(y_title)
+    plt.savefig('GA_max_iter.png')
+    plt.gcf().clear()
+
+    plt.plot(alter_list_GA, best_fitness_GA_att_list, color="r",
+             # label="max_iters"
+             )
+    x_title = "max_attempts"
+    y_title = "best_fitness"
+    plt.xlabel(x_title)
+    plt.ylabel(y_title)
+    plt.savefig('GA_max_attempt.png')
+    plt.gcf().clear()
+
+    plt.plot((x/5 for x in alter_list_GA), best_fitness_GA_pop_list, color="r",
+             # label="max_iters"
+             )
+    x_title = "pop_size"
+    y_title = "best_fitness"
+    plt.xlabel(x_title)
+    plt.ylabel(y_title)
+    plt.savefig('GA_pop_size.png')
+    plt.gcf().clear()
+
+    plt.plot((x/1000 for x in alter_list_GA), best_fitness_GA_mutpb_list, color="r",
+             # label="max_iters"
+             )
+    x_title = "mutation_prob"
+    y_title = "best_fitness"
+    plt.xlabel(x_title)
+    plt.ylabel(y_title)
+    plt.savefig('GA_mutation_prob.png')
+    plt.gcf().clear()
+
+    "========MIMIC========"
+    best_fitness_MI_list = []
+    best_fitness_MI_att_list = []
+    best_fitness_MI_pop_list = []
+    best_fitness_MI_pct_list = []
+    alter_list_MI = []
+
+    # Solve problem using simulated annealing
+    for i in range(1, 1000, 100):
+        print("MI:", i)
+        start_time = time.time()
+        best_state_MI, best_fitness_MI = mlrose.algorithms.mimic(problem,
+                                                                 pop_size=200,
+                                                                 keep_pct=0.2,
+                                                                 max_attempts=1000,
+                                                                 max_iters=i,
+                                                                 curve=False,
+                                                                 random_state = 1)
+        best_state_MI_att, best_fitness_MI_att = mlrose.algorithms.mimic(problem,
+                                                                         pop_size=200,
+                                                                         keep_pct=0.2,
+                                                                         max_attempts=i,
+                                                                         max_iters=1000,
+                                                                         curve=False,
+                                                                         random_state = 1)
+        best_state_MI_pop, best_fitness_MI_pop = mlrose.algorithms.mimic(problem,
+                                                                         pop_size=int(i/5),
+                                                                         keep_pct=0.2,
+                                                                         max_attempts=1000,
+                                                                         max_iters=1000,
+                                                                         curve=False,
+                                                                         random_state=1)
+        best_state_MI_pct, best_fitness_MI_pct = mlrose.algorithms.mimic(problem,
+                                                                         pop_size=200,
+                                                                         keep_pct=float(i)/1000,
+                                                                         max_attempts=1000,
+                                                                         max_iters=1000,
+                                                                         curve=False,
+                                                                         random_state=1)
+        best_fitness_MI_list.append(best_fitness_MI)
+        best_fitness_MI_att_list.append(best_fitness_MI_att)
+        best_fitness_MI_pop_list.append(best_fitness_MI_pop)
+        best_fitness_MI_pct_list.append(best_fitness_MI_pct)
+        alter_list_MI.append(i)
+        end_time = time.time()
+        print(end_time-start_time)
+    # plotting
+
+    plt.grid()
+
+    plt.plot(alter_list, best_fitness_MI_list, color="r",
+             # label="max_iters"
+             )
+    x_title = "max_iters"
+    y_title = "best_fitness"
+    plt.xlabel(x_title)
+    plt.ylabel(y_title)
+    plt.savefig('MI_max_iter.png')
+    plt.gcf().clear()
+
+    plt.plot(alter_list, best_fitness_MI_att_list, color="r",
+             # label="max_iters"
+             )
+    x_title = "max_attempts"
+    y_title = "best_fitness"
+    plt.xlabel(x_title)
+    plt.ylabel(y_title)
+    plt.savefig('MI_max_attempt.png')
+    plt.gcf().clear()
+
+    plt.plot((x/5 for x in alter_list_MI), best_fitness_MI_pop_list, color="r",
+             # label="max_iters"
+             )
+    x_title = "pop_size"
+    y_title = "best_fitness"
+    plt.xlabel(x_title)
+    plt.ylabel(y_title)
+    plt.savefig('MI_pop_size.png')
+    plt.gcf().clear()
+
+    plt.plot((x/1000 for x in alter_list_MI), best_fitness_MI_pct_list, color="r",
+             # label="max_iters"
+             )
+    x_title = "keep_pct"
+    y_title = "best_fitness"
+    plt.xlabel(x_title)
+    plt.ylabel(y_title)
+    plt.savefig('MI_pct_size.png')
+    plt.gcf().clear()
 
 
 if __name__=="__main__":
