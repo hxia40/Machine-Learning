@@ -565,7 +565,10 @@ same color.'''
     plt.savefig('MKC_GA_max_attempt.png')
     plt.gcf().clear()
 
-    plt.plot((x/5 for x in alter_list_GA), best_fitness_GA_pop_list, color="r",
+    alter_list_GA_div5 = (x / 5 for x in alter_list_GA)
+    alter_list_GA_div1000 = (x / 1000 for x in alter_list_GA)
+
+    plt.plot(alter_list_GA_div5, best_fitness_GA_pop_list, color="r",
              # label="max_iters"
              )
     x_title = "pop_size"
@@ -575,7 +578,7 @@ same color.'''
     plt.savefig('MKC_GA_pop_size.png')
     plt.gcf().clear()
 
-    plt.plot((x/1000 for x in alter_list_GA), best_fitness_GA_mutpb_list, color="r",
+    plt.plot(alter_list_GA_div1000, best_fitness_GA_mutpb_list, color="r",
              # label="max_iters"
              )
     x_title = "mutation_prob"
@@ -634,8 +637,9 @@ same color.'''
     # plotting
 
     plt.grid()
-
-    plt.plot(alter_list, best_fitness_MI_list, color="r",
+    alter_list_MI_div5 = (x / 5 for x in alter_list_MI)
+    alter_list_MI_div1000 = (x / 1000 for x in alter_list_MI)
+    plt.plot(alter_list_MI, best_fitness_MI_list, color="r",
              # label="max_iters"
              )
     x_title = "max_iters"
@@ -645,7 +649,7 @@ same color.'''
     plt.savefig('MKC_MI_max_iter.png')
     plt.gcf().clear()
 
-    plt.plot(alter_list, best_fitness_MI_att_list, color="r",
+    plt.plot(alter_list_MI, best_fitness_MI_att_list, color="r",
              # label="max_iters"
              )
     x_title = "max_attempts"
@@ -655,7 +659,7 @@ same color.'''
     plt.savefig('MKC_MI_max_attempt.png')
     plt.gcf().clear()
 
-    plt.plot((x/5 for x in alter_list_MI), best_fitness_MI_pop_list, color="r",
+    plt.plot(alter_list_MI_div5, best_fitness_MI_pop_list, color="r",
              # label="max_iters"
              )
     x_title = "pop_size"
@@ -665,7 +669,7 @@ same color.'''
     plt.savefig('MKC_MI_pop_size.png')
     plt.gcf().clear()
 
-    plt.plot((x/1000 for x in alter_list_MI), best_fitness_MI_pct_list, color="r",
+    plt.plot(alter_list_MI_div1000, best_fitness_MI_pct_list, color="r",
              # label="max_iters"
              )
     x_title = "keep_pct"
@@ -837,7 +841,7 @@ same color.'''
     # plotting
     plt.grid()
 
-    plt.plot(alter_list_GA, best_fitness_MI_list, color="r",
+    plt.plot(alter_list_GA, best_fitness_GA_list, color="r",
              # label="max_iters"
              )
     x_title = "max_iters"
@@ -857,24 +861,27 @@ same color.'''
     plt.savefig('4p_GA_max_attempt.png')
     plt.gcf().clear()
 
-    plt.plot((x/5 for x in alter_list_GA), best_fitness_GA_pop_list, color="r",
+    alter_list_GA_div5 = (x / 5 for x in alter_list_GA)
+    alter_list_GA_div1000 = (x / 1000 for x in alter_list_GA)
+
+    plt.plot(alter_list_GA_div5, best_fitness_GA_pop_list, color="r",
              # label="max_iters"
              )
     x_title = "pop_size"
     y_title = "best_fitness"
     plt.xlabel(x_title)
     plt.ylabel(y_title)
-    plt.savefig('4p_GA_pop_size.png')
+    plt.savefig('MKC_GA_pop_size.png')
     plt.gcf().clear()
 
-    plt.plot((x/1000 for x in alter_list_GA), best_fitness_GA_mutpb_list, color="r",
+    plt.plot(alter_list_GA_div1000, best_fitness_GA_mutpb_list, color="r",
              # label="max_iters"
              )
     x_title = "mutation_prob"
     y_title = "best_fitness"
     plt.xlabel(x_title)
     plt.ylabel(y_title)
-    plt.savefig('4p_GA_mutation_prob.png')
+    plt.savefig('MKC_GA_mutation_prob.png')
     plt.gcf().clear()
 
     "========MIMIC========"
@@ -927,7 +934,7 @@ same color.'''
 
     plt.grid()
 
-    plt.plot(alter_list, best_fitness_MI_list, color="r",
+    plt.plot(alter_list_MI, best_fitness_MI_list, color="r",
              # label="max_iters"
              )
     x_title = "max_iters"
@@ -937,7 +944,7 @@ same color.'''
     plt.savefig('4p_MI_max_iter.png')
     plt.gcf().clear()
 
-    plt.plot(alter_list, best_fitness_MI_att_list, color="r",
+    plt.plot(alter_list_MI, best_fitness_MI_att_list, color="r",
              # label="max_iters"
              )
     x_title = "max_attempts"
@@ -947,7 +954,10 @@ same color.'''
     plt.savefig('4p_MI_max_attempt.png')
     plt.gcf().clear()
 
-    plt.plot((x/5 for x in alter_list_MI), best_fitness_MI_pop_list, color="r",
+    alter_list_MI_div5 = (x / 5 for x in alter_list_GA)
+    alter_list_MI_div1000 = (x / 1000 for x in alter_list_GA)
+
+    plt.plot(alter_list_MI_div5, best_fitness_MI_pop_list, color="r",
              # label="max_iters"
              )
     x_title = "pop_size"
@@ -957,7 +967,7 @@ same color.'''
     plt.savefig('4p_MI_pop_size.png')
     plt.gcf().clear()
 
-    plt.plot((x/1000 for x in alter_list_MI), best_fitness_MI_pct_list, color="r",
+    plt.plot(alter_list_MI_div1000, best_fitness_MI_pct_list, color="r",
              # label="max_iters"
              )
     x_title = "keep_pct"
@@ -966,7 +976,6 @@ same color.'''
     plt.ylabel(y_title)
     plt.savefig('4p_MI_pct_size.png')
     plt.gcf().clear()
-
 
 if __name__=="__main__":
     # nCityTSP(city_num=10)
