@@ -147,8 +147,8 @@ def SA(problem, prob_name):
     best_fitness_SA_list = np.array(best_fitness_SA_list)
     best_fitness_SA_att_list = np.array(best_fitness_SA_att_list)
 
-    return (alter_list_SA, best_fitness_SA_list, "max_iters", "best_fitness"), \
-           (alter_list_SA,best_fitness_SA_att_list, "max_attempts", "best_fitness")
+    return np.array([[alter_list_SA, best_fitness_SA_list, "max_iters", "best_fitness"],
+           [alter_list_SA,best_fitness_SA_att_list, "max_attempts", "best_fitness"]])
 
 def GA(problem, prob_name):
 
@@ -203,10 +203,10 @@ def GA(problem, prob_name):
     best_fitness_GA_pop_list = np.array(best_fitness_GA_pop_list)
     best_fitness_GA_mutpb_list = np.array(best_fitness_GA_mutpb_list)
 
-    return (alter_list_GA, best_fitness_GA_list, "max_iters", "best_fitness"), \
-           (alter_list_GA,best_fitness_GA_att_list, "max_attempts", "best_fitness"), \
-           (alter_list_GA/5, best_fitness_GA_pop_list, "pop_size", "best_fitness"), \
-           (alter_list_GA/1000, best_fitness_GA_mutpb_list, "mutation_prob", "best_fitness")
+    return np.array([[alter_list_GA, best_fitness_GA_list, "max_iters", "best_fitness"],
+           [alter_list_GA, best_fitness_GA_att_list, "max_attempts", "best_fitness"],
+           [alter_list_GA/5, best_fitness_GA_pop_list, "pop_size", "best_fitness"],
+           [alter_list_GA/1000, best_fitness_GA_mutpb_list, "mutation_prob", "best_fitness"]])
 
 def MI(problem, prob_name):
     best_fitness_MI_list = []
@@ -219,36 +219,55 @@ def MI(problem, prob_name):
     for i in range(1, 1000, 20):
         print(prob_name, "MI:", i)
         start_time = time.time()
-        best_state_MI, best_fitness_MI = mlrose.algorithms.mimic(problem,
-                                                                 pop_size=200,
-                                                                 keep_pct=0.2,
-                                                                 max_attempts=10,
-                                                                 max_iters=i,
-                                                                 curve=False,
-                                                                 random_state=1)
-        best_state_MI_att, best_fitness_MI_att = mlrose.algorithms.mimic(problem,
-                                                                         pop_size=200,
-                                                                         keep_pct=0.2,
-                                                                         max_attempts=i,
-                                                                         max_iters=10,
-                                                                         curve=False,
-                                                                         random_state=1)
-        best_state_MI_pop, best_fitness_MI_pop = mlrose.algorithms.mimic(problem,
-                                                                         pop_size=max(1, int(i / 5)),
-                                                                         keep_pct=0.2,
-                                                                         max_attempts=10,
-                                                                         max_iters=10,
-                                                                         curve=False,
-                                                                         random_state=1)
-
-        best_state_MI_pct, best_fitness_MI_pct = mlrose.algorithms.mimic(problem,
-                                                                         pop_size=200,
-                                                                         keep_pct=max(0.1, float(i+2) / 1000.0),
-                                                                         # keep_pct = 0.333,
-                                                                         max_attempts=10,
-                                                                         max_iters=10,
-                                                                         curve=False,
-                                                                         random_state=1)
+        try:
+            best_state_MI, best_fitness_MI = mlrose.algorithms.mimic(problem,
+                                                                     pop_size=200,
+                                                                     keep_pct=0.2,
+                                                                     max_attempts=10,
+                                                                     max_iters=i,
+                                                                     curve=False,
+                                                                     random_state=1)
+        except:
+            print("MI_iter error on i = {}".format(i))
+            best_state_MI = np.nan
+            best_fitness_MI = np.nan
+        try:
+            best_state_MI_att, best_fitness_MI_att = mlrose.algorithms.mimic(problem,
+                                                                             pop_size=200,
+                                                                             keep_pct=0.2,
+                                                                             max_attempts=i,
+                                                                             max_iters=10,
+                                                                             curve=False,
+                                                                             random_state=1)
+        except:
+            print("MI_att error on i = {}".format(i))
+            best_state_MI_att = np.nan
+            best_fitness_MI_att = np.nan
+        try:
+            best_state_MI_pop, best_fitness_MI_pop = mlrose.algorithms.mimic(problem,
+                                                                             pop_size=max(1, int(i / 5)),
+                                                                             keep_pct=0.2,
+                                                                             max_attempts=10,
+                                                                             max_iters=10,
+                                                                             curve=False,
+                                                                             random_state=1)
+        except:
+            print("MI_pop error on i = {}".format(i))
+            best_state_MI_pop = np.nan
+            best_fitness_MI_pop = np.nan
+        try:
+            best_state_MI_pct, best_fitness_MI_pct = mlrose.algorithms.mimic(problem,
+                                                                             pop_size=200,
+                                                                             keep_pct=max(0.1, float(i-1) / 1000.0),
+                                                                             # keep_pct = 0.333,
+                                                                             max_attempts=10,
+                                                                             max_iters=10,
+                                                                             curve=False,
+                                                                             random_state=1)
+        except:
+            print("MI_pct error on i = {}".format(i))
+            best_state_MI_pct = np.nan
+            best_fitness_MI_pct = np.nan
         print('checker:', i, max(0.1, float(i +3) / 1000.0))
         best_fitness_MI_list.append(best_fitness_MI)
         best_fitness_MI_att_list.append(best_fitness_MI_att)
@@ -264,95 +283,135 @@ def MI(problem, prob_name):
     best_fitness_MI_pop_list = np.array(best_fitness_MI_pop_list)
     best_fitness_MI_pct_list = np.array(best_fitness_MI_pct_list)
 
-    return (alter_list_MI, best_fitness_MI_list, "max_iters", "best_fitness"), \
-           (alter_list_MI,best_fitness_MI_att_list, "max_attempts", "best_fitness"), \
-           (alter_list_MI/5, best_fitness_MI_pop_list, "pop_size", "best_fitness"), \
-           (alter_list_MI/1000, best_fitness_MI_pct_list, "keep_pct", "best_fitness")
+    return np.array([[alter_list_MI, best_fitness_MI_list, "max_iters", "best_fitness"],
+           [alter_list_MI, best_fitness_MI_att_list, "max_attempts", "best_fitness"],
+           [alter_list_MI/5, best_fitness_MI_pop_list, "pop_size", "best_fitness"],
+           [alter_list_MI/1000, best_fitness_MI_pct_list, "keep_pct", "best_fitness"]])
 
 def plotting(prob_name, algo_name, valuess):
-    for value in valuess:
-        plt.plot(value[0], value[1], color="r",)
-        x_title = value[2]
-        y_title = value[3]
-        plt.xlabel(x_title)
-        plt.ylabel(y_title)
-        plt.savefig('{}_{}_{}.png'.format(prob_name, algo_name, value[2]))
-        plt.gcf().clear()
+    if (prob_name == "nCityTSP") or (prob_name == "MaxKColor"):
+        for value in valuess:
+            plt.plot(value[0], value[1], color="r",)
+            x_title = value[2]
+            y_title = value[3]
+            plt.xlabel(x_title)
+            plt.ylabel(y_title)
+            plt.savefig('{}_{}_{}.png'.format(prob_name, algo_name, value[2]))
+            plt.gcf().clear()
+
+    else:
+        for value in valuess:
+            plt.plot(value[0], value[1], color="r",)
+            x_title = value[2]
+            y_title = value[3]
+            plt.xlabel(x_title)
+            plt.ylabel(y_title)
+            plt.savefig('{}_{}_{}.png'.format(prob_name, algo_name, value[2]))
+            plt.gcf().clear()
+
+def generate_prob_MKC(random_seed=0, nodes=8, size=5):
+    np.random.seed(random_seed)
+    problem_list = []
+    for n in range(size):
+        edges_list = []
+        for i in range(nodes):
+            for j in range(i + 1, nodes):
+                if np.random.random() > 0.6:
+                    edges_list.append((i, j))
+
+        # Initialize fitness function object using edges_list
+        fitness = mlrose.MaxKColor(edges_list)
+
+        # Define optimization problem object
+        problem = mlrose.DiscreteOpt(length=nodes, fitness_fn=fitness, maximize=False)
+        problem_list.append(problem)
+    return problem_list
 
 if __name__=="__main__":
-
 
     '''Problem 1: n-city TSP: over a map of given size,
     generate N cities for a salesman to travel through each city and find the shortest route'''
     # Create list of city coordinates
     result_RHC_list = []
+    result_SA_list = []
+    result_GA_list = []
+    result_MI_list = []
+    result_RHC_title = []
 
-    for random_seed in range(5):
+    for random_seed in range(3):
 
         np.random.seed(random_seed)
+
         city_num = 6
         coords_list = []
         for i in range(city_num):
             coords_list.append((np.random.random_sample(), np.random.random_sample()))
-        rev_dist_list = []
-        for i in range(len(coords_list)):
-            for j in range(i+1, len(coords_list)):
-                rev_dist_list.append((i,j,
-                        (2 ** 0.5)-(((coords_list[i][0]-coords_list[j][0]) ** 2 + (coords_list[i][1]-coords_list[j][1]) ** 2) ** 0.5)))
-        rev_dist_list = np.array(rev_dist_list)
-        # print(rev_dist_list)
+        # rev_dist_list = []
+        # for i in range(len(coords_list)):
+        #     for j in range(i+1, len(coords_list)):
+        #         rev_dist_list.append((i,j,
+        #                 (2 ** 0.5)-(((coords_list[i][0]-coords_list[j][0]) ** 2 + (coords_list[i][1]-coords_list[j][1]) ** 2) ** 0.5)))
+        # rev_dist_list = np.array(rev_dist_list)
+
         # Initialize fitness function object using coords_list
         fitness_cords = mlrose.TravellingSales(coords = coords_list)
-        fitness_dists = mlrose.TravellingSales(distances = rev_dist_list)
+        # fitness_dists = mlrose.TravellingSales(distances = rev_dist_list)
 
         # Define optimization problem object
         problem_nCityTSP = mlrose.TSPOpt(length=city_num, fitness_fn=fitness_cords, maximize=False)
 
         result_RHC = RHC(problem_nCityTSP, "nCityTSP")
-        # print(result_RHC[0])
-        result_RHC_num = result_RHC[0:,:2]
-
-        # print("result_RHC_num", result_RHC_num, "\n========================\n")
+        result_RHC_num = result_RHC[0:, :2]
         result_RHC_list.append(result_RHC_num)
 
-        # if result_RHC_list == np.array([]):
-        #     result_RHC_list = result_RHC
-        # else:
+        # result_SA = SA(problem_nCityTSP, "nCityTSP")
+        # result_SA_num = result_SA[0:, :2]
+        # result_SA_list.append(result_SA_num)
 
-        # results_SA = SA(problem_nCityTSP, "nCityTSP")
-        # results_GA = GA(problem_nCityTSP, "nCityTSP")
-        # results_MI = MI(problem_nCityTSP, "nCityTSP")
-        # plotting("nCityTSP", "RHC", results_RHC)
-        # plotting("nCityTSP", "SA", results_SA)
-        # plotting("nCityTSP", "GA", results_GA)
-        # plotting("nCityTSP", "MI", results_MI)
-    # print(result_RHC_list)
-    result_RHC_mean = np.mean(result_RHC_list, axis=0)
+        # result_GA = GA(problem_nCityTSP, "nCityTSP")
+        # result_GA_num = result_GA[0:, :2]
+        # result_GA_list.append(result_GA_num)
+        #
+        # result_MI = MI(problem_nCityTSP, "nCityTSP")
+        # result_MI_num = result_MI[0:, :2]
+        # result_MI_list.append(result_MI_num)
+
+    result_RHC_list = np.array(result_RHC_list) 
+    result_RHC_mean = np.nanmean(result_RHC_list, axis=0)
     result_RHC_title = result_RHC[0:, 2:]
-    print(result_RHC_mean[0])
-    print(result_RHC_title[0])
+    results_RHC_complete = np.concatenate((result_RHC_mean, result_RHC_title), axis=1)
+    plotting("nCityTSP", "RHC", results_RHC_complete)
+
+    # result_SA_list = np.array(result_SA_list)
+    # result_SA_mean = np.nanmean(result_SA_list, axis=0)
+    # result_SA_title = result_SA[0:, 2:]
+    # results_SA_complete = np.concatenate((result_SA_mean, result_SA_title), axis=1)
+    # plotting("nCityTSP", "SA", results_SA_complete)
+
+    # result_GA_list = np.array(result_GA_list) * -1
+    # result_GA_mean = np.nanmean(result_GA_list, axis=0)
+    # result_GA_title = result_GA[0:, 2:]
+    # results_GA_complete = np.concatenate((result_GA_mean, result_GA_title), axis=1)
+    # plotting("nCityTSP", "GA", results_GA_complete)
+    #
+    # result_MI_list = np.array(result_MI_list) * -1
+    # result_MI_mean = np.nanmean(result_MI_list, axis=0)
+    # result_MI_title = result_MI[0:, 2:]
+    # results_MI_complete = np.concatenate((result_MI_mean, result_MI_title), axis=1)
+    # plotting("nCityTSP", "MI", results_MI_complete)
+
+    '''Problem 2: Max-k color optimization problem. Evaluates the fitness of an n-dimensional state vector
+    𝑥 = [𝑥0, 𝑥1, . . . , 𝑥𝑛−1], where 𝑥𝑖 represents the color of node i, as the number of pairs of adjacent nodes of the
+    same color.'''
+    # Create a random nodes map
+    # result_RHC_list = []
+    # result_SA_list = []
+    # result_GA_list = []
+    # result_MI_list = []
 
 
-    c = result_RHC_mean[0] + result_RHC_title[0]
-    print(c)
-    # '''Problem 2: Max-k color optimization problem. Evaluates the fitness of an n-dimensional state vector
-    # 𝑥 = [𝑥0, 𝑥1, . . . , 𝑥𝑛−1], where 𝑥𝑖 represents the color of node i, as the number of pairs of adjacent nodes of the
-    # same color.'''
-    # # Create list of nodes
-    # nodes = 8
-    # edges_list = []
-    # for i in range(nodes):
-    #     for j in range(i + 1, nodes):
-    #         edges_list.append((i, j))
-    # # print(edges_list)
-    #
-    # # Initialize fitness function object using edges_list
-    # fitness = mlrose.MaxKColor(edges_list)
-    #
-    # # Define optimization problem object
-    # problem_MaxKColor = mlrose.DiscreteOpt(length=nodes, fitness_fn=fitness, maximize=False)
-    #
-    # plotting_rev(problem_MaxKColor, "MaxKColor")
+
+
     #
     # '''Problem 3: Max-k color optimization problem. Evaluates the fitness of an n-dimensional state vector
     # 𝑥 = [𝑥0, 𝑥1, . . . , 𝑥𝑛−1], where 𝑥𝑖 represents the color of node i, as the number of pairs of adjacent nodes of the
