@@ -123,7 +123,6 @@ def RHC(problem, prob_name):
 
     return np.array([[alter_list_RHC, best_fitness_RHC_list,"max_iters", "best_fitness"],
            [alter_list_RHC, best_fitness_RHC_att_list,"max_attempts", "best_fitness"]])
-
 def SA(problem, prob_name):
 
     best_fitness_SA_list = []
@@ -152,7 +151,6 @@ def SA(problem, prob_name):
 
     return np.array([[alter_list_SA, best_fitness_SA_list, "max_iters", "best_fitness"],
            [alter_list_SA,best_fitness_SA_att_list, "max_attempts", "best_fitness"]])
-
 def GA(problem, prob_name):
 
     best_fitness_GA_list = []
@@ -210,7 +208,6 @@ def GA(problem, prob_name):
            [alter_list_GA, best_fitness_GA_att_list, "max_attempts", "best_fitness"],
            [alter_list_GA/5, best_fitness_GA_pop_list, "pop_size", "best_fitness"],
            [alter_list_GA/1000, best_fitness_GA_mutpb_list, "mutation_prob", "best_fitness"]])
-
 def MI(problem, prob_name):
     best_fitness_MI_list = []
     best_fitness_MI_att_list = []
@@ -294,22 +291,36 @@ def MI(problem, prob_name):
 def plotting(prob_name, algo_name, valuess):
     if (prob_name == "nCityTSP") or (prob_name == "MaxKColor"):
         for value in valuess:
+            writer = open('data/{}_{}_{}.txt'.format(prob_name, algo_name, value[2]), 'w')
+            writer.write('{}_{}_{}'.format(prob_name, algo_name, value[2]))
+            writer.write("\n\n")
+            writer.write(str(value[0]))
+            writer.write("\n\n")
+            writer.write(str(1/value[1]))
+
             plt.plot(value[0], 1/value[1], color="r",)
             x_title = value[2]
             y_title = value[3]
             plt.xlabel(x_title)
             plt.ylabel(y_title)
-            plt.savefig('{}_{}_{}.png'.format(prob_name, algo_name, value[2]))
+            plt.savefig('fig/{}_{}_{}.png'.format(prob_name, algo_name, value[2]))
             plt.gcf().clear()
 
     else:
         for value in valuess:
+            writer = open('data/{}_{}_{}.txt'.format(prob_name, algo_name, value[2]), 'w')
+            writer.write('{}_{}_{}'.format(prob_name, algo_name, value[2]))
+            writer.write("\n\n")
+            writer.write(str(value[0]))
+            writer.write("\n\n")
+            writer.write(str(value[1]))
+
             plt.plot(value[0], value[1], color="r",)
             x_title = value[2]
             y_title = value[3]
             plt.xlabel(x_title)
             plt.ylabel(y_title)
-            plt.savefig('{}_{}_{}.png'.format(prob_name, algo_name, value[2]))
+            plt.savefig('fig/{}_{}_{}.png'.format(prob_name, algo_name, value[2]))
             plt.gcf().clear()
 
 def generate_prob_MKC(random_seed=0, nodes=8, sample_size=5):
@@ -329,7 +340,6 @@ def generate_prob_MKC(random_seed=0, nodes=8, sample_size=5):
         problem = mlrose.DiscreteOpt(length=nodes, fitness_fn=fitness, maximize=False)
         problem_list.append(problem)
     return problem_list
-
 def generate_prob_TSP(random_seed=0, citys=6, sample_size=5):
     np.random.seed(random_seed)
     problem_list = []
@@ -353,7 +363,26 @@ def generate_prob_TSP(random_seed=0, citys=6, sample_size=5):
         problem = mlrose.TSPOpt(length=city_num, fitness_fn=fitness_cords, maximize=False)
         problem_list.append(problem)
     return problem_list
-
+def generate_prob_4peaks(random_seed=0, length = 10, sample_size=5):
+    np.random.seed(random_seed)
+    problem_list = []
+    for n in range(sample_size):
+        # t_pct = np.random.random()
+        fitness = mlrose.FourPeaks(t_pct=0.1)
+        # Define optimization problem object
+        problem = mlrose.DiscreteOpt(length=length, fitness_fn=fitness, maximize=True, max_val=2)
+        problem_list.append(problem)
+    return problem_list
+def generate_prob_OneMax(random_seed=0, length = 10, sample_size=5):
+    np.random.seed(random_seed)
+    problem_list = []
+    for n in range(sample_size):
+        # length = int(np.random.randint(low=10, high=50, size=1))
+        fitness = mlrose.OneMax()
+        # Define optimization problem object
+        problem = mlrose.DiscreteOpt(length=length, fitness_fn=fitness, maximize=True, max_val=2)
+        problem_list.append(problem)
+    return problem_list
 
 def prob_to_curves(prob_name, problem_list):
     # Create list of city coordinates
@@ -381,9 +410,7 @@ def prob_to_curves(prob_name, problem_list):
 
     result_RHC_list = pd.DataFrame(result_RHC_list)
     result_RHC_list = result_RHC_list.fillna(method='ffill')
-    print("=======b4 mean====", result_RHC_list)
     result_RHC_mean = np.nanmean(result_RHC_list, axis=0)
-    print("=======mean====", result_RHC_mean)
     result_RHC_title = result_RHC[0:, 2:]
     results_RHC_complete = np.concatenate((result_RHC_mean[0], result_RHC_title), axis=1)
     plotting(prob_name, "RHC", results_RHC_complete)
@@ -404,13 +431,14 @@ def prob_to_curves(prob_name, problem_list):
     #
     result_MI_list = pd.DataFrame(result_MI_list)
     result_MI_list = result_MI_list.fillna(method='ffill')
-    print("=======b4 mean====", result_MI_list[0])
     result_MI_mean = np.nanmean(result_MI_list, axis=0)
-    print("=======mean====", result_MI_mean)
     result_MI_title = result_MI[0:, 2:]
     results_MI_complete = np.concatenate((result_MI_mean[0], result_MI_title), axis=1)
     plotting(prob_name, "MI", results_MI_complete)
 
+def test_algos(prob_name, problem_list,problem_size):  # generate time and accuracy for all four algorithms on given problem pover given size (number of cities, number of nodes, etc)
+
+    pass
 
 if __name__=="__main__":
 
@@ -419,39 +447,43 @@ if __name__=="__main__":
     problem_list_TSP = generate_prob_TSP(random_seed=0, citys=6, sample_size=5)
     prob_to_curves("nCityTSP", problem_list_TSP)
 
-    problem_list_MKC = generate_prob_MKC(random_seed=0, nodes=8, sample_size=5)
-    prob_to_curves("MaxKColor", problem_list_MKC)
-
-
-
-
     '''Problem 2: Max-k color optimization problem. Evaluates the fitness of an n-dimensional state vector
     𝑥 = [𝑥0, 𝑥1, . . . , 𝑥𝑛−1], where 𝑥𝑖 represents the color of node i, as the number of pairs of adjacent nodes of the
     same color.'''
+    problem_list_MKC = generate_prob_MKC(random_seed=0, nodes=8, sample_size=5)
+    prob_to_curves("MaxKColor", problem_list_MKC)
+
+    # '''Problem 3: 4 peaks
+    # # Create list of states with random t_pct'''
+    # problem_list_4peaks = generate_prob_4peaks(random_seed=0, length=10, sample_size=5)
+    # prob_to_curves("4peaks", problem_list_4peaks)
+
+    '''Problem 4: OneMax
+    # Create an array made by 0 and 1, with a length between 10 and 50'''
+    problem_list_OneMax = generate_prob_OneMax(random_seed=0, length=10, sample_size=5)
+    prob_to_curves("OneMax", problem_list_OneMax)
+
+    '''plot time and fitness score over sample size on four algorithms'''
+    '''Problem 1: n-city TSP:'''
+    # for num_city in range(1, 50, 10):
+    #     problem_list = generate_prob_TSP(random_seed=0, citys=num_city, sample_size=5)
+    #     time_list = []
+    #     best_fitness_list = []
+    #     for problem in problem_list:
+    #         start_time = time.time()
+    #         best_state, best_fitness = mlrose.random_hill_climb(problem,
+    #                                                             max_attempts=100,
+    #                                                             max_iters=100,
+    #                                                             restarts=0,
+    #                                                             init_state=None,
+    #                                                             curve=False,
+    #                                                             random_state=1)
+    #         time_diff = time.time() - start_time
+    #         time_list.append(time_diff)
+    #         best_fitness_list.append(1/best_fitness_RHC)
+    #     time_mean = np.nanmean(time_list)
+    #     best_fitness_mean = np.mean(best_fitness_list)
 
 
 
 
-
-    #
-    # '''Problem 3: Max-k color optimization problem. Evaluates the fitness of an n-dimensional state vector
-    # 𝑥 = [𝑥0, 𝑥1, . . . , 𝑥𝑛−1], where 𝑥𝑖 represents the color of node i, as the number of pairs of adjacent nodes of the
-    # same color.'''
-    # # Create list of states
-    # state = np.array([1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0])
-    #
-    # # Initialize fitness function object using edges_list
-    # fitness = mlrose.FourPeaks(t_pct=0.15)
-    #
-    # # Define optimization problem object
-    # # problem = mlrose.TSPOpt(length=city_num, fitness_fn=fitness_coords, maximize=False)
-    # problem_4peaks = mlrose.DiscreteOpt(length=len(state), fitness_fn=fitness, maximize=True, max_val=2)
-    #
-    # result_RHC = RHC(problem_4peaks, "4peaks")
-    # results_SA = SA(problem_4peaks, "4peaks")
-    # results_GA = GA(problem_4peaks, "4peaks")
-    # results_MI = MI(problem_4peaks, "4peaks")
-    # plotting("4peaks", "RHC", results_RHC)
-    # plotting("4peaks", "SA", results_SA)
-    # plotting("4peaks", "GA", results_GA)
-    # plotting("4peaks", "MI", results_MI)
