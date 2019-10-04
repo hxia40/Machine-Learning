@@ -1,4 +1,7 @@
 import numpy as np
+import sys
+np.set_printoptions(threshold=sys.maxsize)
+import pandas as pd
 import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
@@ -291,7 +294,7 @@ def MI(problem, prob_name):
 def plotting(prob_name, algo_name, valuess):
     if (prob_name == "nCityTSP") or (prob_name == "MaxKColor"):
         for value in valuess:
-            plt.plot(value[0], value[1], color="r",)
+            plt.plot(value[0], 1/value[1], color="r",)
             x_title = value[2]
             y_title = value[3]
             plt.xlabel(x_title)
@@ -309,10 +312,10 @@ def plotting(prob_name, algo_name, valuess):
             plt.savefig('{}_{}_{}.png'.format(prob_name, algo_name, value[2]))
             plt.gcf().clear()
 
-def generate_prob_MKC(random_seed=0, nodes=8, size=5):
+def generate_prob_MKC(random_seed=0, nodes=8, sample_size=5):
     np.random.seed(random_seed)
     problem_list = []
-    for n in range(size):
+    for n in range(sample_size):
         edges_list = []
         for i in range(nodes):
             for j in range(i + 1, nodes):
@@ -327,22 +330,11 @@ def generate_prob_MKC(random_seed=0, nodes=8, size=5):
         problem_list.append(problem)
     return problem_list
 
-if __name__=="__main__":
-
-    '''Problem 1: n-city TSP: over a map of given size,
-    generate N cities for a salesman to travel through each city and find the shortest route'''
-    # Create list of city coordinates
-    result_RHC_list = []
-    result_SA_list = []
-    result_GA_list = []
-    result_MI_list = []
-    result_RHC_title = []
-
-    for random_seed in range(3):
-
-        np.random.seed(random_seed)
-
-        city_num = 6
+def generate_prob_TSP(random_seed=0, citys=6, sample_size=5):
+    np.random.seed(random_seed)
+    problem_list = []
+    for n in range(sample_size):
+        city_num = citys
         coords_list = []
         for i in range(city_num):
             coords_list.append((np.random.random_sample(), np.random.random_sample()))
@@ -354,60 +346,89 @@ if __name__=="__main__":
         # rev_dist_list = np.array(rev_dist_list)
 
         # Initialize fitness function object using coords_list
-        fitness_cords = mlrose.TravellingSales(coords = coords_list)
+        fitness_cords = mlrose.TravellingSales(coords=coords_list)
         # fitness_dists = mlrose.TravellingSales(distances = rev_dist_list)
 
         # Define optimization problem object
-        problem_nCityTSP = mlrose.TSPOpt(length=city_num, fitness_fn=fitness_cords, maximize=False)
+        problem = mlrose.TSPOpt(length=city_num, fitness_fn=fitness_cords, maximize=False)
+        problem_list.append(problem)
+    return problem_list
 
-        result_RHC = RHC(problem_nCityTSP, "nCityTSP")
+
+def prob_to_curves(prob_name, problem_list):
+    # Create list of city coordinates
+    result_RHC_list = []
+    result_SA_list = []
+    result_GA_list = []
+    result_MI_list = []
+
+    for problem in problem_list:
+        result_RHC = RHC(problem, prob_name)
         result_RHC_num = result_RHC[0:, :2]
         result_RHC_list.append(result_RHC_num)
 
-        # result_SA = SA(problem_nCityTSP, "nCityTSP")
-        # result_SA_num = result_SA[0:, :2]
-        # result_SA_list.append(result_SA_num)
+        result_SA = SA(problem, prob_name)
+        result_SA_num = result_SA[0:, :2]
+        result_SA_list.append(result_SA_num)
 
-        # result_GA = GA(problem_nCityTSP, "nCityTSP")
-        # result_GA_num = result_GA[0:, :2]
-        # result_GA_list.append(result_GA_num)
-        #
-        # result_MI = MI(problem_nCityTSP, "nCityTSP")
-        # result_MI_num = result_MI[0:, :2]
-        # result_MI_list.append(result_MI_num)
+        result_GA = GA(problem, prob_name)
+        result_GA_num = result_GA[0:, :2]
+        result_GA_list.append(result_GA_num)
 
-    result_RHC_list = np.array(result_RHC_list) 
+        result_MI = MI(problem, prob_name)
+        result_MI_num = result_MI[0:, :2]
+        result_MI_list.append(result_MI_num)
+
+    result_RHC_list = pd.DataFrame(result_RHC_list)
+    result_RHC_list = result_RHC_list.fillna(method='ffill')
+    print("=======b4 mean====", result_RHC_list)
     result_RHC_mean = np.nanmean(result_RHC_list, axis=0)
+    print("=======mean====", result_RHC_mean)
     result_RHC_title = result_RHC[0:, 2:]
-    results_RHC_complete = np.concatenate((result_RHC_mean, result_RHC_title), axis=1)
-    plotting("nCityTSP", "RHC", results_RHC_complete)
+    results_RHC_complete = np.concatenate((result_RHC_mean[0], result_RHC_title), axis=1)
+    plotting(prob_name, "RHC", results_RHC_complete)
 
-    # result_SA_list = np.array(result_SA_list)
-    # result_SA_mean = np.nanmean(result_SA_list, axis=0)
-    # result_SA_title = result_SA[0:, 2:]
-    # results_SA_complete = np.concatenate((result_SA_mean, result_SA_title), axis=1)
-    # plotting("nCityTSP", "SA", results_SA_complete)
+    result_SA_list = pd.DataFrame(result_SA_list)
+    result_SA_list = result_SA_list.fillna(method='ffill')
+    result_SA_mean = np.nanmean(result_SA_list, axis=0)
+    result_SA_title = result_SA[0:, 2:]
+    results_SA_complete = np.concatenate((result_SA_mean[0], result_SA_title), axis=1)
+    plotting(prob_name, "SA", results_SA_complete)
 
-    # result_GA_list = np.array(result_GA_list) * -1
-    # result_GA_mean = np.nanmean(result_GA_list, axis=0)
-    # result_GA_title = result_GA[0:, 2:]
-    # results_GA_complete = np.concatenate((result_GA_mean, result_GA_title), axis=1)
-    # plotting("nCityTSP", "GA", results_GA_complete)
+    result_GA_list = pd.DataFrame(result_GA_list)
+    result_GA_list = result_GA_list.fillna(method='ffill')
+    result_GA_mean = np.nanmean(result_GA_list, axis=0)
+    result_GA_title = result_GA[0:, 2:]
+    results_GA_complete = np.concatenate((result_GA_mean[0], result_GA_title), axis=1)
+    plotting(prob_name, "GA", results_GA_complete)
     #
-    # result_MI_list = np.array(result_MI_list) * -1
-    # result_MI_mean = np.nanmean(result_MI_list, axis=0)
-    # result_MI_title = result_MI[0:, 2:]
-    # results_MI_complete = np.concatenate((result_MI_mean, result_MI_title), axis=1)
-    # plotting("nCityTSP", "MI", results_MI_complete)
+    result_MI_list = pd.DataFrame(result_MI_list)
+    result_MI_list = result_MI_list.fillna(method='ffill')
+    print("=======b4 mean====", result_MI_list[0])
+    result_MI_mean = np.nanmean(result_MI_list, axis=0)
+    print("=======mean====", result_MI_mean)
+    result_MI_title = result_MI[0:, 2:]
+    results_MI_complete = np.concatenate((result_MI_mean[0], result_MI_title), axis=1)
+    plotting(prob_name, "MI", results_MI_complete)
+
+
+if __name__=="__main__":
+
+    '''Problem 1: n-city TSP: over a map of given size,
+    generate N cities for a salesman to travel through each city and find the shortest route'''
+    problem_list_TSP = generate_prob_TSP(random_seed=0, citys=6, sample_size=5)
+    prob_to_curves("nCityTSP", problem_list_TSP)
+
+    problem_list_MKC = generate_prob_MKC(random_seed=0, nodes=8, sample_size=5)
+    prob_to_curves("MaxKColor", problem_list_MKC)
+
+
+
 
     '''Problem 2: Max-k color optimization problem. Evaluates the fitness of an n-dimensional state vector
     𝑥 = [𝑥0, 𝑥1, . . . , 𝑥𝑛−1], where 𝑥𝑖 represents the color of node i, as the number of pairs of adjacent nodes of the
     same color.'''
-    # Create a random nodes map
-    # result_RHC_list = []
-    # result_SA_list = []
-    # result_GA_list = []
-    # result_MI_list = []
+
 
 
 
