@@ -288,7 +288,7 @@ def MI(problem, prob_name):
            [alter_list_MI/5, best_fitness_MI_pop_list, "pop_size", "best_fitness"],
            [alter_list_MI/1000, best_fitness_MI_pct_list, "keep_pct", "best_fitness"]])
 
-def plotting(prob_name, algo_name, valuess, size_plot):
+def plotting(prob_name, algo_name, valuess, size_plot = False):
     size_plot = size_plot
     if (prob_name == "nCityTSP") or (prob_name == "MaxKColor"):
         print("sdfsdf")
@@ -770,7 +770,7 @@ def size_test_Cpeaks_RHC():
         for problem in problem_list:
             start_time = time.time()
             best_state, best_fitness = mlrose.random_hill_climb(problem,
-                                                                max_attempts=50,
+                                                                max_attempts=10,
                                                                 max_iters=50,
                                                                 restarts=0,
                                                                 init_state=None,
@@ -833,7 +833,7 @@ def size_test_Cpeaks_GA():
         for problem in problem_list:
             start_time = time.time()
             best_state, best_fitness = mlrose.genetic_alg(problem,
-                                                          pop_size=50,
+                                                          pop_size=100,
                                                           mutation_prob=0.1,
                                                           max_attempts=10,
                                                           max_iters=50,
@@ -868,7 +868,7 @@ def size_test_Cpeaks_MI():
             start_time = time.time()
             best_state, best_fitness = mlrose.algorithms.mimic(problem,
                                                                pop_size=100,
-                                                               keep_pct=0.5,
+                                                               keep_pct=0.1,
                                                                max_attempts=10,
                                                                max_iters=10,
                                                                curve=False,
@@ -1208,8 +1208,8 @@ def size_test_FlipFlop_SA():
             start_time = time.time()
             best_state, best_fitness = mlrose.simulated_annealing(problem,
                                                                   schedule=mlrose.ExpDecay(),
-                                                                  max_attempts=10,
-                                                                  max_iters=20,
+                                                                  max_attempts=50,
+                                                                  max_iters=100,
                                                                   random_state=1)
 
             time_diff = time.time() - start_time
@@ -1239,9 +1239,9 @@ def size_test_FlipFlop_GA():
             start_time = time.time()
             best_state, best_fitness = mlrose.genetic_alg(problem,
                                                           pop_size=100,
-                                                          mutation_prob=0.5,
-                                                          max_attempts=50,
-                                                          max_iters=50,
+                                                          mutation_prob=0.1,
+                                                          max_attempts=10,
+                                                          max_iters=10,
                                                           curve=False,
                                                           random_state=0)
 
@@ -1272,10 +1272,10 @@ def size_test_FlipFlop_MI():
         for problem in problem_list:
             start_time = time.time()
             best_state, best_fitness = mlrose.algorithms.mimic(problem,
-                                                               pop_size=50,
-                                                               keep_pct=0.1,
+                                                               pop_size=100,
+                                                               keep_pct=0.5,
                                                                max_attempts=10,
-                                                               max_iters=10,
+                                                               max_iters=50,
                                                                curve=False,
                                                                random_state=1)
 
@@ -1339,8 +1339,8 @@ def size_test_KnapSack_SA():
             start_time = time.time()
             best_state, best_fitness = mlrose.simulated_annealing(problem,
                                                                   schedule=mlrose.ExpDecay(),
-                                                                  max_attempts=10,
-                                                                  max_iters=20,
+                                                                  max_attempts=50,
+                                                                  max_iters=50,
                                                                   random_state=1)
 
             time_diff = time.time() - start_time
@@ -1369,8 +1369,8 @@ def size_test_KnapSack_GA():
         for problem in problem_list:
             start_time = time.time()
             best_state, best_fitness = mlrose.genetic_alg(problem,
-                                                          pop_size=100,
-                                                          mutation_prob=0.5,
+                                                          pop_size=150,
+                                                          mutation_prob=0.1,
                                                           max_attempts=50,
                                                           max_iters=50,
                                                           curve=False,
@@ -1403,10 +1403,10 @@ def size_test_KnapSack_MI():
         for problem in problem_list:
             start_time = time.time()
             best_state, best_fitness = mlrose.algorithms.mimic(problem,
-                                                               pop_size=50,
-                                                               keep_pct=0.1,
+                                                               pop_size=150,
+                                                               keep_pct=0.9,
                                                                max_attempts=10,
-                                                               max_iters=10,
+                                                               max_iters=50,
                                                                curve=False,
                                                                random_state=1)
 
@@ -1437,11 +1437,11 @@ if __name__=="__main__":
     plotting(prob_name="Cpeaks", algo_name="SA", valuess=size_test_Cpeaks_SA(), size_plot=True)
     plotting(prob_name="Cpeaks", algo_name="GA", valuess=size_test_Cpeaks_GA(), size_plot=True)
     plotting(prob_name="Cpeaks", algo_name="MI", valuess=size_test_Cpeaks_MI(), size_plot=True)
-    #
-    plotting(prob_name="4peaks", algo_name="RHC", valuess=size_test_4peaks_RHC(), size_plot=True)
-    plotting(prob_name="4peaks", algo_name="SA", valuess=size_test_4peaks_SA(), size_plot=True)
-    plotting(prob_name="4peaks", algo_name="GA", valuess=size_test_4peaks_GA(), size_plot=True)
-    plotting(prob_name="4peaks", algo_name="MI", valuess=size_test_4peaks_MI(), size_plot=True)  # neet to rerun this
+    # #
+    # plotting(prob_name="4peaks", algo_name="RHC", valuess=size_test_4peaks_RHC(), size_plot=True)
+    # plotting(prob_name="4peaks", algo_name="SA", valuess=size_test_4peaks_SA(), size_plot=True)
+    # plotting(prob_name="4peaks", algo_name="GA", valuess=size_test_4peaks_GA(), size_plot=True)
+    # plotting(prob_name="4peaks", algo_name="MI", valuess=size_test_4peaks_MI(), size_plot=True)  # neet to rerun this
 
     # plotting(prob_name="TSP", algo_name="RHC", valuess=size_test_TSP_RHC(), size_plot=True)
     # plotting(prob_name="TSP", algo_name="SA", valuess=size_test_TSP_SA(), size_plot=True)
@@ -1473,19 +1473,33 @@ if __name__=="__main__":
     # same color.'''
     # problem_list_MKC = generate_prob_MKC(random_seed=0, nodes=8, sample_size=5)
     # prob_to_curves("MaxKColor", problem_list_MKC)
-
+    #
     # '''Problem 3: 4 peaks
     # # Create list of states with random t_pct'''
     # problem_list_4peaks = generate_prob_4peaks(random_seed=0, length=10, sample_size=5)
     # prob_to_curves("4peaks", problem_list_4peaks)
 
-    # '''Problem 4: OneMax
+    # '''Problem 4: continous peaks
+    # # Create list of states with random t_pct'''
+    # problem_list_Cpeaks = generate_prob_Cpeaks(random_seed=0, length=10, sample_size=5)
+    # prob_to_curves("Cpeaks", problem_list_Cpeaks)
+
+    # '''Problem 5: OneMax
     # # Create an array made by 0 and 1, with a length between 10 and 50'''
     # problem_list_OneMax = generate_prob_OneMax(random_seed=0, length=10, sample_size= 5)
     # prob_to_curves("OneMax", problem_list_OneMax)
 
-    '''plot time and fitness score over sample size on four algorithms'''
-    '''Problem 4: OneMax:alteration of length'''
+    # '''Problem 6: Flip-Flop
+    # # Create list of states '''
+    # problem_list_FlipFlop = generate_prob_FlipFlop(random_seed=0, length=10, sample_size=5)
+    # prob_to_curves("FlipFlop", problem_list_FlipFlop)
+    #
+    # '''Problem 7: Knap-sack
+    # # Create list of states '''
+    # problem_list_Knapsack = generate_prob_KnapSack(random_seed=0, length=10, sample_size=5)
+    # prob_to_curves("Knapsack", problem_list_Knapsack)
+
+
 
 
 
