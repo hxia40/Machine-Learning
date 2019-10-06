@@ -762,7 +762,7 @@ def size_test_Cpeaks_RHC():
     time_mean_list = []
     best_fitness_mean_list = []
     alter_list = []
-    for i in range(1, 100, 10):
+    for i in range(1, 100, 5):
         problem_list = generate_prob_Cpeaks(random_seed=0, length = i, sample_size=5)
         time_list = []
         best_fitness_list = []
@@ -794,7 +794,7 @@ def size_test_Cpeaks_SA():
     time_mean_list = []
     best_fitness_mean_list = []
     alter_list = []
-    for i in range(1, 100, 10):
+    for i in range(1, 100, 5):
         problem_list = generate_prob_Cpeaks(random_seed=0, length=i, sample_size=5)
         time_list = []
         best_fitness_list = []
@@ -825,7 +825,7 @@ def size_test_Cpeaks_GA():
     time_mean_list = []
     best_fitness_mean_list = []
     alter_list = []
-    for i in range(1, 100, 10):
+    for i in range(1, 100, 5):
         problem_list = generate_prob_Cpeaks(random_seed=0, length=i, sample_size=5)
         time_list = []
         best_fitness_list = []
@@ -858,7 +858,7 @@ def size_test_Cpeaks_MI():
     time_mean_list = []
     best_fitness_mean_list = []
     alter_list = []
-    for i in range(1, 100, 10):
+    for i in range(1, 100, 5):
         print("cpeask_mi:", i)
         problem_list = generate_prob_Cpeaks(random_seed=0, length=i, sample_size=5)
         time_list = []
@@ -1433,11 +1433,11 @@ if __name__=="__main__":
     # plotting(prob_name="OneMax", algo_name="GA", valuess=size_test_OneMax_GA(), size_plot=True)
     # plotting(prob_name="OneMax", algo_name="MI", valuess=size_test_OneMax_MI(), size_plot=True)  # neet to rerun this
 
-    plotting(prob_name="Cpeaks", algo_name="RHC", valuess=size_test_Cpeaks_RHC(), size_plot=True)
-    plotting(prob_name="Cpeaks", algo_name="SA", valuess=size_test_Cpeaks_SA(), size_plot=True)
-    plotting(prob_name="Cpeaks", algo_name="GA", valuess=size_test_Cpeaks_GA(), size_plot=True)
-    plotting(prob_name="Cpeaks", algo_name="MI", valuess=size_test_Cpeaks_MI(), size_plot=True)
-    # #
+    # plotting(prob_name="Cpeaks", algo_name="RHC", valuess=size_test_Cpeaks_RHC(), size_plot=True)
+    # plotting(prob_name="Cpeaks", algo_name="SA", valuess=size_test_Cpeaks_SA(), size_plot=True)
+    # plotting(prob_name="Cpeaks", algo_name="GA", valuess=size_test_Cpeaks_GA(), size_plot=True)
+    # plotting(prob_name="Cpeaks", algo_name="MI", valuess=size_test_Cpeaks_MI(), size_plot=True)
+    # # #
     # plotting(prob_name="4peaks", algo_name="RHC", valuess=size_test_4peaks_RHC(), size_plot=True)
     # plotting(prob_name="4peaks", algo_name="SA", valuess=size_test_4peaks_SA(), size_plot=True)
     # plotting(prob_name="4peaks", algo_name="GA", valuess=size_test_4peaks_GA(), size_plot=True)
