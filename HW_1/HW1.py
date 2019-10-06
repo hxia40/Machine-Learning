@@ -62,7 +62,7 @@ def decision_tree_learning_curve_size_pre(dataset_name, X_train, y_train, min_sa
                                                             )
     end_time = time.time()
     difference = end_time - start_time
-    print "DT_learning_curve_size_pre", difference
+    print("DT_learning_curve_size_pre", difference)
     recording_and_plotting(dataset_name, name="DT_learning_curve_size_pre",
                            alter=train_sizes,
                            train=train_scores,
@@ -79,7 +79,7 @@ def boost_dt_learning_curve_size_pre(dataset_name, X_train, y_train, min_samples
                                                             train_sizes=train_sizes)
     end_time = time.time()
     difference = end_time - start_time
-    print "boost_dt_learning_curve_size_pre", difference
+    print("boost_dt_learning_curve_size_pre", difference)
 
     recording_and_plotting(dataset_name, name="boost_dt_learning_curve_size_pre",
                            alter=train_sizes,
@@ -97,7 +97,7 @@ def ann_learning_curve_size_pre(dataset_name, X_train, y_train, hidden_layer_siz
                                                             train_sizes=train_sizes)
     end_time = time.time()
     difference = end_time - start_time
-    print "ann_learning_curve_size_pre", difference
+    print("ann_learning_curve_size_pre", difference)
 
     recording_and_plotting(dataset_name, name="ann_learning_curve_size_pre",
                            alter=train_sizes,
@@ -115,7 +115,7 @@ def knn_learning_curve_size_pre(dataset_name, X_train, y_train, n_neighbors=5, a
                                                             train_sizes=train_sizes)
     end_time = time.time()
     difference = end_time - start_time
-    print "knn_learning_curve_size_pre", difference
+    print("knn_learning_curve_size_pre", difference)
 
     recording_and_plotting(dataset_name, name="knn_learning_curve_size_pre",
                            alter=train_sizes,
@@ -134,7 +134,7 @@ def svm_learning_curve_size_pre(dataset_name, X_train, y_train, C=1.0, kernel='r
                                                             )
     end_time = time.time()
     difference = end_time - start_time
-    print "svm_learning_curve_size_pre", difference
+    print("svm_learning_curve_size_pre", difference)
 
     recording_and_plotting(dataset_name, name="svm_learning_curve_size_pre",
                            alter=train_sizes,
@@ -155,7 +155,7 @@ def boost_dt_learning_curve_epoch_pre(dataset_name, X_train, y_train, min_sample
                                                  n_jobs=1)
     end_time = time.time()
     difference = end_time - start_time
-    print "boost_dt_learning_curve_epoch_pre", difference
+    print("boost_dt_learning_curve_epoch_pre", difference)
 
     recording_and_plotting(dataset_name, name="boost_dt_learning_curve_epoch_pre",
                            alter=param_range,
@@ -219,7 +219,7 @@ def ann_learning_curve_epoch_pre(dataset_name, X, y, hidden_layer_sizes=(5, ), m
         # n_alter.append(n_alter_looper)
     end_time = time.time()
     difference = end_time - start_time
-    print "ann_learning_curve_epoch_pre", difference
+    print("ann_learning_curve_epoch_pre", difference)
     n_alter = range(25)
 
     # recording
@@ -273,7 +273,7 @@ def svm_learning_curve_epoch_pre(dataset_name, X_train, y_train, C=1.0, kernel='
                                                  n_jobs=1)
     end_time = time.time()
     difference = end_time - start_time
-    print "SVM epoch difference:", difference
+    print("SVM epoch difference:", difference)
 
     recording_and_plotting(dataset_name, name="SVM_learning_curve_epoch",
                            alter=param_range,
@@ -292,7 +292,7 @@ def decision_tree_learning_curve_size_post(dataset_name, X_train, y_train, min_s
                                                             )
     end_time = time.time()
     difference = end_time - start_time
-    print "DT_learning_curve_size_post", difference
+    print("DT_learning_curve_size_post", difference)
     recording_and_plotting(dataset_name, name="DT_learning_curve_size_post",
                            alter=train_sizes,
                            train=train_scores,
@@ -309,7 +309,7 @@ def boost_dt_learning_curve_size_post(dataset_name, X_train, y_train, min_sample
                                                             train_sizes=train_sizes)
     end_time = time.time()
     difference = end_time - start_time
-    print "boost_dt_learning_curve_size_post", difference
+    print("boost_dt_learning_curve_size_post", difference)
 
     recording_and_plotting(dataset_name, name="boost_dt_learning_curve_size_post",
                            alter=train_sizes,
@@ -327,7 +327,7 @@ def ann_learning_curve_size_post(dataset_name, X_train, y_train, hidden_layer_si
                                                             train_sizes=train_sizes)
     end_time = time.time()
     difference = end_time - start_time
-    print "ann_learning_curve_size_post", difference
+    print("ann_learning_curve_size_post", difference)
 
     recording_and_plotting(dataset_name, name="ann_learning_curve_size_post",
                            alter=train_sizes,
@@ -345,7 +345,7 @@ def knn_learning_curve_size_post(dataset_name, X_train, y_train, n_neighbors=5, 
                                                             train_sizes=train_sizes)
     end_time = time.time()
     difference = end_time - start_time
-    print "knn_learning_curve_size_post", difference
+    print("knn_learning_curve_size_post", difference)
 
     recording_and_plotting(dataset_name, name="knn_learning_curve_size_post",
                            alter=train_sizes,
@@ -364,7 +364,7 @@ def svm_learning_curve_size_post(dataset_name, X_train, y_train, C=1.0, kernel='
                                                             )
     end_time = time.time()
     difference = end_time - start_time
-    print "svm_learning_curve_size_post", difference
+    print("svm_learning_curve_size_post", difference)
 
     recording_and_plotting(dataset_name, name="svm_learning_curve_size_post",
                            alter=train_sizes,
@@ -385,7 +385,7 @@ def boost_dt_learning_curve_epoch_post(dataset_name, X_train, y_train, min_sampl
                                                  n_jobs=1)
     end_time = time.time()
     difference = end_time - start_time
-    print "boost_dt_learning_curve_epoch_post", difference
+    print("boost_dt_learning_curve_epoch_post", difference)
 
     recording_and_plotting(dataset_name, name="boost_dt_learning_curve_epoch_post",
                            alter=param_range,
@@ -449,7 +449,7 @@ def ann_learning_curve_epoch_post(dataset_name, X, y, hidden_layer_sizes=(5, ), 
         # n_alter.append(n_alter_looper)
     end_time = time.time()
     difference = end_time - start_time
-    print "ann_learning_curve_epoch_post", difference
+    print("ann_learning_curve_epoch_post", difference)
     n_alter = range(25)
 
     # recording
@@ -503,7 +503,7 @@ def svm_learning_curve_epoch_post(dataset_name, X_train, y_train, C=1.0, kernel=
                                                  n_jobs=1)
     end_time = time.time()
     difference = end_time - start_time
-    print "SVM_learning_curve_epoch_post", difference
+    print("SVM_learning_curve_epoch_post", difference)
 
     recording_and_plotting(dataset_name, name="SVM_learning_curve_epoch_post",
                            alter=param_range,
@@ -524,7 +524,7 @@ def decision_tree_vld_curve_1(dataset_name, X_train, y_train, min_samples_leaf=2
                                                  n_jobs=1)
     end_time = time.time()
     difference = end_time - start_time
-    print "DT_vlad_curve_1", difference
+    print("DT_vlad_curve_1", difference)
 
     recording_and_plotting(dataset_name, name="DT_vlad_curve_1",
                            alter=param_range,
@@ -544,7 +544,7 @@ def decision_tree_vld_curve_2(dataset_name, X_train, y_train, min_samples_leaf=2
                                                  n_jobs=1)
     end_time = time.time()
     difference = end_time - start_time
-    print "DT_vlad_curve_2", difference
+    print("DT_vlad_curve_2", difference)
 
     recording_and_plotting(dataset_name, name="DT_vlad_curve_2",
                            alter=param_range,
@@ -570,7 +570,7 @@ def boost_dt_vld_curve_1(dataset_name, X_train, y_train, min_samples_leaf=25, n_
                                                  n_jobs=1)
     end_time = time.time()
     difference = end_time - start_time
-    print "boost_dt_vld_curve_1", difference
+    print("boost_dt_vld_curve_1", difference)
 
     recording_and_plotting(dataset_name, name="boost_dt_vld_curve_1",
                            alter=alter_list,
@@ -590,7 +590,7 @@ def boost_dt_vld_curve_2(dataset_name, X_train, y_train, min_samples_leaf=25, n_
                                                  n_jobs=1)
     end_time = time.time()
     difference = end_time - start_time
-    print "BoostDT4 difference:", difference
+    print("BoostDT4 difference:", difference)
 
     recording_and_plotting(dataset_name, name="BoostDT4",
                            alter=param_range,
@@ -615,7 +615,7 @@ def ann_vld_curve_1(dataset_name, X_train, y_train, hidden_layer_sizes=(5, ), ma
                                                  n_jobs=1)
     end_time = time.time()
     difference = end_time - start_time
-    print "ann_vld_curve_1", difference
+    print("ann_vld_curve_1", difference)
 
     recording_and_plotting(dataset_name, name="ann_vld_curve_1",
                            alter=alter_list,
@@ -635,7 +635,7 @@ def ann_vld_curve_2(dataset_name, X_train, y_train, hidden_layer_sizes=(5, ), ma
                                                  n_jobs=1)
     end_time = time.time()
     difference = end_time - start_time
-    print "ann_vld_curve_2", difference
+    print("ann_vld_curve_2", difference)
 
     recording_and_plotting(dataset_name, name="ann_vld_curve_2",
                            alter=param_range,
@@ -656,7 +656,7 @@ def knn_vld_curve_1(dataset_name, X_train, y_train, n_neighbors=5, algorithm='au
                                                  n_jobs=1)
     end_time = time.time()
     difference = end_time - start_time
-    print "knn_vld_curve_1", difference
+    print("knn_vld_curve_1", difference)
 
     recording_and_plotting(dataset_name, name="knn_vld_curve_1",
                            alter=param_range,
@@ -676,7 +676,7 @@ def knn_vld_curve_2(dataset_name, X_train, y_train, n_neighbors=5, algorithm='au
                                                  n_jobs=1)
     end_time = time.time()
     difference = end_time - start_time
-    print "knn_vld_curve_2", difference
+    print("knn_vld_curve_2", difference)
 
     recording_and_plotting(dataset_name, name="knn_vld_curve_2",
                            alter=param_range,
@@ -698,7 +698,7 @@ def svm_vld_curve_1(dataset_name, X_train, y_train, C=1.0, kernel='rbf', max_ite
                                                  n_jobs=1)
     end_time = time.time()
     difference = end_time - start_time
-    print "svm_vld_curve_1", difference
+    print("svm_vld_curve_1", difference)
 
     recording_and_plotting(dataset_name, name="svm_vld_curve_1",
                            alter=param_range,
@@ -718,7 +718,7 @@ def svm_vld_curve_2(dataset_name, X_train, y_train, C=1.0, kernel='rbf', max_ite
                                                  n_jobs=1)
     end_time = time.time()
     difference = end_time - start_time
-    print "svm_vld_curve_2", difference
+    print("svm_vld_curve_2", difference)
 
     recording_and_plotting(dataset_name, name="svm_vld_curve_2",
                            alter=param_range,
@@ -776,39 +776,39 @@ if __name__=="__main__":
     X_test = scaler.transform(X_test)
     set1_name = "mnist"
 
-    '''MNIST - pre-parameter adjustment'''
-    decision_tree_learning_curve_size_pre(set1_name, X_train, y_train)
-    boost_dt_learning_curve_size_pre(set1_name, X_train, y_train)
-    ann_learning_curve_size_pre(set1_name, X_train, y_train)
-    knn_learning_curve_size_pre(set1_name, X_train, y_train)
-    svm_learning_curve_size_pre(set1_name, X_train, y_train)
-
-    boost_dt_learning_curve_epoch_pre(set1_name, X_train, y_train)
-    ann_learning_curve_epoch_pre(set1_name, X_train, y_train)
-    svm_learning_curve_epoch_pre(set1_name, X_train, y_train)
-
-    '''MNIST - parameter validation curve'''
-    decision_tree_vld_curve_1(set1_name, X_train, y_train)
-    decision_tree_vld_curve_2(set1_name, X_train, y_train)
-    boost_dt_vld_curve_1(set1_name, X_train, y_train)
-    boost_dt_vld_curve_2(set1_name, X_train, y_train)
-    ann_vld_curve_1(set1_name, X_train, y_train)
-    ann_vld_curve_2(set1_name, X_train, y_train)
-    knn_vld_curve_1(set1_name, X_train, y_train)
-    knn_vld_curve_2(set1_name, X_train, y_train)
-    svm_vld_curve_1(set1_name, X_train, y_train)
-    svm_vld_curve_2(set1_name, X_train,  y_train)
-
-    '''MNIST - post-parameter adjustment'''
-    decision_tree_learning_curve_size_post(set1_name, X_train, y_train, min_samples_leaf=1, max_depth=None)
-    boost_dt_learning_curve_size_post(set1_name, X_train, y_train, min_samples_leaf=9, n_estimators=40, learning_rate = 0.0925)
-    ann_learning_curve_size_post(set1_name, X_train, y_train, hidden_layer_sizes=(50, ), alpha=6.25)
-    knn_learning_curve_size_post(set1_name, X_train, y_train, n_neighbors=5, algorithm='auto')
-    svm_learning_curve_size_post(set1_name, X_train, y_train, C=0.418, kernel='rbf', max_iter=-1)
-
-    boost_dt_learning_curve_epoch_post(set1_name, X_train, y_train, min_samples_leaf=9, n_estimators=40, learning_rate = 0.0925)
-    ann_learning_curve_epoch_post(set1_name, X_train, y_train, hidden_layer_sizes=(50, ), alpha=6.25)
-    svm_learning_curve_epoch_post(set1_name, X_train, y_train, C=0.418, kernel='rbf', max_iter=-1)
+    # '''MNIST - pre-parameter adjustment'''
+    # decision_tree_learning_curve_size_pre(set1_name, X_train, y_train)
+    # boost_dt_learning_curve_size_pre(set1_name, X_train, y_train)
+    # ann_learning_curve_size_pre(set1_name, X_train, y_train)
+    # knn_learning_curve_size_pre(set1_name, X_train, y_train)
+    # svm_learning_curve_size_pre(set1_name, X_train, y_train)
+    #
+    # boost_dt_learning_curve_epoch_pre(set1_name, X_train, y_train)
+    # ann_learning_curve_epoch_pre(set1_name, X_train, y_train)
+    # svm_learning_curve_epoch_pre(set1_name, X_train, y_train)
+    #
+    # '''MNIST - parameter validation curve'''
+    # decision_tree_vld_curve_1(set1_name, X_train, y_train)
+    # decision_tree_vld_curve_2(set1_name, X_train, y_train)
+    # boost_dt_vld_curve_1(set1_name, X_train, y_train)
+    # boost_dt_vld_curve_2(set1_name, X_train, y_train)
+    # ann_vld_curve_1(set1_name, X_train, y_train)
+    # ann_vld_curve_2(set1_name, X_train, y_train)
+    # knn_vld_curve_1(set1_name, X_train, y_train)
+    # knn_vld_curve_2(set1_name, X_train, y_train)
+    # svm_vld_curve_1(set1_name, X_train, y_train)
+    # svm_vld_curve_2(set1_name, X_train,  y_train)
+    #
+    # '''MNIST - post-parameter adjustment'''
+    # decision_tree_learning_curve_size_post(set1_name, X_train, y_train, min_samples_leaf=1, max_depth=None)
+    # boost_dt_learning_curve_size_post(set1_name, X_train, y_train, min_samples_leaf=9, n_estimators=40, learning_rate = 0.0925)
+    # ann_learning_curve_size_post(set1_name, X_train, y_train, hidden_layer_sizes=(50, ), alpha=6.25)
+    # knn_learning_curve_size_post(set1_name, X_train, y_train, n_neighbors=5, algorithm='auto')
+    # svm_learning_curve_size_post(set1_name, X_train, y_train, C=0.418, kernel='rbf', max_iter=-1)
+    #
+    # boost_dt_learning_curve_epoch_post(set1_name, X_train, y_train, min_samples_leaf=9, n_estimators=40, learning_rate = 0.0925)
+    # ann_learning_curve_epoch_post(set1_name, X_train, y_train, hidden_layer_sizes=(50, ), alpha=6.25)
+    # svm_learning_curve_epoch_post(set1_name, X_train, y_train, C=0.418, kernel='rbf', max_iter=-1)
 
     #
 
@@ -837,7 +837,7 @@ if __name__=="__main__":
     # svm_learning_curve_epoch_pre(set2_name, X2_train, y2_train)
 
     '''ESR - parameter validation curve'''
-    decision_tree_vld_curve_1(set2_name, X2_train, y2_train)
+    # decision_tree_vld_curve_1(set2_name, X2_train, y2_train)
     # decision_tree_vld_curve_2(set2_name, X2_train, y2_train)
     # boost_dt_vld_curve_1(set2_name, X2_train, y2_train)
     # boost_dt_vld_curve_2(set2_name, X2_train, y2_train)
@@ -898,9 +898,9 @@ if __name__=="__main__":
     #            X2_train, X2_test, y2_train, y2_test)
 
 
-    # '''Inter-model comparison using default hyperparameters'''
+    '''Inter-model comparison using default hyperparameters'''
 
-    # open('Inter_model_comparison_default.txt', 'w')
+    open('Inter_model_comparison_default.txt', 'w')
 
     # score_time_default("MNIST", "Decision tree",
     #            tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=25, max_depth=None),
@@ -909,9 +909,9 @@ if __name__=="__main__":
     #            AdaBoostClassifier(tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=25),
     #                                   n_estimators=5, learning_rate=1),
     #            X_train, X_test, y_train, y_test)
-    # score_time_default("MNIST", "ANN",
-    #            MLPClassifier(hidden_layer_sizes=(5, ), max_iter=500, alpha=0.0001, random_state=1),
-    #            X_train, X_test, y_train, y_test)
+    score_time_default("MNIST", "ANN",
+               MLPClassifier(hidden_layer_sizes=(5, ), max_iter=500, alpha=0.0001, random_state=1),
+               X_train, X_test, y_train, y_test)
     # score_time_default("MNIST", "kNN",
     #            neighbors.KNeighborsClassifier(n_neighbors=5, algorithm='auto'),
     #            X_train, X_test, y_train, y_test)
@@ -935,10 +935,10 @@ if __name__=="__main__":
     # score_time_default("ESR", "SVM",
     #            svm.SVC(C=1, kernel='rbf', max_iter=-1),
     #            X2_train, X2_test, y2_train, y2_test)
-
     #
-
-
+    #
+    #
+    #
 
 
 
