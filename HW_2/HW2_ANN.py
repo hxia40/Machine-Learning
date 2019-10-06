@@ -38,12 +38,12 @@ nn_model1.fit(X_train_scaled, y_train_hot)
 # Predict labels for train set and assess accuracy
 y_train_pred = nn_model1.predict(X_train_scaled)
 y_train_accuracy = accuracy_score(y_train_hot, y_train_pred)
-print(y_train_accuracy)
+print('FHC', y_train_accuracy)
 
 # Predict labels for test set and assess accuracy
 y_test_pred = nn_model1.predict(X_test_scaled)
 y_test_accuracy = accuracy_score(y_test_hot, y_test_pred)
-print(y_test_accuracy)
+print('FHC',y_test_accuracy)
 
 '''We can potentially improve on the accuracy of our model by tuning the parameters we set when initializing the neural
 network object. Suppose we decide to change the optimization algorithm to gradient descent, but leave all other model
@@ -59,12 +59,12 @@ nn_model2.fit(X_train_scaled, y_train_hot)
 # Predict labels for train set and assess accuracy
 y_train_pred = nn_model2.predict(X_train_scaled)
 y_train_accuracy = accuracy_score(y_train_hot, y_train_pred)
-print(y_train_accuracy)
+print('gradient_descent', y_train_accuracy)
 
 # Predict labels for test set and assess accuracy
 y_test_pred = nn_model2.predict(X_test_scaled)
 y_test_accuracy = accuracy_score(y_test_hot, y_test_pred)
-print(y_test_accuracy)
+print('gradient_descent', y_test_accuracy)
 
 
 lr_nn_model1 = mlrose.NeuralNetwork(hidden_nodes = [], activation = 'sigmoid',
