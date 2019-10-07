@@ -102,7 +102,7 @@ def RHC(problem, prob_name):
         print(prob_name, "RHC:", i)
         best_state_RHC, best_fitness_RHC = mlrose.random_hill_climb(problem,
                                                                     max_attempts=10,
-                                                                    max_iters=int(i/10)+1,
+                                                                    max_iters=i,
                                                                     restarts=0,
                                                                     init_state=None,
                                                                     curve=False,
@@ -135,7 +135,7 @@ def SA(problem, prob_name):
         best_state_SA, best_fitness_SA = mlrose.simulated_annealing(problem,
                                                                     schedule=mlrose.ExpDecay(),
                                                                     max_attempts=10,
-                                                                    max_iters=int(i/10)+1,
+                                                                    max_iters=i,
                                                                     random_state=1)
         best_state_SA_att, best_fitness_SA_att = mlrose.simulated_annealing(problem,
                                                                             schedule=mlrose.ExpDecay(),
@@ -167,7 +167,7 @@ def GA(problem, prob_name):
                                                             pop_size=200,
                                                             mutation_prob=0.1,
                                                             max_attempts=10,
-                                                            max_iters=int(i/10)+1,
+                                                            max_iters=i,
                                                             curve=False,
                                                             random_state=0)
         best_state_GA_att, best_fitness_GA_att = mlrose.genetic_alg(problem,
@@ -224,7 +224,7 @@ def MI(problem, prob_name):
                                                                      pop_size=200,
                                                                      keep_pct=0.2,
                                                                      max_attempts=10,
-                                                                     max_iters=int(i/10)+1,
+                                                                     max_iters=i,
                                                                      curve=False,
                                                                      random_state=1)
         except:
@@ -291,7 +291,6 @@ def MI(problem, prob_name):
 def plotting(prob_name, algo_name, valuess, size_plot = False):
     size_plot = size_plot
     if (prob_name == "nCityTSP") or (prob_name == "MaxKColor"):
-        print("sdfsdf")
         for value in valuess:
             if size_plot == True:
                 if value[3] == "clock time":
@@ -321,7 +320,6 @@ def plotting(prob_name, algo_name, valuess, size_plot = False):
             plt.gcf().clear()
 
     else:
-
         for value in valuess:
             if size_plot == True:
                 if value[3] == "clock time":
@@ -508,9 +506,11 @@ def prob_to_curves(prob_name, problem_list):
 
 def size_test_OneMax_RHC():
     time_mean_list = []
+    time_std_list = []
     best_fitness_mean_list = []
+    best_fitness_std_list = []
     alter_list = []
-    for i in range(1, 300, 30):
+    for i in range(1, 300, 100):
         problem_list = generate_prob_OneMax(random_seed=0, length = i, sample_size=5)
         time_list = []
         best_fitness_list = []
@@ -531,13 +531,25 @@ def size_test_OneMax_RHC():
             best_fitness_list.append(best_fitness)
 
         time_mean = np.mean(time_list)
+        time_std = np.std(time_list)
         best_fitness_mean = np.mean(best_fitness_list)
+        best_fitness_std = np.std(best_fitness_list)
         time_mean_list.append(time_mean)
+        time_std_list.append(time_std)
         best_fitness_mean_list.append(best_fitness_mean)
+        best_fitness_std_list.append(best_fitness_std)
         alter_list.append(i)
 
-    return np.array([[alter_list, time_mean_list, "sample size", "clock time"],
-                     [alter_list, best_fitness_mean_list, "sample_size", "best_fitness"]])
+    # return np.array([[alter_list, time_mean_list, "sample size", "clock time"],
+    #                  [alter_list, time_std_list, "sample size", "clock time std"],
+    #                  [alter_list, best_fitness_mean_list, "sample_size", "best_fitness"],
+    #                  [alter_list, best_fitness_std_list, "sample_size", "best_fitness_std"]])
+    return "sample_size", np.array([alter_list]), \
+           "clock time", np.array([time_mean_list]),\
+           "clock time std", np.array([time_std_list]), \
+           "best fitness", np.array([best_fitness_mean_list]), \
+           "best fitness std", np.array([best_fitness_std_list])
+
 def size_test_OneMax_SA():
     time_mean_list = []
     best_fitness_mean_list = []
@@ -1569,7 +1581,7 @@ def size_test_queens_MI():
 
 if __name__=="__main__":
 
-    # plotting(prob_name="OneMax", algo_name="RHC", valuess=size_test_OneMax_RHC(), size_plot=True)
+    plotting(prob_name="OneMax", algo_name="RHC", valuess=size_test_OneMax_RHC(), size_plot=True)
     # plotting(prob_name="OneMax", algo_name="SA", valuess=size_test_OneMax_SA(), size_plot=True)
     # plotting(prob_name="OneMax", algo_name="GA", valuess=size_test_OneMax_GA(), size_plot=True)
     # plotting(prob_name="OneMax", algo_name="MI", valuess=size_test_OneMax_MI(), size_plot=True)  # neet to rerun this
@@ -1609,46 +1621,46 @@ if __name__=="__main__":
     # plotting(prob_name="queens", algo_name="GA", valuess=size_test_queens_GA(), size_plot=True)
     # plotting(prob_name="queens", algo_name="MI", valuess=size_test_queens_MI(), size_plot=True)
 
-    '''Problem 1: n-city TSP: over a map of given size,
-    generate N cities for a salesman to travel through each city and find the shortest route'''
-    problem_list_TSP = generate_prob_TSP(random_seed=0, citys=6, sample_size=5)
-    prob_to_curves("nCityTSP", problem_list_TSP)
+    # '''Problem 1: n-city TSP: over a map of given size,
+    # generate N cities for a salesman to travel through each city and find the shortest route'''
+    # problem_list_TSP = generate_prob_TSP(random_seed=0, citys=6, sample_size=5)
+    # prob_to_curves("nCityTSP", problem_list_TSP)
+    #
+    # '''Problem 2: Max-k color optimization problem. Evaluates the fitness of an n-dimensional state vector
+    # 𝑥 = [𝑥0, 𝑥1, . . . , 𝑥𝑛−1], where 𝑥𝑖 represents the color of node i, as the number of pairs of adjacent nodes of the
+    # same color.'''
+    # problem_list_MKC = generate_prob_MKC(random_seed=0, nodes=8, sample_size=5)
+    # prob_to_curves("MaxKColor", problem_list_MKC)
+    #
+    # '''Problem 3: 4 peaks
+    # # Create list of states with random t_pct'''
+    # problem_list_4peaks = generate_prob_4peaks(random_seed=0, length=10, sample_size=5)
+    # prob_to_curves("4peaks", problem_list_4peaks)
 
-    '''Problem 2: Max-k color optimization problem. Evaluates the fitness of an n-dimensional state vector
-    𝑥 = [𝑥0, 𝑥1, . . . , 𝑥𝑛−1], where 𝑥𝑖 represents the color of node i, as the number of pairs of adjacent nodes of the
-    same color.'''
-    problem_list_MKC = generate_prob_MKC(random_seed=0, nodes=8, sample_size=5)
-    prob_to_curves("MaxKColor", problem_list_MKC)
+    # '''Problem 4: continous peaks
+    # # Create list of states with random t_pct'''
+    # problem_list_Cpeaks = generate_prob_Cpeaks(random_seed=0, length=10, sample_size=5)
+    # prob_to_curves("Cpeaks", problem_list_Cpeaks)
 
-    '''Problem 3: 4 peaks
-    # Create list of states with random t_pct'''
-    problem_list_4peaks = generate_prob_4peaks(random_seed=0, length=10, sample_size=5)
-    prob_to_curves("4peaks", problem_list_4peaks)
+    # '''Problem 5: OneMax
+    # # Create an array made by 0 and 1, with a length between 10 and 50'''
+    # problem_list_OneMax = generate_prob_OneMax(random_seed=0, length=10, sample_size= 5)
+    # prob_to_curves("OneMax", problem_list_OneMax)
 
-    '''Problem 4: continous peaks
-    # Create list of states with random t_pct'''
-    problem_list_Cpeaks = generate_prob_Cpeaks(random_seed=0, length=10, sample_size=5)
-    prob_to_curves("Cpeaks", problem_list_Cpeaks)
+    # '''Problem 6: Flip-Flop
+    # # Create list of states '''
+    # problem_list_FlipFlop = generate_prob_FlipFlop(random_seed=0, length=10, sample_size=5)
+    # prob_to_curves("FlipFlop", problem_list_FlipFlop)
+    #
+    # '''Problem 7: Knap-sack
+    # # Create list of states '''
+    # problem_list_Knapsack = generate_prob_KnapSack(random_seed=0, length=10, sample_size=5)
+    # prob_to_curves("Knapsack", problem_list_Knapsack)
 
-    '''Problem 5: OneMax
-    # Create an array made by 0 and 1, with a length between 10 and 50'''
-    problem_list_OneMax = generate_prob_OneMax(random_seed=0, length=10, sample_size= 5)
-    prob_to_curves("OneMax", problem_list_OneMax)
-
-    '''Problem 6: Flip-Flop
-    # Create list of states '''
-    problem_list_FlipFlop = generate_prob_FlipFlop(random_seed=0, length=10, sample_size=5)
-    prob_to_curves("FlipFlop", problem_list_FlipFlop)
-
-    '''Problem 7: Knap-sack
-    # Create list of states '''
-    problem_list_Knapsack = generate_prob_KnapSack(random_seed=0, length=10, sample_size=5)
-    prob_to_curves("Knapsack", problem_list_Knapsack)
-
-    '''Problem 8: Queens
-    # Create list of states '''
-    problem_list_queens = generate_prob_queens(random_seed=0, length=10, sample_size=5)
-    prob_to_curves("Kqueens", problem_list_queens)
+    # '''Problem 8: Queens
+    # # Create list of states '''
+    # problem_list_queens = generate_prob_queens(random_seed=0, length=10, sample_size=5)
+    # prob_to_curves("Kqueens", problem_list_queens)
 
 
 
