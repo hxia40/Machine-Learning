@@ -162,35 +162,48 @@ def score_time_default(dataset_name, clf_name, clf, X_train, X_test, y_train, y_
 if __name__=="__main__":
     '''Load and standardize data set MNIST'''
 
-    train = np.genfromtxt('fashion-mnist_train_minor.csv', delimiter=',')[1:, :]
-    test = np.genfromtxt('fashion-mnist_test_minor.csv', delimiter=',')[1:, :]
+    # train = np.genfromtxt('fashion-mnist_train_minor.csv', delimiter=',')[1:, :]
+    # test = np.genfromtxt('fashion-mnist_test_minor.csv', delimiter=',')[1:, :]
+    #
+    # # X_train = train[:, 1:]
+    # # y_train = train[:, 0]
+    # # X_test = test[:, 1:]
+    # # y_test = test[:, 0]
+    #
+    # X = train[:, 1:]
+    # y = train[:, 0]
+    #
+    # X_train, X_test, y_train, y_test = train_test_split(X, y,
+    #                                                     test_size=0.2,
+    #                                                     random_state=0,
+    #                                                     shuffle=True,
+    #                                                     stratify=y)
 
-    # X_train = train[:, 1:]
-    # y_train = train[:, 0]
-    # X_test = test[:, 1:]
-    # y_test = test[:, 0]
+    set2 = np.genfromtxt('Epileptic_Seizure_Recognition.csv', delimiter=',', dtype=None)[1:6001, 1:]
+    set2 = set2.astype(int)
 
-    X = train[:, 1:]
-    y = train[:, 0]
+    # separating set2 into X and y, then train and test
+    X2 = set2[:, :-1]
+    scaler = preprocessing.StandardScaler()
+    X2 = scaler.fit_transform(X2)
+    y2 = set2[:, -1]
+    X2_train, X2_test, y2_train, y2_test = train_test_split(X2, y2, test_size=0.2, random_state=0, stratify=y2)
+    #
+    # set2_name = "ESR"
 
-    X_train, X_test, y_train, y_test = train_test_split(X, y,
-                                                        test_size=0.2,
-                                                        random_state=0,
-                                                        shuffle=True,
-                                                        stratify=y)
-    print(y_train)
+    print(y2_train)
     # standardize the original data - this is important but usually neglected by newbies.
     scaler = preprocessing.StandardScaler()
     # X_train = scaler.fit_transform(X_train)
     # X_test = scaler.transform(X_test)
 
     # scaler = MinMaxScaler()
-    X_train_scaled = scaler.fit_transform(X_train)
-    X_test_scaled = scaler.transform(X_test)
+    X_train_scaled = scaler.fit_transform(X2_train)
+    X_test_scaled = scaler.transform(X2_test)
 
     one_hot = OneHotEncoder()
-    y_train_hot = one_hot.fit_transform(y_train.reshape(-1, 1)).todense()
-    y_test_hot = one_hot.transform(y_test.reshape(-1, 1)).todense()
+    y_train_hot = one_hot.fit_transform(y2_train.reshape(-1, 1)).todense()
+    y_test_hot = one_hot.transform(y2_test.reshape(-1, 1)).todense()
     set1_name = "mnist"
 
     # ann_learning_curve_size_pre(set1_name, X_train_scaled, y_train_hot)
@@ -201,10 +214,10 @@ if __name__=="__main__":
     for i in range(10):
         start = time.time()
         print("===========i===========", i)
-        clf = mlrose.NeuralNetwork(hidden_nodes=[50,], activation='relu',
-                                   algorithm='random_hill_climb', max_iters=1000,
-                                   bias=True, is_classifier=True, learning_rate=i+1,
-                                   # early_stopping=True,
+        clf = mlrose.NeuralNetwork(hidden_nodes=[5,], activation='relu',
+                                   algorithm='gradient_descent', max_iters=1000,
+                                   bias=True, is_classifier=True, learning_rate=float(i)/1000 + 0.0001,
+                                   early_stopping=True,
                                    # clip_max=5,
                                    max_attempts=1000,
                                    # restarts=20,
@@ -222,11 +235,11 @@ if __name__=="__main__":
         print(y_train_accuracy)
 
         #
-        # # Predict labels for test set and assess accuracy
-        # y_test_pred = clf.predict(X_test_scaled)
-        # y_test_accuracy = accuracy_score(y_test_hot, y_test_pred)
-        # print(y_test_accuracy)
-        #
+        # Predict labels for test set and assess accuracy
+        y_test_pred = clf.predict(X_test_scaled)
+        y_test_accuracy = accuracy_score(y_test_hot, y_test_pred)
+        print(y_test_accuracy)
+
 
 
 
