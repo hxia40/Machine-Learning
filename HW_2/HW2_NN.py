@@ -165,17 +165,26 @@ if __name__=="__main__":
     train = np.genfromtxt('fashion-mnist_train_minor.csv', delimiter=',')[1:, :]
     test = np.genfromtxt('fashion-mnist_test_minor.csv', delimiter=',')[1:, :]
 
-    X_train = train[:, 1:]
-    y_train = train[:, 0]
-    X_test = test[:, 1:]
-    y_test = test[:, 0]
+    # X_train = train[:, 1:]
+    # y_train = train[:, 0]
+    # X_test = test[:, 1:]
+    # y_test = test[:, 0]
 
+    X = train[:, 1:]
+    y = train[:, 0]
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y,
+                                                        test_size=0.2,
+                                                        random_state=0,
+                                                        shuffle=True,
+                                                        stratify=y)
+    print(y_train)
     # standardize the original data - this is important but usually neglected by newbies.
-    # scaler = preprocessing.StandardScaler()
+    scaler = preprocessing.StandardScaler()
     # X_train = scaler.fit_transform(X_train)
     # X_test = scaler.transform(X_test)
 
-    scaler = MinMaxScaler()
+    # scaler = MinMaxScaler()
     X_train_scaled = scaler.fit_transform(X_train)
     X_test_scaled = scaler.transform(X_test)
 
@@ -191,14 +200,17 @@ if __name__=="__main__":
 
     for i in range(10):
         start = time.time()
-        print("===========i===========", float(i+1)/10)
-        clf = mlrose.NeuralNetwork(hidden_nodes=[5], activation='relu',
-                                   algorithm='genetic_alg', max_iters=500,
-                                   bias=True, is_classifier=True, learning_rate=float(i+1)/10,
-                                   early_stopping=True,
+        print("===========i===========", i)
+        clf = mlrose.NeuralNetwork(hidden_nodes=[50,], activation='relu',
+                                   algorithm='random_hill_climb', max_iters=1000,
+                                   bias=True, is_classifier=True, learning_rate=i+1,
+                                   # early_stopping=True,
                                    # clip_max=5,
-                                   max_attempts=100,
+                                   max_attempts=1000,
                                    # restarts=20,
+                                   # schedule= mlrose.GeomDecay(),
+                                   # pop_size = 200,
+                                   # mutation_prob = 0.1,
                                    random_state=1)
 
 
@@ -209,12 +221,12 @@ if __name__=="__main__":
         y_train_accuracy = accuracy_score(y_train_hot, y_train_pred)
         print(y_train_accuracy)
 
-
-        # Predict labels for test set and assess accuracy
-        y_test_pred = clf.predict(X_test_scaled)
-        y_test_accuracy = accuracy_score(y_test_hot, y_test_pred)
-        print(y_test_accuracy)
-
+        #
+        # # Predict labels for test set and assess accuracy
+        # y_test_pred = clf.predict(X_test_scaled)
+        # y_test_accuracy = accuracy_score(y_test_hot, y_test_pred)
+        # print(y_test_accuracy)
+        #
 
 
 
