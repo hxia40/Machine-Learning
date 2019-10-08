@@ -213,13 +213,13 @@ if __name__=="__main__":
 
     for i in range(10):
         start = time.time()
-        print("===========i===========", i)
+        print("===========i===========", i*1000+1000)
         clf = mlrose.NeuralNetwork(hidden_nodes=[5,], activation='relu',
-                                   algorithm='gradient_descent', max_iters=1000,
-                                   bias=True, is_classifier=True, learning_rate=float(i)/1000 + 0.0001,
+                                   algorithm='gradient_descent', max_iters=8000,
+                                   bias=True, is_classifier=True, learning_rate=0.00015,
                                    early_stopping=True,
                                    # clip_max=5,
-                                   max_attempts=1000,
+                                   max_attempts=10000,
                                    # restarts=20,
                                    # schedule= mlrose.GeomDecay(),
                                    # pop_size = 200,

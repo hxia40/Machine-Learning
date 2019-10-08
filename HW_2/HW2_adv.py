@@ -504,16 +504,18 @@ def prob_to_curves(prob_name, problem_list):
     results_MI_complete = np.concatenate((result_MI_mean[0], result_MI_title), axis=1)
     plotting(prob_name, "MI", results_MI_complete)
 
-def size_test_OneMax_RHC():
+def size_test_OneMax_RHC(prob_name, algo_name):
     time_mean_list = []
     time_std_list = []
     best_fitness_mean_list = []
     best_fitness_std_list = []
     alter_list = []
-    for i in range(1, 300, 100):
+    for i in range(1, 300, 30):
+        print(prob_name, algo_name, i)
         problem_list = generate_prob_OneMax(random_seed=0, length = i, sample_size=5)
         time_list = []
         best_fitness_list = []
+
         # print(problem_list)
         for problem in problem_list:
             start_time = time.time()
@@ -523,41 +525,67 @@ def size_test_OneMax_RHC():
                                                                 restarts=0,
                                                                 init_state=None,
                                                                 curve=False,
-                                                                random_state=1)
+                                                                )
             time_diff = time.time() - start_time
-            print("time_diff:", time_diff)
-            print("best_fitness:", best_fitness)
+
             time_list.append(time_diff)
             best_fitness_list.append(best_fitness)
 
         time_mean = np.mean(time_list)
         time_std = np.std(time_list)
+        # print("best_fitness_list:", best_fitness_list)
         best_fitness_mean = np.mean(best_fitness_list)
         best_fitness_std = np.std(best_fitness_list)
+        # print("best_fitness_std:", best_fitness_std)
         time_mean_list.append(time_mean)
         time_std_list.append(time_std)
         best_fitness_mean_list.append(best_fitness_mean)
         best_fitness_std_list.append(best_fitness_std)
         alter_list.append(i)
+    # print("best_fitness_std_list:", best_fitness_std_list)
+    writer = open('data_adv/{}_{}.txt'.format(prob_name, algo_name), 'w')
+
+    writer.write('sample size')
+    writer.write(str(alter_list))
+    writer.write("\n\n")
+
+    writer.write('clock time')
+    writer.write(str(time_mean_list))
+    writer.write("\n\n")
+
+    writer.write('clock time std')
+    writer.write(str(time_std_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score')
+    writer.write(str(best_fitness_mean_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score std')
+    writer.write(str(best_fitness_std_list))
+    writer.write("\n\n")
 
     # return np.array([[alter_list, time_mean_list, "sample size", "clock time"],
     #                  [alter_list, time_std_list, "sample size", "clock time std"],
     #                  [alter_list, best_fitness_mean_list, "sample_size", "best_fitness"],
     #                  [alter_list, best_fitness_std_list, "sample_size", "best_fitness_std"]])
-    return "sample_size", np.array([alter_list]), \
-           "clock time", np.array([time_mean_list]),\
-           "clock time std", np.array([time_std_list]), \
-           "best fitness", np.array([best_fitness_mean_list]), \
-           "best fitness std", np.array([best_fitness_std_list])
-
-def size_test_OneMax_SA():
+    # return "sample_size", np.array([alter_list]), \
+    #        "clock time", np.array([time_mean_list]),\
+    #        "clock time std", np.array([time_std_list]), \
+    #        "best fitness", np.array([best_fitness_mean_list]), \
+    #        "best fitness std", np.array([best_fitness_std_list])
+def size_test_OneMax_SA(prob_name, algo_name):
     time_mean_list = []
+    time_std_list = []
     best_fitness_mean_list = []
+    best_fitness_std_list = []
     alter_list = []
     for i in range(1, 300, 30):
-        problem_list = generate_prob_OneMax(random_seed=0, length=i, sample_size=5)
+        print(prob_name, algo_name, i)
+        problem_list = generate_prob_OneMax(random_seed=0, length = i, sample_size=5)
         time_list = []
         best_fitness_list = []
+
         # print(problem_list)
         for problem in problem_list:
             start_time = time.time()
@@ -565,30 +593,57 @@ def size_test_OneMax_SA():
                                                                   schedule=mlrose.ExpDecay(),
                                                                   max_attempts=10,
                                                                   max_iters=20,
-                                                                  random_state=1)
-
+                                                                  )
             time_diff = time.time() - start_time
-            print("time_diff:", time_diff)
-            print("best_fitness:", best_fitness)
+
             time_list.append(time_diff)
             best_fitness_list.append(best_fitness)
 
         time_mean = np.mean(time_list)
+        time_std = np.std(time_list)
+        # print("best_fitness_list:", best_fitness_list)
         best_fitness_mean = np.mean(best_fitness_list)
+        best_fitness_std = np.std(best_fitness_list)
+        # print("best_fitness_std:", best_fitness_std)
         time_mean_list.append(time_mean)
+        time_std_list.append(time_std)
         best_fitness_mean_list.append(best_fitness_mean)
+        best_fitness_std_list.append(best_fitness_std)
         alter_list.append(i)
+    # print("best_fitness_std_list:", best_fitness_std_list)
+    writer = open('data_adv/{}_{}.txt'.format(prob_name, algo_name), 'w')
 
-    return np.array([[alter_list, time_mean_list, "sample size", "clock time"],
-                     [alter_list, best_fitness_mean_list, "sample_size", "best_fitness"]])
-def size_test_OneMax_GA():
+    writer.write('sample size')
+    writer.write(str(alter_list))
+    writer.write("\n\n")
+
+    writer.write('clock time')
+    writer.write(str(time_mean_list))
+    writer.write("\n\n")
+
+    writer.write('clock time std')
+    writer.write(str(time_std_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score')
+    writer.write(str(best_fitness_mean_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score std')
+    writer.write(str(best_fitness_std_list))
+    writer.write("\n\n")
+def size_test_OneMax_GA(prob_name, algo_name):
     time_mean_list = []
+    time_std_list = []
     best_fitness_mean_list = []
+    best_fitness_std_list = []
     alter_list = []
     for i in range(1, 300, 30):
-        problem_list = generate_prob_OneMax(random_seed=0, length=i, sample_size=5)
+        print(prob_name, algo_name, i)
+        problem_list = generate_prob_OneMax(random_seed=0, length = i, sample_size=5)
         time_list = []
         best_fitness_list = []
+
         # print(problem_list)
         for problem in problem_list:
             start_time = time.time()
@@ -598,31 +653,57 @@ def size_test_OneMax_GA():
                                                           max_attempts=50,
                                                           max_iters=50,
                                                           curve=False,
-                                                          random_state=0)
-
+                                                          )
             time_diff = time.time() - start_time
-            print("time_diff:", time_diff)
-            print("best_fitness:", best_fitness)
+
             time_list.append(time_diff)
             best_fitness_list.append(best_fitness)
 
         time_mean = np.mean(time_list)
+        time_std = np.std(time_list)
+        # print("best_fitness_list:", best_fitness_list)
         best_fitness_mean = np.mean(best_fitness_list)
+        best_fitness_std = np.std(best_fitness_list)
+        # print("best_fitness_std:", best_fitness_std)
         time_mean_list.append(time_mean)
+        time_std_list.append(time_std)
         best_fitness_mean_list.append(best_fitness_mean)
+        best_fitness_std_list.append(best_fitness_std)
         alter_list.append(i)
+    # print("best_fitness_std_list:", best_fitness_std_list)
+    writer = open('data_adv/{}_{}.txt'.format(prob_name, algo_name), 'w')
 
-    return np.array([[alter_list, time_mean_list, "sample size", "clock time"],
-                     [alter_list, best_fitness_mean_list, "sample_size", "best_fitness"]])
-def size_test_OneMax_MI():
+    writer.write('sample size')
+    writer.write(str(alter_list))
+    writer.write("\n\n")
+
+    writer.write('clock time')
+    writer.write(str(time_mean_list))
+    writer.write("\n\n")
+
+    writer.write('clock time std')
+    writer.write(str(time_std_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score')
+    writer.write(str(best_fitness_mean_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score std')
+    writer.write(str(best_fitness_std_list))
+    writer.write("\n\n")
+def size_test_OneMax_MI(prob_name, algo_name):
     time_mean_list = []
+    time_std_list = []
     best_fitness_mean_list = []
+    best_fitness_std_list = []
     alter_list = []
     for i in range(1, 300, 30):
-        print("onemax_mi:", i)
-        problem_list = generate_prob_OneMax(random_seed=0, length=i, sample_size=5)
+        print(prob_name, algo_name, i)
+        problem_list = generate_prob_OneMax(random_seed=0, length = i, sample_size=5)
         time_list = []
         best_fitness_list = []
+
         # print(problem_list)
         for problem in problem_list:
             start_time = time.time()
@@ -632,31 +713,58 @@ def size_test_OneMax_MI():
                                                                max_attempts=10,
                                                                max_iters=10,
                                                                curve=False,
-                                                               random_state=1)
-
+                                                               )
             time_diff = time.time() - start_time
-            print("time_diff:", time_diff)
-            print("best_fitness:", best_fitness)
+
             time_list.append(time_diff)
             best_fitness_list.append(best_fitness)
 
         time_mean = np.mean(time_list)
+        time_std = np.std(time_list)
+        # print("best_fitness_list:", best_fitness_list)
         best_fitness_mean = np.mean(best_fitness_list)
+        best_fitness_std = np.std(best_fitness_list)
+        # print("best_fitness_std:", best_fitness_std)
         time_mean_list.append(time_mean)
+        time_std_list.append(time_std)
         best_fitness_mean_list.append(best_fitness_mean)
+        best_fitness_std_list.append(best_fitness_std)
         alter_list.append(i)
+    # print("best_fitness_std_list:", best_fitness_std_list)
+    writer = open('data_adv/{}_{}.txt'.format(prob_name, algo_name), 'w')
 
-    return np.array([[alter_list, time_mean_list, "sample size", "clock time"],
-                     [alter_list, best_fitness_mean_list, "sample_size", "best_fitness"]])
+    writer.write('sample size')
+    writer.write(str(alter_list))
+    writer.write("\n\n")
 
-def size_test_4peaks_RHC():
+    writer.write('clock time')
+    writer.write(str(time_mean_list))
+    writer.write("\n\n")
+
+    writer.write('clock time std')
+    writer.write(str(time_std_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score')
+    writer.write(str(best_fitness_mean_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score std')
+    writer.write(str(best_fitness_std_list))
+    writer.write("\n\n")
+
+def size_test_4peaks_RHC(prob_name, algo_name):
     time_mean_list = []
+    time_std_list = []
     best_fitness_mean_list = []
+    best_fitness_std_list = []
     alter_list = []
     for i in range(1, 100, 10):
+        print(prob_name, algo_name, i)
         problem_list = generate_prob_4peaks(random_seed=0, length = i, sample_size=5)
         time_list = []
         best_fitness_list = []
+
         # print(problem_list)
         for problem in problem_list:
             start_time = time.time()
@@ -666,892 +774,185 @@ def size_test_4peaks_RHC():
                                                                 restarts=0,
                                                                 init_state=None,
                                                                 curve=False,
-                                                                random_state=1)
+                                                                )
             time_diff = time.time() - start_time
-            print("time_diff:", time_diff)
-            print("best_fitness:", best_fitness)
+
             time_list.append(time_diff)
             best_fitness_list.append(best_fitness)
 
         time_mean = np.mean(time_list)
+        time_std = np.std(time_list)
+        # print("best_fitness_list:", best_fitness_list)
         best_fitness_mean = np.mean(best_fitness_list)
+        best_fitness_std = np.std(best_fitness_list)
+        # print("best_fitness_std:", best_fitness_std)
         time_mean_list.append(time_mean)
+        time_std_list.append(time_std)
         best_fitness_mean_list.append(best_fitness_mean)
+        best_fitness_std_list.append(best_fitness_std)
         alter_list.append(i)
+    # print("best_fitness_std_list:", best_fitness_std_list)
+    writer = open('data_adv/{}_{}.txt'.format(prob_name, algo_name), 'w')
 
-    return np.array([[alter_list, time_mean_list, "sample size", "clock time"],
-                     [alter_list, best_fitness_mean_list, "sample_size", "best_fitness"]])
-def size_test_4peaks_SA():
+    writer.write('sample size')
+    writer.write(str(alter_list))
+    writer.write("\n\n")
+
+    writer.write('clock time')
+    writer.write(str(time_mean_list))
+    writer.write("\n\n")
+
+    writer.write('clock time std')
+    writer.write(str(time_std_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score')
+    writer.write(str(best_fitness_mean_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score std')
+    writer.write(str(best_fitness_std_list))
+    writer.write("\n\n")
+
+    # return np.array([[alter_list, time_mean_list, "sample size", "clock time"],
+    #                  [alter_list, time_std_list, "sample size", "clock time std"],
+    #                  [alter_list, best_fitness_mean_list, "sample_size", "best_fitness"],
+    #                  [alter_list, best_fitness_std_list, "sample_size", "best_fitness_std"]])
+    # return "sample_size", np.array([alter_list]), \
+    #        "clock time", np.array([time_mean_list]),\
+    #        "clock time std", np.array([time_std_list]), \
+    #        "best fitness", np.array([best_fitness_mean_list]), \
+    #        "best fitness std", np.array([best_fitness_std_list])
+def size_test_4peaks_SA(prob_name, algo_name):
     time_mean_list = []
+    time_std_list = []
     best_fitness_mean_list = []
+    best_fitness_std_list = []
     alter_list = []
     for i in range(1, 100, 10):
-        problem_list = generate_prob_4peaks(random_seed=0, length=i, sample_size=5)
+        print(prob_name, algo_name, i)
+        problem_list = generate_prob_4peaks(random_seed=0, length = i, sample_size=5)
         time_list = []
         best_fitness_list = []
+
         # print(problem_list)
         for problem in problem_list:
             start_time = time.time()
             best_state, best_fitness = mlrose.simulated_annealing(problem,
                                                                   schedule=mlrose.ExpDecay(),
-                                                                  max_attempts=50,
-                                                                  max_iters=50,
-                                                                  random_state=1)
-
+                                                                  max_attempts=10,
+                                                                  max_iters=20,
+                                                                  )
             time_diff = time.time() - start_time
-            print("time_diff:", time_diff)
-            print("best_fitness:", best_fitness)
+
             time_list.append(time_diff)
             best_fitness_list.append(best_fitness)
 
         time_mean = np.mean(time_list)
+        time_std = np.std(time_list)
+        # print("best_fitness_list:", best_fitness_list)
         best_fitness_mean = np.mean(best_fitness_list)
+        best_fitness_std = np.std(best_fitness_list)
+        # print("best_fitness_std:", best_fitness_std)
         time_mean_list.append(time_mean)
+        time_std_list.append(time_std)
         best_fitness_mean_list.append(best_fitness_mean)
+        best_fitness_std_list.append(best_fitness_std)
         alter_list.append(i)
+    # print("best_fitness_std_list:", best_fitness_std_list)
+    writer = open('data_adv/{}_{}.txt'.format(prob_name, algo_name), 'w')
 
-    return np.array([[alter_list, time_mean_list, "sample size", "clock time"],
-                     [alter_list, best_fitness_mean_list, "sample_size", "best_fitness"]])
-def size_test_4peaks_GA():
+    writer.write('sample size')
+    writer.write(str(alter_list))
+    writer.write("\n\n")
+
+    writer.write('clock time')
+    writer.write(str(time_mean_list))
+    writer.write("\n\n")
+
+    writer.write('clock time std')
+    writer.write(str(time_std_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score')
+    writer.write(str(best_fitness_mean_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score std')
+    writer.write(str(best_fitness_std_list))
+    writer.write("\n\n")
+def size_test_4peaks_GA(prob_name, algo_name):
     time_mean_list = []
+    time_std_list = []
     best_fitness_mean_list = []
+    best_fitness_std_list = []
     alter_list = []
     for i in range(1, 100, 10):
-        problem_list = generate_prob_4peaks(random_seed=0, length=i, sample_size=5)
+        print(prob_name, algo_name, i)
+        problem_list = generate_prob_4peaks(random_seed=0, length = i, sample_size=5)
         time_list = []
         best_fitness_list = []
+
         # print(problem_list)
         for problem in problem_list:
             start_time = time.time()
             best_state, best_fitness = mlrose.genetic_alg(problem,
-                                                          pop_size=50,
+                                                          pop_size=100,
                                                           mutation_prob=0.5,
-                                                          max_attempts=10,
-                                                          max_iters=50,
-                                                          curve=False,
-                                                          random_state=0)
-
-            time_diff = time.time() - start_time
-            print("time_diff:", time_diff)
-            print("best_fitness:", best_fitness)
-            time_list.append(time_diff)
-            best_fitness_list.append(best_fitness)
-
-        time_mean = np.mean(time_list)
-        best_fitness_mean = np.mean(best_fitness_list)
-        time_mean_list.append(time_mean)
-        best_fitness_mean_list.append(best_fitness_mean)
-        alter_list.append(i)
-
-    return np.array([[alter_list, time_mean_list, "sample size", "clock time"],
-                     [alter_list, best_fitness_mean_list, "sample_size", "best_fitness"]])
-def size_test_4peaks_MI():
-    time_mean_list = []
-    best_fitness_mean_list = []
-    alter_list = []
-    for i in range(1, 100, 10):
-        print("4peaks_MI:", i)
-        problem_list = generate_prob_4peaks(random_seed=0, length=i, sample_size=5)
-        time_list = []
-        best_fitness_list = []
-        # print(problem_list)
-        for problem in problem_list:
-            start_time = time.time()
-            best_state, best_fitness = mlrose.algorithms.mimic(problem,
-                                                               pop_size=100,
-                                                               keep_pct=0.5,
-                                                               max_attempts=10,
-                                                               max_iters=10,
-                                                               curve=False,
-                                                               random_state=1)
-
-            time_diff = time.time() - start_time
-            print("time_diff:", time_diff)
-            print("best_fitness:", best_fitness)
-            time_list.append(time_diff)
-            best_fitness_list.append(best_fitness)
-
-        time_mean = np.mean(time_list)
-        best_fitness_mean = np.mean(best_fitness_list)
-        time_mean_list.append(time_mean)
-        best_fitness_mean_list.append(best_fitness_mean)
-        alter_list.append(i)
-
-    return np.array([[alter_list, time_mean_list, "sample size", "clock time"],
-                     [alter_list, best_fitness_mean_list, "sample_size", "best_fitness"]])
-
-def size_test_Cpeaks_RHC():
-    time_mean_list = []
-    best_fitness_mean_list = []
-    alter_list = []
-    for i in range(1, 100, 5):
-        problem_list = generate_prob_Cpeaks(random_seed=0, length = i, sample_size=5)
-        time_list = []
-        best_fitness_list = []
-        # print(problem_list)
-        for problem in problem_list:
-            start_time = time.time()
-            best_state, best_fitness = mlrose.random_hill_climb(problem,
-                                                                max_attempts=10,
-                                                                max_iters=50,
-                                                                restarts=0,
-                                                                init_state=None,
-                                                                curve=False,
-                                                                random_state=1)
-            time_diff = time.time() - start_time
-            print("time_diff:", time_diff)
-            print("best_fitness:", best_fitness)
-            time_list.append(time_diff)
-            best_fitness_list.append(best_fitness)
-
-        time_mean = np.mean(time_list)
-        best_fitness_mean = np.mean(best_fitness_list)
-        time_mean_list.append(time_mean)
-        best_fitness_mean_list.append(best_fitness_mean)
-        alter_list.append(i)
-
-    return np.array([[alter_list, time_mean_list, "sample size", "clock time"],
-                     [alter_list, best_fitness_mean_list, "sample_size", "best_fitness"]])
-def size_test_Cpeaks_SA():
-    time_mean_list = []
-    best_fitness_mean_list = []
-    alter_list = []
-    for i in range(1, 100, 5):
-        problem_list = generate_prob_Cpeaks(random_seed=0, length=i, sample_size=5)
-        time_list = []
-        best_fitness_list = []
-        # print(problem_list)
-        for problem in problem_list:
-            start_time = time.time()
-            best_state, best_fitness = mlrose.simulated_annealing(problem,
-                                                                  schedule=mlrose.ExpDecay(),
-                                                                  max_attempts=50,
-                                                                  max_iters=50,
-                                                                  random_state=1)
-
-            time_diff = time.time() - start_time
-            print("time_diff:", time_diff)
-            print("best_fitness:", best_fitness)
-            time_list.append(time_diff)
-            best_fitness_list.append(best_fitness)
-
-        time_mean = np.mean(time_list)
-        best_fitness_mean = np.mean(best_fitness_list)
-        time_mean_list.append(time_mean)
-        best_fitness_mean_list.append(best_fitness_mean)
-        alter_list.append(i)
-
-    return np.array([[alter_list, time_mean_list, "sample size", "clock time"],
-                     [alter_list, best_fitness_mean_list, "sample_size", "best_fitness"]])
-def size_test_Cpeaks_GA():
-    time_mean_list = []
-    best_fitness_mean_list = []
-    alter_list = []
-    for i in range(1, 100, 5):
-        problem_list = generate_prob_Cpeaks(random_seed=0, length=i, sample_size=5)
-        time_list = []
-        best_fitness_list = []
-        # print(problem_list)
-        for problem in problem_list:
-            start_time = time.time()
-            best_state, best_fitness = mlrose.genetic_alg(problem,
-                                                          pop_size=100,
-                                                          mutation_prob=0.1,
-                                                          max_attempts=10,
-                                                          max_iters=50,
-                                                          curve=False,
-                                                          random_state=0)
-
-            time_diff = time.time() - start_time
-            print("time_diff:", time_diff)
-            print("best_fitness:", best_fitness)
-            time_list.append(time_diff)
-            best_fitness_list.append(best_fitness)
-
-        time_mean = np.mean(time_list)
-        best_fitness_mean = np.mean(best_fitness_list)
-        time_mean_list.append(time_mean)
-        best_fitness_mean_list.append(best_fitness_mean)
-        alter_list.append(i)
-
-    return np.array([[alter_list, time_mean_list, "sample size", "clock time"],
-                     [alter_list, best_fitness_mean_list, "sample_size", "best_fitness"]])
-def size_test_Cpeaks_MI():
-    time_mean_list = []
-    best_fitness_mean_list = []
-    alter_list = []
-    for i in range(1, 100, 5):
-        print("cpeask_mi:", i)
-        problem_list = generate_prob_Cpeaks(random_seed=0, length=i, sample_size=5)
-        time_list = []
-        best_fitness_list = []
-        # print(problem_list)
-        for problem in problem_list:
-            start_time = time.time()
-            best_state, best_fitness = mlrose.algorithms.mimic(problem,
-                                                               pop_size=100,
-                                                               keep_pct=0.1,
-                                                               max_attempts=10,
-                                                               max_iters=10,
-                                                               curve=False,
-                                                               random_state=1)
-
-            time_diff = time.time() - start_time
-            print("time_diff:", time_diff)
-            print("best_fitness:", best_fitness)
-            time_list.append(time_diff)
-            best_fitness_list.append(best_fitness)
-
-        time_mean = np.mean(time_list)
-        best_fitness_mean = np.mean(best_fitness_list)
-        time_mean_list.append(time_mean)
-        best_fitness_mean_list.append(best_fitness_mean)
-        alter_list.append(i)
-
-    return np.array([[alter_list, time_mean_list, "sample size", "clock time"],
-                     [alter_list, best_fitness_mean_list, "sample_size", "best_fitness"]])
-
-def size_test_TSP_RHC():
-    time_mean_list = []
-    best_fitness_mean_list = []
-    alter_list = []
-    for i in range(2, 100, 5):
-        problem_list = generate_prob_TSP(random_seed=0, citys = i, sample_size=5)
-        time_list = []
-        best_fitness_list = []
-        # print(problem_list)
-        for problem in problem_list:
-            start_time = time.time()
-            best_state, best_fitness = mlrose.random_hill_climb(problem,
-                                                                max_attempts=50,
-                                                                max_iters=100,
-                                                                restarts=0,
-                                                                init_state=None,
-                                                                curve=False,
-                                                                random_state=1)
-            time_diff = time.time() - start_time
-            print("time_diff:", time_diff)
-            print("best_fitness:", best_fitness)
-            time_list.append(time_diff)
-            best_fitness_list.append(best_fitness)
-
-        time_mean = np.mean(time_list)
-        best_fitness_mean = np.mean(best_fitness_list)
-        time_mean_list.append(time_mean)
-        best_fitness_mean_list.append(best_fitness_mean)
-        alter_list.append(i)
-
-    return np.array([[alter_list, time_mean_list, "sample size", "clock time"],
-                     [alter_list, best_fitness_mean_list, "sample_size", "best_fitness"]])
-def size_test_TSP_SA():
-    time_mean_list = []
-    best_fitness_mean_list = []
-    alter_list = []
-    for i in range(2, 100, 5):
-        problem_list = generate_prob_TSP(random_seed=0, citys=i, sample_size=5)
-        time_list = []
-        best_fitness_list = []
-        # print(problem_list)
-        for problem in problem_list:
-            start_time = time.time()
-            best_state, best_fitness = mlrose.simulated_annealing(problem,
-                                                                  schedule=mlrose.ExpDecay(),
-                                                                  max_attempts=1,
-                                                                  max_iters=800,
-                                                                  random_state=1)
-
-            time_diff = time.time() - start_time
-            print("time_diff:", time_diff)
-            print("best_fitness:", best_fitness)
-            time_list.append(time_diff)
-            best_fitness_list.append(best_fitness)
-
-        time_mean = np.mean(time_list)
-        best_fitness_mean = np.mean(best_fitness_list)
-        time_mean_list.append(time_mean)
-        best_fitness_mean_list.append(best_fitness_mean)
-        alter_list.append(i)
-
-    return np.array([[alter_list, time_mean_list, "sample size", "clock time"],
-                     [alter_list, best_fitness_mean_list, "sample_size", "best_fitness"]])
-def size_test_TSP_GA():
-    time_mean_list = []
-    best_fitness_mean_list = []
-    alter_list = []
-    for i in range(2, 100, 5):
-        problem_list = generate_prob_TSP(random_seed=0, citys=i, sample_size=5)
-        time_list = []
-        best_fitness_list = []
-        # print(problem_list)
-        for problem in problem_list:
-            start_time = time.time()
-            best_state, best_fitness = mlrose.genetic_alg(problem,
-                                                          pop_size=100,
-                                                          mutation_prob=0.1,
-                                                          max_attempts=10,
-                                                          max_iters=50,
-                                                          curve=False,
-                                                          random_state=0)
-
-            time_diff = time.time() - start_time
-            print("time_diff:", time_diff)
-            print("best_fitness:", best_fitness)
-            time_list.append(time_diff)
-            best_fitness_list.append(best_fitness)
-
-        time_mean = np.mean(time_list)
-        best_fitness_mean = np.mean(best_fitness_list)
-        time_mean_list.append(time_mean)
-        best_fitness_mean_list.append(best_fitness_mean)
-        alter_list.append(i)
-
-    return np.array([[alter_list, time_mean_list, "sample size", "clock time"],
-                     [alter_list, best_fitness_mean_list, "sample_size", "best_fitness"]])
-def size_test_TSP_MI():
-    time_mean_list = []
-    best_fitness_mean_list = []
-    alter_list = []
-    for i in range(2, 100, 5):
-        print("TSP_MI- city size:", i)
-        problem_list = generate_prob_TSP(random_seed=0, citys=i, sample_size=5)
-        time_list = []
-        best_fitness_list = []
-        # print(problem_list)
-        for problem in problem_list:
-            try:
-                start_time = time.time()
-                best_state, best_fitness = mlrose.algorithms.mimic(problem,
-                                                                   pop_size=100,
-                                                                   keep_pct=0.1,
-                                                                   max_attempts=10,
-                                                                   max_iters=10,
-                                                                   curve=False,
-                                                                   random_state=1)
-
-                time_diff = time.time() - start_time
-                print("time_diff:", time_diff)
-                print("best_fitness:", best_fitness)
-            except:
-                print("error on MI")
-                best_state = np.nan
-                best_fitness = np.nan
-                time_diff = np.nan
-            time_list.append(time_diff)
-            best_fitness_list.append(best_fitness)
-
-        time_mean = np.nanmean(time_list)
-        best_fitness_mean = np.nanmean(best_fitness_list)
-        time_mean_list.append(time_mean)
-        best_fitness_mean_list.append(best_fitness_mean)
-        alter_list.append(i)
-
-    return np.array([[alter_list, time_mean_list, "sample size", "clock time"],
-                     [alter_list, best_fitness_mean_list, "sample_size", "best_fitness"]])
-
-def size_test_MKC_RHC():
-    time_mean_list = []
-    best_fitness_mean_list = []
-    alter_list = []
-    for i in range(2, 100, 5):
-        problem_list = generate_prob_MKC(random_seed=0, nodes = i, sample_size=5)
-        time_list = []
-        best_fitness_list = []
-        # print(problem_list)
-        for problem in problem_list:
-            start_time = time.time()
-            best_state, best_fitness = mlrose.random_hill_climb(problem,
-                                                                max_attempts=50,
-                                                                max_iters=50,
-                                                                restarts=0,
-                                                                init_state=None,
-                                                                curve=False,
-                                                                random_state=1)
-            time_diff = time.time() - start_time
-            print("time_diff:", time_diff)
-            print("best_fitness:", best_fitness)
-            time_list.append(time_diff)
-            best_fitness_list.append(best_fitness)
-
-        time_mean = np.mean(time_list)
-        best_fitness_mean = np.mean(best_fitness_list)
-        time_mean_list.append(time_mean)
-        best_fitness_mean_list.append(best_fitness_mean)
-        alter_list.append(i)
-
-    return np.array([[alter_list, time_mean_list, "sample size", "clock time"],
-                     [alter_list, best_fitness_mean_list, "sample_size", "best_fitness"]])
-def size_test_MKC_SA():
-    time_mean_list = []
-    best_fitness_mean_list = []
-    alter_list = []
-    for i in range(2, 100, 5):
-        problem_list = generate_prob_MKC(random_seed=0, nodes=i, sample_size=5)
-        time_list = []
-        best_fitness_list = []
-        # print(problem_list)
-        for problem in problem_list:
-            start_time = time.time()
-            best_state, best_fitness = mlrose.simulated_annealing(problem,
-                                                                  schedule=mlrose.ExpDecay(),
-                                                                  max_attempts=50,
-                                                                  max_iters=400,
-                                                                  random_state=1)
-
-            time_diff = time.time() - start_time
-            print("time_diff:", time_diff)
-            print("best_fitness:", best_fitness)
-            time_list.append(time_diff)
-            best_fitness_list.append(best_fitness)
-
-        time_mean = np.mean(time_list)
-        best_fitness_mean = np.mean(best_fitness_list)
-        time_mean_list.append(time_mean)
-        best_fitness_mean_list.append(best_fitness_mean)
-        alter_list.append(i)
-
-    return np.array([[alter_list, time_mean_list, "sample size", "clock time"],
-                     [alter_list, best_fitness_mean_list, "sample_size", "best_fitness"]])
-def size_test_MKC_GA():
-    time_mean_list = []
-    best_fitness_mean_list = []
-    alter_list = []
-    for i in range(2, 100, 5):
-        problem_list = generate_prob_MKC(random_seed=0, nodes=i, sample_size=5)
-        time_list = []
-        best_fitness_list = []
-        # print(problem_list)
-        for problem in problem_list:
-            start_time = time.time()
-            best_state, best_fitness = mlrose.genetic_alg(problem,
-                                                          pop_size=100,
-                                                          mutation_prob=0.1,
-                                                          max_attempts=10,
-                                                          max_iters=10,
-                                                          curve=False,
-                                                          random_state=0)
-
-            time_diff = time.time() - start_time
-            print("time_diff:", time_diff)
-            print("best_fitness:", best_fitness)
-            time_list.append(time_diff)
-            best_fitness_list.append(best_fitness)
-
-        time_mean = np.mean(time_list)
-        best_fitness_mean = np.mean(best_fitness_list)
-        time_mean_list.append(time_mean)
-        best_fitness_mean_list.append(best_fitness_mean)
-        alter_list.append(i)
-
-    return np.array([[alter_list, time_mean_list, "sample size", "clock time"],
-                     [alter_list, best_fitness_mean_list, "sample_size", "best_fitness"]])
-def size_test_MKC_MI():
-    time_mean_list = []
-    best_fitness_mean_list = []
-    alter_list = []
-    for i in range(2, 100, 5):
-        print("MKC_MI- city size:", i)
-        problem_list = generate_prob_MKC(random_seed=0, nodes=i, sample_size=5)
-        time_list = []
-        best_fitness_list = []
-        # print(problem_list)
-        for problem in problem_list:
-            try:
-                start_time = time.time()
-                best_state, best_fitness = mlrose.algorithms.mimic(problem,
-                                                                   pop_size=100,
-                                                                   keep_pct=0.1,
-                                                                   max_attempts=10,
-                                                                   max_iters=10,
-                                                                   curve=False,
-                                                                   random_state=1)
-
-                time_diff = time.time() - start_time
-                print("time_diff:", time_diff)
-                print("best_fitness:", best_fitness)
-            except:
-                print("error on MI")
-                best_state = np.nan
-                best_fitness = np.nan
-                time_diff = np.nan
-            time_list.append(time_diff)
-            best_fitness_list.append(best_fitness)
-
-        time_mean = np.nanmean(time_list)
-        best_fitness_mean = np.nanmean(best_fitness_list)
-        time_mean_list.append(time_mean)
-        best_fitness_mean_list.append(best_fitness_mean)
-        alter_list.append(i)
-
-    return np.array([[alter_list, time_mean_list, "sample size", "clock time"],
-                     [alter_list, best_fitness_mean_list, "sample_size", "best_fitness"]])
-
-def size_test_FlipFlop_RHC():
-    time_mean_list = []
-    best_fitness_mean_list = []
-    alter_list = []
-    for i in range(1, 300, 30):
-        problem_list = generate_prob_FlipFlop(random_seed=0, length = i, sample_size=5)
-        time_list = []
-        best_fitness_list = []
-        # print(problem_list)
-        for problem in problem_list:
-            start_time = time.time()
-            best_state, best_fitness = mlrose.random_hill_climb(problem,
-                                                                max_attempts=50,
-                                                                max_iters=50,
-                                                                restarts=0,
-                                                                init_state=None,
-                                                                curve=False,
-                                                                random_state=1)
-            time_diff = time.time() - start_time
-            print("time_diff:", time_diff)
-            print("best_fitness:", best_fitness)
-            time_list.append(time_diff)
-            best_fitness_list.append(best_fitness)
-
-        time_mean = np.mean(time_list)
-        best_fitness_mean = np.mean(best_fitness_list)
-        time_mean_list.append(time_mean)
-        best_fitness_mean_list.append(best_fitness_mean)
-        alter_list.append(i)
-
-    return np.array([[alter_list, time_mean_list, "sample size", "clock time"],
-                     [alter_list, best_fitness_mean_list, "sample_size", "best_fitness"]])
-def size_test_FlipFlop_SA():
-    time_mean_list = []
-    best_fitness_mean_list = []
-    alter_list = []
-    for i in range(1, 300, 30):
-        problem_list = generate_prob_FlipFlop(random_seed=0, length=i, sample_size=5)
-        time_list = []
-        best_fitness_list = []
-        # print(problem_list)
-        for problem in problem_list:
-            start_time = time.time()
-            best_state, best_fitness = mlrose.simulated_annealing(problem,
-                                                                  schedule=mlrose.ExpDecay(),
-                                                                  max_attempts=50,
-                                                                  max_iters=100,
-                                                                  random_state=1)
-
-            time_diff = time.time() - start_time
-            print("time_diff:", time_diff)
-            print("best_fitness:", best_fitness)
-            time_list.append(time_diff)
-            best_fitness_list.append(best_fitness)
-
-        time_mean = np.mean(time_list)
-        best_fitness_mean = np.mean(best_fitness_list)
-        time_mean_list.append(time_mean)
-        best_fitness_mean_list.append(best_fitness_mean)
-        alter_list.append(i)
-
-    return np.array([[alter_list, time_mean_list, "sample size", "clock time"],
-                     [alter_list, best_fitness_mean_list, "sample_size", "best_fitness"]])
-def size_test_FlipFlop_GA():
-    time_mean_list = []
-    best_fitness_mean_list = []
-    alter_list = []
-    for i in range(1, 300, 30):
-        problem_list = generate_prob_FlipFlop(random_seed=0, length=i, sample_size=5)
-        time_list = []
-        best_fitness_list = []
-        # print(problem_list)
-        for problem in problem_list:
-            start_time = time.time()
-            best_state, best_fitness = mlrose.genetic_alg(problem,
-                                                          pop_size=100,
-                                                          mutation_prob=0.1,
-                                                          max_attempts=10,
-                                                          max_iters=10,
-                                                          curve=False,
-                                                          random_state=0)
-
-            time_diff = time.time() - start_time
-            print("time_diff:", time_diff)
-            print("best_fitness:", best_fitness)
-            time_list.append(time_diff)
-            best_fitness_list.append(best_fitness)
-
-        time_mean = np.mean(time_list)
-        best_fitness_mean = np.mean(best_fitness_list)
-        time_mean_list.append(time_mean)
-        best_fitness_mean_list.append(best_fitness_mean)
-        alter_list.append(i)
-
-    return np.array([[alter_list, time_mean_list, "sample size", "clock time"],
-                     [alter_list, best_fitness_mean_list, "sample_size", "best_fitness"]])
-def size_test_FlipFlop_MI():
-    time_mean_list = []
-    best_fitness_mean_list = []
-    alter_list = []
-    for i in range(1, 300, 30):
-        print("flipflop_mi:", i)
-        problem_list = generate_prob_FlipFlop(random_seed=0, length=i, sample_size=5)
-        time_list = []
-        best_fitness_list = []
-        # print(problem_list)
-        for problem in problem_list:
-            start_time = time.time()
-            best_state, best_fitness = mlrose.algorithms.mimic(problem,
-                                                               pop_size=100,
-                                                               keep_pct=0.5,
-                                                               max_attempts=10,
-                                                               max_iters=50,
-                                                               curve=False,
-                                                               random_state=1)
-
-            time_diff = time.time() - start_time
-            print("time_diff:", time_diff)
-            print("best_fitness:", best_fitness)
-            time_list.append(time_diff)
-            best_fitness_list.append(best_fitness)
-
-        time_mean = np.mean(time_list)
-        best_fitness_mean = np.mean(best_fitness_list)
-        time_mean_list.append(time_mean)
-        best_fitness_mean_list.append(best_fitness_mean)
-        alter_list.append(i)
-
-    return np.array([[alter_list, time_mean_list, "sample size", "clock time"],
-                     [alter_list, best_fitness_mean_list, "sample_size", "best_fitness"]])
-
-def size_test_KnapSack_RHC():
-    time_mean_list = []
-    best_fitness_mean_list = []
-    alter_list = []
-    for i in range(1, 300, 30):
-        problem_list = generate_prob_KnapSack(random_seed=0, length = i, sample_size=5)
-        time_list = []
-        best_fitness_list = []
-        # print(problem_list)
-        for problem in problem_list:
-            start_time = time.time()
-            best_state, best_fitness = mlrose.random_hill_climb(problem,
-                                                                max_attempts=50,
-                                                                max_iters=50,
-                                                                restarts=0,
-                                                                init_state=None,
-                                                                curve=False,
-                                                                random_state=1)
-            time_diff = time.time() - start_time
-            print("time_diff:", time_diff)
-            print("best_fitness:", best_fitness)
-            time_list.append(time_diff)
-            best_fitness_list.append(best_fitness)
-
-        time_mean = np.mean(time_list)
-        best_fitness_mean = np.mean(best_fitness_list)
-        time_mean_list.append(time_mean)
-        best_fitness_mean_list.append(best_fitness_mean)
-        alter_list.append(i)
-
-    return np.array([[alter_list, time_mean_list, "sample size", "clock time"],
-                     [alter_list, best_fitness_mean_list, "sample_size", "best_fitness"]])
-def size_test_KnapSack_SA():
-    time_mean_list = []
-    best_fitness_mean_list = []
-    alter_list = []
-    for i in range(1, 300, 30):
-        problem_list = generate_prob_KnapSack(random_seed=0, length=i, sample_size=5)
-        time_list = []
-        best_fitness_list = []
-        # print(problem_list)
-        for problem in problem_list:
-            start_time = time.time()
-            best_state, best_fitness = mlrose.simulated_annealing(problem,
-                                                                  schedule=mlrose.ExpDecay(),
-                                                                  max_attempts=50,
-                                                                  max_iters=50,
-                                                                  random_state=1)
-
-            time_diff = time.time() - start_time
-            print("time_diff:", time_diff)
-            print("best_fitness:", best_fitness)
-            time_list.append(time_diff)
-            best_fitness_list.append(best_fitness)
-
-        time_mean = np.mean(time_list)
-        best_fitness_mean = np.mean(best_fitness_list)
-        time_mean_list.append(time_mean)
-        best_fitness_mean_list.append(best_fitness_mean)
-        alter_list.append(i)
-
-    return np.array([[alter_list, time_mean_list, "sample size", "clock time"],
-                     [alter_list, best_fitness_mean_list, "sample_size", "best_fitness"]])
-def size_test_KnapSack_GA():
-    time_mean_list = []
-    best_fitness_mean_list = []
-    alter_list = []
-    for i in range(1, 300, 30):
-        problem_list = generate_prob_KnapSack(random_seed=0, length=i, sample_size=5)
-        time_list = []
-        best_fitness_list = []
-        # print(problem_list)
-        for problem in problem_list:
-            start_time = time.time()
-            best_state, best_fitness = mlrose.genetic_alg(problem,
-                                                          pop_size=150,
-                                                          mutation_prob=0.1,
                                                           max_attempts=50,
                                                           max_iters=50,
                                                           curve=False,
-                                                          random_state=0)
-
+                                                          )
             time_diff = time.time() - start_time
-            print("time_diff:", time_diff)
-            print("best_fitness:", best_fitness)
+
             time_list.append(time_diff)
             best_fitness_list.append(best_fitness)
 
         time_mean = np.mean(time_list)
+        time_std = np.std(time_list)
+        # print("best_fitness_list:", best_fitness_list)
         best_fitness_mean = np.mean(best_fitness_list)
+        best_fitness_std = np.std(best_fitness_list)
+        # print("best_fitness_std:", best_fitness_std)
         time_mean_list.append(time_mean)
+        time_std_list.append(time_std)
         best_fitness_mean_list.append(best_fitness_mean)
+        best_fitness_std_list.append(best_fitness_std)
         alter_list.append(i)
+    # print("best_fitness_std_list:", best_fitness_std_list)
+    writer = open('data_adv/{}_{}.txt'.format(prob_name, algo_name), 'w')
 
-    return np.array([[alter_list, time_mean_list, "sample size", "clock time"],
-                     [alter_list, best_fitness_mean_list, "sample_size", "best_fitness"]])
-def size_test_KnapSack_MI():
+    writer.write('sample size')
+    writer.write(str(alter_list))
+    writer.write("\n\n")
+
+    writer.write('clock time')
+    writer.write(str(time_mean_list))
+    writer.write("\n\n")
+
+    writer.write('clock time std')
+    writer.write(str(time_std_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score')
+    writer.write(str(best_fitness_mean_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score std')
+    writer.write(str(best_fitness_std_list))
+    writer.write("\n\n")
+def size_test_4peaks_MI(prob_name, algo_name):
     time_mean_list = []
+    time_std_list = []
     best_fitness_mean_list = []
-    alter_list = []
-    for i in range(1, 300, 30):
-        print("knapsack_mi:", i)
-        problem_list = generate_prob_KnapSack(random_seed=0, length=i, sample_size=5)
-        time_list = []
-        best_fitness_list = []
-        # print(problem_list)
-        for problem in problem_list:
-            start_time = time.time()
-            best_state, best_fitness = mlrose.algorithms.mimic(problem,
-                                                               pop_size=150,
-                                                               keep_pct=0.9,
-                                                               max_attempts=10,
-                                                               max_iters=50,
-                                                               curve=False,
-                                                               random_state=1)
-
-            time_diff = time.time() - start_time
-            print("time_diff:", time_diff)
-            print("best_fitness:", best_fitness)
-            time_list.append(time_diff)
-            best_fitness_list.append(best_fitness)
-
-        time_mean = np.mean(time_list)
-        best_fitness_mean = np.mean(best_fitness_list)
-        time_mean_list.append(time_mean)
-        best_fitness_mean_list.append(best_fitness_mean)
-        alter_list.append(i)
-
-    return np.array([[alter_list, time_mean_list, "sample size", "clock time"],
-                     [alter_list, best_fitness_mean_list, "sample_size", "best_fitness"]])
-
-def size_test_queens_RHC():
-    time_mean_list = []
-    best_fitness_mean_list = []
+    best_fitness_std_list = []
     alter_list = []
     for i in range(1, 100, 10):
-        problem_list = generate_prob_KnapSack(random_seed=0, length = i, sample_size=5)
+        print(prob_name, algo_name, i)
+        problem_list = generate_prob_4peaks(random_seed=0, length = i, sample_size=5)
         time_list = []
         best_fitness_list = []
-        # print(problem_list)
-        for problem in problem_list:
-            start_time = time.time()
-            best_state, best_fitness = mlrose.random_hill_climb(problem,
-                                                                max_attempts=50,
-                                                                max_iters=50,
-                                                                restarts=0,
-                                                                init_state=None,
-                                                                curve=False,
-                                                                random_state=1)
-            time_diff = time.time() - start_time
-            print("time_diff:", time_diff)
-            print("best_fitness:", best_fitness)
-            time_list.append(time_diff)
-            best_fitness_list.append(best_fitness)
 
-        time_mean = np.mean(time_list)
-        best_fitness_mean = np.mean(best_fitness_list)
-        time_mean_list.append(time_mean)
-        best_fitness_mean_list.append(best_fitness_mean)
-        alter_list.append(i)
-
-    return np.array([[alter_list, time_mean_list, "sample size", "clock time"],
-                     [alter_list, best_fitness_mean_list, "sample_size", "best_fitness"]])
-def size_test_queens_SA():
-    time_mean_list = []
-    best_fitness_mean_list = []
-    alter_list = []
-    for i in range(1, 100, 10):
-        problem_list = generate_prob_KnapSack(random_seed=0, length=i, sample_size=5)
-        time_list = []
-        best_fitness_list = []
-        # print(problem_list)
-        for problem in problem_list:
-            start_time = time.time()
-            best_state, best_fitness = mlrose.simulated_annealing(problem,
-                                                                  schedule=mlrose.ExpDecay(),
-                                                                  max_attempts=50,
-                                                                  max_iters=50,
-                                                                  random_state=1)
-
-            time_diff = time.time() - start_time
-            print("time_diff:", time_diff)
-            print("best_fitness:", best_fitness)
-            time_list.append(time_diff)
-            best_fitness_list.append(best_fitness)
-
-        time_mean = np.mean(time_list)
-        best_fitness_mean = np.mean(best_fitness_list)
-        time_mean_list.append(time_mean)
-        best_fitness_mean_list.append(best_fitness_mean)
-        alter_list.append(i)
-
-    return np.array([[alter_list, time_mean_list, "sample size", "clock time"],
-                     [alter_list, best_fitness_mean_list, "sample_size", "best_fitness"]])
-def size_test_queens_GA():
-    time_mean_list = []
-    best_fitness_mean_list = []
-    alter_list = []
-    for i in range(1, 100, 10):
-        problem_list = generate_prob_KnapSack(random_seed=0, length=i, sample_size=5)
-        time_list = []
-        best_fitness_list = []
-        # print(problem_list)
-        for problem in problem_list:
-            start_time = time.time()
-            best_state, best_fitness = mlrose.genetic_alg(problem,
-                                                          pop_size=150,
-                                                          mutation_prob=0.1,
-                                                          max_attempts=10,
-                                                          max_iters=50,
-                                                          curve=False,
-                                                          random_state=0)
-
-            time_diff = time.time() - start_time
-            print("time_diff:", time_diff)
-            print("best_fitness:", best_fitness)
-            time_list.append(time_diff)
-            best_fitness_list.append(best_fitness)
-
-        time_mean = np.mean(time_list)
-        best_fitness_mean = np.mean(best_fitness_list)
-        time_mean_list.append(time_mean)
-        best_fitness_mean_list.append(best_fitness_mean)
-        alter_list.append(i)
-
-    return np.array([[alter_list, time_mean_list, "sample size", "clock time"],
-                     [alter_list, best_fitness_mean_list, "sample_size", "best_fitness"]])
-def size_test_queens_MI():
-    time_mean_list = []
-    best_fitness_mean_list = []
-    alter_list = []
-    for i in range(1, 100, 10):
-        print("knapsack_mi:", i)
-        problem_list = generate_prob_KnapSack(random_seed=0, length=i, sample_size=5)
-        time_list = []
-        best_fitness_list = []
         # print(problem_list)
         for problem in problem_list:
             start_time = time.time()
@@ -1561,27 +962,1579 @@ def size_test_queens_MI():
                                                                max_attempts=10,
                                                                max_iters=10,
                                                                curve=False,
-                                                               random_state=1)
-
+                                                               )
             time_diff = time.time() - start_time
-            print("time_diff:", time_diff)
-            print("best_fitness:", best_fitness)
+
             time_list.append(time_diff)
             best_fitness_list.append(best_fitness)
 
         time_mean = np.mean(time_list)
+        time_std = np.std(time_list)
+        # print("best_fitness_list:", best_fitness_list)
         best_fitness_mean = np.mean(best_fitness_list)
+        best_fitness_std = np.std(best_fitness_list)
+        # print("best_fitness_std:", best_fitness_std)
         time_mean_list.append(time_mean)
+        time_std_list.append(time_std)
         best_fitness_mean_list.append(best_fitness_mean)
+        best_fitness_std_list.append(best_fitness_std)
         alter_list.append(i)
+    # print("best_fitness_std_list:", best_fitness_std_list)
+    writer = open('data_adv/{}_{}.txt'.format(prob_name, algo_name), 'w')
 
-    return np.array([[alter_list, time_mean_list, "sample size", "clock time"],
-                     [alter_list, best_fitness_mean_list, "sample_size", "best_fitness"]])
+    writer.write('sample size')
+    writer.write(str(alter_list))
+    writer.write("\n\n")
+
+    writer.write('clock time')
+    writer.write(str(time_mean_list))
+    writer.write("\n\n")
+
+    writer.write('clock time std')
+    writer.write(str(time_std_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score')
+    writer.write(str(best_fitness_mean_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score std')
+    writer.write(str(best_fitness_std_list))
+    writer.write("\n\n")
+
+def size_test_Cpeaks_RHC(prob_name, algo_name):
+    time_mean_list = []
+    time_std_list = []
+    best_fitness_mean_list = []
+    best_fitness_std_list = []
+    alter_list = []
+    for i in range(1, 100, 10):
+        print(prob_name, algo_name, i)
+        problem_list = generate_prob_Cpeaks(random_seed=0, length = i, sample_size=5)
+        time_list = []
+        best_fitness_list = []
+
+        # print(problem_list)
+        for problem in problem_list:
+            start_time = time.time()
+            best_state, best_fitness = mlrose.random_hill_climb(problem,
+                                                                max_attempts=50,
+                                                                max_iters=50,
+                                                                restarts=0,
+                                                                init_state=None,
+                                                                curve=False,
+                                                                )
+            time_diff = time.time() - start_time
+
+            time_list.append(time_diff)
+            best_fitness_list.append(best_fitness)
+
+        time_mean = np.mean(time_list)
+        time_std = np.std(time_list)
+        # print("best_fitness_list:", best_fitness_list)
+        best_fitness_mean = np.mean(best_fitness_list)
+        best_fitness_std = np.std(best_fitness_list)
+        # print("best_fitness_std:", best_fitness_std)
+        time_mean_list.append(time_mean)
+        time_std_list.append(time_std)
+        best_fitness_mean_list.append(best_fitness_mean)
+        best_fitness_std_list.append(best_fitness_std)
+        alter_list.append(i)
+    # print("best_fitness_std_list:", best_fitness_std_list)
+    writer = open('data_adv/{}_{}.txt'.format(prob_name, algo_name), 'w')
+
+    writer.write('sample size')
+    writer.write(str(alter_list))
+    writer.write("\n\n")
+
+    writer.write('clock time')
+    writer.write(str(time_mean_list))
+    writer.write("\n\n")
+
+    writer.write('clock time std')
+    writer.write(str(time_std_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score')
+    writer.write(str(best_fitness_mean_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score std')
+    writer.write(str(best_fitness_std_list))
+    writer.write("\n\n")
+
+    # return np.array([[alter_list, time_mean_list, "sample size", "clock time"],
+    #                  [alter_list, time_std_list, "sample size", "clock time std"],
+    #                  [alter_list, best_fitness_mean_list, "sample_size", "best_fitness"],
+    #                  [alter_list, best_fitness_std_list, "sample_size", "best_fitness_std"]])
+    # return "sample_size", np.array([alter_list]), \
+    #        "clock time", np.array([time_mean_list]),\
+    #        "clock time std", np.array([time_std_list]), \
+    #        "best fitness", np.array([best_fitness_mean_list]), \
+    #        "best fitness std", np.array([best_fitness_std_list])
+def size_test_Cpeaks_SA(prob_name, algo_name):
+    time_mean_list = []
+    time_std_list = []
+    best_fitness_mean_list = []
+    best_fitness_std_list = []
+    alter_list = []
+    for i in range(1, 100, 10):
+        print(prob_name, algo_name, i)
+        problem_list = generate_prob_Cpeaks(random_seed=0, length = i, sample_size=5)
+        time_list = []
+        best_fitness_list = []
+
+        # print(problem_list)
+        for problem in problem_list:
+            start_time = time.time()
+            best_state, best_fitness = mlrose.simulated_annealing(problem,
+                                                                  schedule=mlrose.ExpDecay(),
+                                                                  max_attempts=10,
+                                                                  max_iters=20,
+                                                                  )
+            time_diff = time.time() - start_time
+
+            time_list.append(time_diff)
+            best_fitness_list.append(best_fitness)
+
+        time_mean = np.mean(time_list)
+        time_std = np.std(time_list)
+        # print("best_fitness_list:", best_fitness_list)
+        best_fitness_mean = np.mean(best_fitness_list)
+        best_fitness_std = np.std(best_fitness_list)
+        # print("best_fitness_std:", best_fitness_std)
+        time_mean_list.append(time_mean)
+        time_std_list.append(time_std)
+        best_fitness_mean_list.append(best_fitness_mean)
+        best_fitness_std_list.append(best_fitness_std)
+        alter_list.append(i)
+    # print("best_fitness_std_list:", best_fitness_std_list)
+    writer = open('data_adv/{}_{}.txt'.format(prob_name, algo_name), 'w')
+
+    writer.write('sample size')
+    writer.write(str(alter_list))
+    writer.write("\n\n")
+
+    writer.write('clock time')
+    writer.write(str(time_mean_list))
+    writer.write("\n\n")
+
+    writer.write('clock time std')
+    writer.write(str(time_std_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score')
+    writer.write(str(best_fitness_mean_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score std')
+    writer.write(str(best_fitness_std_list))
+    writer.write("\n\n")
+def size_test_Cpeaks_GA(prob_name, algo_name):
+    time_mean_list = []
+    time_std_list = []
+    best_fitness_mean_list = []
+    best_fitness_std_list = []
+    alter_list = []
+    for i in range(1, 100, 10):
+        print(prob_name, algo_name, i)
+        problem_list = generate_prob_Cpeaks(random_seed=0, length = i, sample_size=5)
+        time_list = []
+        best_fitness_list = []
+
+        # print(problem_list)
+        for problem in problem_list:
+            start_time = time.time()
+            best_state, best_fitness = mlrose.genetic_alg(problem,
+                                                          pop_size=100,
+                                                          mutation_prob=0.5,
+                                                          max_attempts=50,
+                                                          max_iters=50,
+                                                          curve=False,
+                                                          )
+            time_diff = time.time() - start_time
+
+            time_list.append(time_diff)
+            best_fitness_list.append(best_fitness)
+
+        time_mean = np.mean(time_list)
+        time_std = np.std(time_list)
+        # print("best_fitness_list:", best_fitness_list)
+        best_fitness_mean = np.mean(best_fitness_list)
+        best_fitness_std = np.std(best_fitness_list)
+        # print("best_fitness_std:", best_fitness_std)
+        time_mean_list.append(time_mean)
+        time_std_list.append(time_std)
+        best_fitness_mean_list.append(best_fitness_mean)
+        best_fitness_std_list.append(best_fitness_std)
+        alter_list.append(i)
+    # print("best_fitness_std_list:", best_fitness_std_list)
+    writer = open('data_adv/{}_{}.txt'.format(prob_name, algo_name), 'w')
+
+    writer.write('sample size')
+    writer.write(str(alter_list))
+    writer.write("\n\n")
+
+    writer.write('clock time')
+    writer.write(str(time_mean_list))
+    writer.write("\n\n")
+
+    writer.write('clock time std')
+    writer.write(str(time_std_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score')
+    writer.write(str(best_fitness_mean_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score std')
+    writer.write(str(best_fitness_std_list))
+    writer.write("\n\n")
+def size_test_Cpeaks_MI(prob_name, algo_name):
+    time_mean_list = []
+    time_std_list = []
+    best_fitness_mean_list = []
+    best_fitness_std_list = []
+    alter_list = []
+    for i in range(1, 100, 10):
+        print(prob_name, algo_name, i)
+        problem_list = generate_prob_Cpeaks(random_seed=0, length = i, sample_size=5)
+        time_list = []
+        best_fitness_list = []
+
+        # print(problem_list)
+        for problem in problem_list:
+            start_time = time.time()
+            best_state, best_fitness = mlrose.algorithms.mimic(problem,
+                                                               pop_size=50,
+                                                               keep_pct=0.1,
+                                                               max_attempts=10,
+                                                               max_iters=10,
+                                                               curve=False,
+                                                               )
+            time_diff = time.time() - start_time
+
+            time_list.append(time_diff)
+            best_fitness_list.append(best_fitness)
+
+        time_mean = np.mean(time_list)
+        time_std = np.std(time_list)
+        # print("best_fitness_list:", best_fitness_list)
+        best_fitness_mean = np.mean(best_fitness_list)
+        best_fitness_std = np.std(best_fitness_list)
+        # print("best_fitness_std:", best_fitness_std)
+        time_mean_list.append(time_mean)
+        time_std_list.append(time_std)
+        best_fitness_mean_list.append(best_fitness_mean)
+        best_fitness_std_list.append(best_fitness_std)
+        alter_list.append(i)
+    # print("best_fitness_std_list:", best_fitness_std_list)
+    writer = open('data_adv/{}_{}.txt'.format(prob_name, algo_name), 'w')
+
+    writer.write('sample size')
+    writer.write(str(alter_list))
+    writer.write("\n\n")
+
+    writer.write('clock time')
+    writer.write(str(time_mean_list))
+    writer.write("\n\n")
+
+    writer.write('clock time std')
+    writer.write(str(time_std_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score')
+    writer.write(str(best_fitness_mean_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score std')
+    writer.write(str(best_fitness_std_list))
+    writer.write("\n\n")
+
+def size_test_TSP_RHC(prob_name, algo_name):
+    time_mean_list = []
+    time_std_list = []
+    best_fitness_mean_list = []
+    best_fitness_std_list = []
+    alter_list = []
+    for i in range(2, 100, 5):
+        print(prob_name, algo_name, i)
+        problem_list = generate_prob_TSP(random_seed=0, citys = i, sample_size=5)
+        time_list = []
+        best_fitness_list = []
+
+        # print(problem_list)
+        for problem in problem_list:
+            start_time = time.time()
+            best_state, best_fitness = mlrose.random_hill_climb(problem,
+                                                                max_attempts=50,
+                                                                max_iters=50,
+                                                                restarts=0,
+                                                                init_state=None,
+                                                                curve=False,
+                                                                )
+            time_diff = time.time() - start_time
+
+            time_list.append(time_diff)
+            best_fitness_list.append(best_fitness)
+
+        time_mean = np.mean(time_list)
+        time_std = np.std(time_list)
+        # print("best_fitness_list:", best_fitness_list)
+        best_fitness_mean = np.mean(best_fitness_list)
+        best_fitness_std = np.std(best_fitness_list)
+        # print("best_fitness_std:", best_fitness_std)
+        time_mean_list.append(time_mean)
+        time_std_list.append(time_std)
+        best_fitness_mean_list.append(best_fitness_mean)
+        best_fitness_std_list.append(best_fitness_std)
+        alter_list.append(i)
+    # print("best_fitness_std_list:", best_fitness_std_list)
+    writer = open('data_adv/{}_{}.txt'.format(prob_name, algo_name), 'w')
+
+    writer.write('sample size')
+    writer.write(str(alter_list))
+    writer.write("\n\n")
+
+    writer.write('clock time')
+    writer.write(str(time_mean_list))
+    writer.write("\n\n")
+
+    writer.write('clock time std')
+    writer.write(str(time_std_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score')
+    writer.write(str(best_fitness_mean_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score std')
+    writer.write(str(best_fitness_std_list))
+    writer.write("\n\n")
+
+    # return np.array([[alter_list, time_mean_list, "sample size", "clock time"],
+    #                  [alter_list, time_std_list, "sample size", "clock time std"],
+    #                  [alter_list, best_fitness_mean_list, "sample_size", "best_fitness"],
+    #                  [alter_list, best_fitness_std_list, "sample_size", "best_fitness_std"]])
+    # return "sample_size", np.array([alter_list]), \
+    #        "clock time", np.array([time_mean_list]),\
+    #        "clock time std", np.array([time_std_list]), \
+    #        "best fitness", np.array([best_fitness_mean_list]), \
+    #        "best fitness std", np.array([best_fitness_std_list])
+def size_test_TSP_SA(prob_name, algo_name):
+    time_mean_list = []
+    time_std_list = []
+    best_fitness_mean_list = []
+    best_fitness_std_list = []
+    alter_list = []
+    for i in range(2, 100, 5):
+        print(prob_name, algo_name, i)
+        problem_list = generate_prob_TSP(random_seed=0, citys = i, sample_size=5)
+        time_list = []
+        best_fitness_list = []
+
+        # print(problem_list)
+        for problem in problem_list:
+            start_time = time.time()
+            best_state, best_fitness = mlrose.simulated_annealing(problem,
+                                                                  schedule=mlrose.ExpDecay(),
+                                                                  max_attempts=10,
+                                                                  max_iters=20,
+                                                                  )
+            time_diff = time.time() - start_time
+
+            time_list.append(time_diff)
+            best_fitness_list.append(best_fitness)
+
+        time_mean = np.mean(time_list)
+        time_std = np.std(time_list)
+        # print("best_fitness_list:", best_fitness_list)
+        best_fitness_mean = np.mean(best_fitness_list)
+        best_fitness_std = np.std(best_fitness_list)
+        # print("best_fitness_std:", best_fitness_std)
+        time_mean_list.append(time_mean)
+        time_std_list.append(time_std)
+        best_fitness_mean_list.append(best_fitness_mean)
+        best_fitness_std_list.append(best_fitness_std)
+        alter_list.append(i)
+    # print("best_fitness_std_list:", best_fitness_std_list)
+    writer = open('data_adv/{}_{}.txt'.format(prob_name, algo_name), 'w')
+
+    writer.write('sample size')
+    writer.write(str(alter_list))
+    writer.write("\n\n")
+
+    writer.write('clock time')
+    writer.write(str(time_mean_list))
+    writer.write("\n\n")
+
+    writer.write('clock time std')
+    writer.write(str(time_std_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score')
+    writer.write(str(best_fitness_mean_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score std')
+    writer.write(str(best_fitness_std_list))
+    writer.write("\n\n")
+def size_test_TSP_GA(prob_name, algo_name):
+    time_mean_list = []
+    time_std_list = []
+    best_fitness_mean_list = []
+    best_fitness_std_list = []
+    alter_list = []
+    for i in range(2, 100, 5):
+        print(prob_name, algo_name, i)
+        problem_list = generate_prob_TSP(random_seed=0, citys = i, sample_size=5)
+        time_list = []
+        best_fitness_list = []
+
+        # print(problem_list)
+        for problem in problem_list:
+            start_time = time.time()
+            best_state, best_fitness = mlrose.genetic_alg(problem,
+                                                          pop_size=100,
+                                                          mutation_prob=0.5,
+                                                          max_attempts=50,
+                                                          max_iters=50,
+                                                          curve=False,
+                                                          )
+            time_diff = time.time() - start_time
+
+            time_list.append(time_diff)
+            best_fitness_list.append(best_fitness)
+
+        time_mean = np.mean(time_list)
+        time_std = np.std(time_list)
+        # print("best_fitness_list:", best_fitness_list)
+        best_fitness_mean = np.mean(best_fitness_list)
+        best_fitness_std = np.std(best_fitness_list)
+        # print("best_fitness_std:", best_fitness_std)
+        time_mean_list.append(time_mean)
+        time_std_list.append(time_std)
+        best_fitness_mean_list.append(best_fitness_mean)
+        best_fitness_std_list.append(best_fitness_std)
+        alter_list.append(i)
+    # print("best_fitness_std_list:", best_fitness_std_list)
+    writer = open('data_adv/{}_{}.txt'.format(prob_name, algo_name), 'w')
+
+    writer.write('sample size')
+    writer.write(str(alter_list))
+    writer.write("\n\n")
+
+    writer.write('clock time')
+    writer.write(str(time_mean_list))
+    writer.write("\n\n")
+
+    writer.write('clock time std')
+    writer.write(str(time_std_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score')
+    writer.write(str(best_fitness_mean_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score std')
+    writer.write(str(best_fitness_std_list))
+    writer.write("\n\n")
+def size_test_TSP_MI(prob_name, algo_name):
+    time_mean_list = []
+    time_std_list = []
+    best_fitness_mean_list = []
+    best_fitness_std_list = []
+    alter_list = []
+    for i in range(2, 100, 5):
+        print(prob_name, algo_name, i)
+        problem_list = generate_prob_TSP(random_seed=0, citys = i, sample_size=5)
+        time_list = []
+        best_fitness_list = []
+
+        # print(problem_list)
+        for problem in problem_list:
+            start_time = time.time()
+            best_state, best_fitness = mlrose.algorithms.mimic(problem,
+                                                               pop_size=50,
+                                                               keep_pct=0.1,
+                                                               max_attempts=10,
+                                                               max_iters=10,
+                                                               curve=False,
+                                                               )
+            time_diff = time.time() - start_time
+
+            time_list.append(time_diff)
+            best_fitness_list.append(best_fitness)
+
+        time_mean = np.mean(time_list)
+        time_std = np.std(time_list)
+        # print("best_fitness_list:", best_fitness_list)
+        best_fitness_mean = np.mean(best_fitness_list)
+        best_fitness_std = np.std(best_fitness_list)
+        # print("best_fitness_std:", best_fitness_std)
+        time_mean_list.append(time_mean)
+        time_std_list.append(time_std)
+        best_fitness_mean_list.append(best_fitness_mean)
+        best_fitness_std_list.append(best_fitness_std)
+        alter_list.append(i)
+    # print("best_fitness_std_list:", best_fitness_std_list)
+    writer = open('data_adv/{}_{}.txt'.format(prob_name, algo_name), 'w')
+
+    writer.write('sample size')
+    writer.write(str(alter_list))
+    writer.write("\n\n")
+
+    writer.write('clock time')
+    writer.write(str(time_mean_list))
+    writer.write("\n\n")
+
+    writer.write('clock time std')
+    writer.write(str(time_std_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score')
+    writer.write(str(best_fitness_mean_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score std')
+    writer.write(str(best_fitness_std_list))
+    writer.write("\n\n")
+
+def size_test_MKC_RHC(prob_name, algo_name):
+    time_mean_list = []
+    time_std_list = []
+    best_fitness_mean_list = []
+    best_fitness_std_list = []
+    alter_list = []
+    for i in range(2, 100, 5):
+        print(prob_name, algo_name, i)
+        problem_list = generate_prob_MKC(random_seed=0, nodes = i, sample_size=5)
+        time_list = []
+        best_fitness_list = []
+
+        # print(problem_list)
+        for problem in problem_list:
+            start_time = time.time()
+            best_state, best_fitness = mlrose.random_hill_climb(problem,
+                                                                max_attempts=50,
+                                                                max_iters=50,
+                                                                restarts=0,
+                                                                init_state=None,
+                                                                curve=False,
+                                                                )
+            time_diff = time.time() - start_time
+
+            time_list.append(time_diff)
+            best_fitness_list.append(best_fitness)
+
+        time_mean = np.mean(time_list)
+        time_std = np.std(time_list)
+        # print("best_fitness_list:", best_fitness_list)
+        best_fitness_mean = np.mean(best_fitness_list)
+        best_fitness_std = np.std(best_fitness_list)
+        # print("best_fitness_std:", best_fitness_std)
+        time_mean_list.append(time_mean)
+        time_std_list.append(time_std)
+        best_fitness_mean_list.append(best_fitness_mean)
+        best_fitness_std_list.append(best_fitness_std)
+        alter_list.append(i)
+    # print("best_fitness_std_list:", best_fitness_std_list)
+    writer = open('data_adv/{}_{}.txt'.format(prob_name, algo_name), 'w')
+
+    writer.write('sample size')
+    writer.write(str(alter_list))
+    writer.write("\n\n")
+
+    writer.write('clock time')
+    writer.write(str(time_mean_list))
+    writer.write("\n\n")
+
+    writer.write('clock time std')
+    writer.write(str(time_std_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score')
+    writer.write(str(best_fitness_mean_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score std')
+    writer.write(str(best_fitness_std_list))
+    writer.write("\n\n")
+
+    # return np.array([[alter_list, time_mean_list, "sample size", "clock time"],
+    #                  [alter_list, time_std_list, "sample size", "clock time std"],
+    #                  [alter_list, best_fitness_mean_list, "sample_size", "best_fitness"],
+    #                  [alter_list, best_fitness_std_list, "sample_size", "best_fitness_std"]])
+    # return "sample_size", np.array([alter_list]), \
+    #        "clock time", np.array([time_mean_list]),\
+    #        "clock time std", np.array([time_std_list]), \
+    #        "best fitness", np.array([best_fitness_mean_list]), \
+    #        "best fitness std", np.array([best_fitness_std_list])
+def size_test_MKC_SA(prob_name, algo_name):
+    time_mean_list = []
+    time_std_list = []
+    best_fitness_mean_list = []
+    best_fitness_std_list = []
+    alter_list = []
+    for i in range(2, 100, 5):
+        print(prob_name, algo_name, i)
+        problem_list = generate_prob_MKC(random_seed=0, nodes = i, sample_size=5)
+        time_list = []
+        best_fitness_list = []
+
+        # print(problem_list)
+        for problem in problem_list:
+            start_time = time.time()
+            best_state, best_fitness = mlrose.simulated_annealing(problem,
+                                                                  schedule=mlrose.ExpDecay(),
+                                                                  max_attempts=10,
+                                                                  max_iters=20,
+                                                                  )
+            time_diff = time.time() - start_time
+
+            time_list.append(time_diff)
+            best_fitness_list.append(best_fitness)
+
+        time_mean = np.mean(time_list)
+        time_std = np.std(time_list)
+        # print("best_fitness_list:", best_fitness_list)
+        best_fitness_mean = np.mean(best_fitness_list)
+        best_fitness_std = np.std(best_fitness_list)
+        # print("best_fitness_std:", best_fitness_std)
+        time_mean_list.append(time_mean)
+        time_std_list.append(time_std)
+        best_fitness_mean_list.append(best_fitness_mean)
+        best_fitness_std_list.append(best_fitness_std)
+        alter_list.append(i)
+    # print("best_fitness_std_list:", best_fitness_std_list)
+    writer = open('data_adv/{}_{}.txt'.format(prob_name, algo_name), 'w')
+
+    writer.write('sample size')
+    writer.write(str(alter_list))
+    writer.write("\n\n")
+
+    writer.write('clock time')
+    writer.write(str(time_mean_list))
+    writer.write("\n\n")
+
+    writer.write('clock time std')
+    writer.write(str(time_std_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score')
+    writer.write(str(best_fitness_mean_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score std')
+    writer.write(str(best_fitness_std_list))
+    writer.write("\n\n")
+def size_test_MKC_GA(prob_name, algo_name):
+    time_mean_list = []
+    time_std_list = []
+    best_fitness_mean_list = []
+    best_fitness_std_list = []
+    alter_list = []
+    for i in range(2, 100, 5):
+        print(prob_name, algo_name, i)
+        problem_list = generate_prob_MKC(random_seed=0, nodes = i, sample_size=5)
+        time_list = []
+        best_fitness_list = []
+
+        # print(problem_list)
+        for problem in problem_list:
+            start_time = time.time()
+            best_state, best_fitness = mlrose.genetic_alg(problem,
+                                                          pop_size=100,
+                                                          mutation_prob=0.5,
+                                                          max_attempts=50,
+                                                          max_iters=50,
+                                                          curve=False,
+                                                          )
+            time_diff = time.time() - start_time
+
+            time_list.append(time_diff)
+            best_fitness_list.append(best_fitness)
+
+        time_mean = np.mean(time_list)
+        time_std = np.std(time_list)
+        # print("best_fitness_list:", best_fitness_list)
+        best_fitness_mean = np.mean(best_fitness_list)
+        best_fitness_std = np.std(best_fitness_list)
+        # print("best_fitness_std:", best_fitness_std)
+        time_mean_list.append(time_mean)
+        time_std_list.append(time_std)
+        best_fitness_mean_list.append(best_fitness_mean)
+        best_fitness_std_list.append(best_fitness_std)
+        alter_list.append(i)
+    # print("best_fitness_std_list:", best_fitness_std_list)
+    writer = open('data_adv/{}_{}.txt'.format(prob_name, algo_name), 'w')
+
+    writer.write('sample size')
+    writer.write(str(alter_list))
+    writer.write("\n\n")
+
+    writer.write('clock time')
+    writer.write(str(time_mean_list))
+    writer.write("\n\n")
+
+    writer.write('clock time std')
+    writer.write(str(time_std_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score')
+    writer.write(str(best_fitness_mean_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score std')
+    writer.write(str(best_fitness_std_list))
+    writer.write("\n\n")
+def size_test_MKC_MI(prob_name, algo_name):
+    time_mean_list = []
+    time_std_list = []
+    best_fitness_mean_list = []
+    best_fitness_std_list = []
+    alter_list = []
+    for i in range(2, 100, 5):
+        print(prob_name, algo_name, i)
+        problem_list = generate_prob_MKC(random_seed=0, nodes = i, sample_size=5)
+        time_list = []
+        best_fitness_list = []
+
+        # print(problem_list)
+        for problem in problem_list:
+            start_time = time.time()
+            best_state, best_fitness = mlrose.algorithms.mimic(problem,
+                                                               pop_size=50,
+                                                               keep_pct=0.1,
+                                                               max_attempts=10,
+                                                               max_iters=10,
+                                                               curve=False,
+                                                               )
+            time_diff = time.time() - start_time
+
+            time_list.append(time_diff)
+            best_fitness_list.append(best_fitness)
+
+        time_mean = np.mean(time_list)
+        time_std = np.std(time_list)
+        # print("best_fitness_list:", best_fitness_list)
+        best_fitness_mean = np.mean(best_fitness_list)
+        best_fitness_std = np.std(best_fitness_list)
+        # print("best_fitness_std:", best_fitness_std)
+        time_mean_list.append(time_mean)
+        time_std_list.append(time_std)
+        best_fitness_mean_list.append(best_fitness_mean)
+        best_fitness_std_list.append(best_fitness_std)
+        alter_list.append(i)
+    # print("best_fitness_std_list:", best_fitness_std_list)
+    writer = open('data_adv/{}_{}.txt'.format(prob_name, algo_name), 'w')
+
+    writer.write('sample size')
+    writer.write(str(alter_list))
+    writer.write("\n\n")
+
+    writer.write('clock time')
+    writer.write(str(time_mean_list))
+    writer.write("\n\n")
+
+    writer.write('clock time std')
+    writer.write(str(time_std_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score')
+    writer.write(str(best_fitness_mean_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score std')
+    writer.write(str(best_fitness_std_list))
+    writer.write("\n\n")
+
+def size_test_FlipFlop_RHC(prob_name, algo_name):
+    time_mean_list = []
+    time_std_list = []
+    best_fitness_mean_list = []
+    best_fitness_std_list = []
+    alter_list = []
+    for i in range(1, 300, 30):
+        print(prob_name, algo_name, i)
+        problem_list = generate_prob_FlipFlop(random_seed=0, length = i, sample_size=5)
+        time_list = []
+        best_fitness_list = []
+
+        # print(problem_list)
+        for problem in problem_list:
+            start_time = time.time()
+            best_state, best_fitness = mlrose.random_hill_climb(problem,
+                                                                max_attempts=50,
+                                                                max_iters=50,
+                                                                restarts=0,
+                                                                init_state=None,
+                                                                curve=False,
+                                                                )
+            time_diff = time.time() - start_time
+
+            time_list.append(time_diff)
+            best_fitness_list.append(best_fitness)
+
+        time_mean = np.mean(time_list)
+        time_std = np.std(time_list)
+        # print("best_fitness_list:", best_fitness_list)
+        best_fitness_mean = np.mean(best_fitness_list)
+        best_fitness_std = np.std(best_fitness_list)
+        # print("best_fitness_std:", best_fitness_std)
+        time_mean_list.append(time_mean)
+        time_std_list.append(time_std)
+        best_fitness_mean_list.append(best_fitness_mean)
+        best_fitness_std_list.append(best_fitness_std)
+        alter_list.append(i)
+    # print("best_fitness_std_list:", best_fitness_std_list)
+    writer = open('data_adv/{}_{}.txt'.format(prob_name, algo_name), 'w')
+
+    writer.write('sample size')
+    writer.write(str(alter_list))
+    writer.write("\n\n")
+
+    writer.write('clock time')
+    writer.write(str(time_mean_list))
+    writer.write("\n\n")
+
+    writer.write('clock time std')
+    writer.write(str(time_std_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score')
+    writer.write(str(best_fitness_mean_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score std')
+    writer.write(str(best_fitness_std_list))
+    writer.write("\n\n")
+
+    # return np.array([[alter_list, time_mean_list, "sample size", "clock time"],
+    #                  [alter_list, time_std_list, "sample size", "clock time std"],
+    #                  [alter_list, best_fitness_mean_list, "sample_size", "best_fitness"],
+    #                  [alter_list, best_fitness_std_list, "sample_size", "best_fitness_std"]])
+    # return "sample_size", np.array([alter_list]), \
+    #        "clock time", np.array([time_mean_list]),\
+    #        "clock time std", np.array([time_std_list]), \
+    #        "best fitness", np.array([best_fitness_mean_list]), \
+    #        "best fitness std", np.array([best_fitness_std_list])
+def size_test_FlipFlop_SA(prob_name, algo_name):
+    time_mean_list = []
+    time_std_list = []
+    best_fitness_mean_list = []
+    best_fitness_std_list = []
+    alter_list = []
+    for i in range(1, 300, 30):
+        print(prob_name, algo_name, i)
+        problem_list = generate_prob_FlipFlop(random_seed=0, length = i, sample_size=5)
+        time_list = []
+        best_fitness_list = []
+
+        # print(problem_list)
+        for problem in problem_list:
+            start_time = time.time()
+            best_state, best_fitness = mlrose.simulated_annealing(problem,
+                                                                  schedule=mlrose.ExpDecay(),
+                                                                  max_attempts=10,
+                                                                  max_iters=20,
+                                                                  )
+            time_diff = time.time() - start_time
+
+            time_list.append(time_diff)
+            best_fitness_list.append(best_fitness)
+
+        time_mean = np.mean(time_list)
+        time_std = np.std(time_list)
+        # print("best_fitness_list:", best_fitness_list)
+        best_fitness_mean = np.mean(best_fitness_list)
+        best_fitness_std = np.std(best_fitness_list)
+        # print("best_fitness_std:", best_fitness_std)
+        time_mean_list.append(time_mean)
+        time_std_list.append(time_std)
+        best_fitness_mean_list.append(best_fitness_mean)
+        best_fitness_std_list.append(best_fitness_std)
+        alter_list.append(i)
+    # print("best_fitness_std_list:", best_fitness_std_list)
+    writer = open('data_adv/{}_{}.txt'.format(prob_name, algo_name), 'w')
+
+    writer.write('sample size')
+    writer.write(str(alter_list))
+    writer.write("\n\n")
+
+    writer.write('clock time')
+    writer.write(str(time_mean_list))
+    writer.write("\n\n")
+
+    writer.write('clock time std')
+    writer.write(str(time_std_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score')
+    writer.write(str(best_fitness_mean_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score std')
+    writer.write(str(best_fitness_std_list))
+    writer.write("\n\n")
+def size_test_FlipFlop_GA(prob_name, algo_name):
+    time_mean_list = []
+    time_std_list = []
+    best_fitness_mean_list = []
+    best_fitness_std_list = []
+    alter_list = []
+    for i in range(1, 300, 30):
+        print(prob_name, algo_name, i)
+        problem_list = generate_prob_FlipFlop(random_seed=0, length = i, sample_size=5)
+        time_list = []
+        best_fitness_list = []
+
+        # print(problem_list)
+        for problem in problem_list:
+            start_time = time.time()
+            best_state, best_fitness = mlrose.genetic_alg(problem,
+                                                          pop_size=100,
+                                                          mutation_prob=0.5,
+                                                          max_attempts=50,
+                                                          max_iters=50,
+                                                          curve=False,
+                                                          )
+            time_diff = time.time() - start_time
+
+            time_list.append(time_diff)
+            best_fitness_list.append(best_fitness)
+
+        time_mean = np.mean(time_list)
+        time_std = np.std(time_list)
+        # print("best_fitness_list:", best_fitness_list)
+        best_fitness_mean = np.mean(best_fitness_list)
+        best_fitness_std = np.std(best_fitness_list)
+        # print("best_fitness_std:", best_fitness_std)
+        time_mean_list.append(time_mean)
+        time_std_list.append(time_std)
+        best_fitness_mean_list.append(best_fitness_mean)
+        best_fitness_std_list.append(best_fitness_std)
+        alter_list.append(i)
+    # print("best_fitness_std_list:", best_fitness_std_list)
+    writer = open('data_adv/{}_{}.txt'.format(prob_name, algo_name), 'w')
+
+    writer.write('sample size')
+    writer.write(str(alter_list))
+    writer.write("\n\n")
+
+    writer.write('clock time')
+    writer.write(str(time_mean_list))
+    writer.write("\n\n")
+
+    writer.write('clock time std')
+    writer.write(str(time_std_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score')
+    writer.write(str(best_fitness_mean_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score std')
+    writer.write(str(best_fitness_std_list))
+    writer.write("\n\n")
+def size_test_FlipFlop_MI(prob_name, algo_name):
+    time_mean_list = []
+    time_std_list = []
+    best_fitness_mean_list = []
+    best_fitness_std_list = []
+    alter_list = []
+    for i in range(1, 300, 30):
+        print(prob_name, algo_name, i)
+        problem_list = generate_prob_FlipFlop(random_seed=0, length = i, sample_size=5)
+        time_list = []
+        best_fitness_list = []
+
+        # print(problem_list)
+        for problem in problem_list:
+            start_time = time.time()
+            best_state, best_fitness = mlrose.algorithms.mimic(problem,
+                                                               pop_size=50,
+                                                               keep_pct=0.1,
+                                                               max_attempts=10,
+                                                               max_iters=10,
+                                                               curve=False,
+                                                               )
+            time_diff = time.time() - start_time
+
+            time_list.append(time_diff)
+            best_fitness_list.append(best_fitness)
+
+        time_mean = np.mean(time_list)
+        time_std = np.std(time_list)
+        # print("best_fitness_list:", best_fitness_list)
+        best_fitness_mean = np.mean(best_fitness_list)
+        best_fitness_std = np.std(best_fitness_list)
+        # print("best_fitness_std:", best_fitness_std)
+        time_mean_list.append(time_mean)
+        time_std_list.append(time_std)
+        best_fitness_mean_list.append(best_fitness_mean)
+        best_fitness_std_list.append(best_fitness_std)
+        alter_list.append(i)
+    # print("best_fitness_std_list:", best_fitness_std_list)
+    writer = open('data_adv/{}_{}.txt'.format(prob_name, algo_name), 'w')
+
+    writer.write('sample size')
+    writer.write(str(alter_list))
+    writer.write("\n\n")
+
+    writer.write('clock time')
+    writer.write(str(time_mean_list))
+    writer.write("\n\n")
+
+    writer.write('clock time std')
+    writer.write(str(time_std_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score')
+    writer.write(str(best_fitness_mean_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score std')
+    writer.write(str(best_fitness_std_list))
+    writer.write("\n\n")
+
+def size_test_KnapSack_RHC(prob_name, algo_name):
+    time_mean_list = []
+    time_std_list = []
+    best_fitness_mean_list = []
+    best_fitness_std_list = []
+    alter_list = []
+    for i in range(1, 300, 30):
+        print(prob_name, algo_name, i)
+        problem_list = generate_prob_KnapSack(random_seed=0, length = i, sample_size=5)
+        time_list = []
+        best_fitness_list = []
+
+        # print(problem_list)
+        for problem in problem_list:
+            start_time = time.time()
+            best_state, best_fitness = mlrose.random_hill_climb(problem,
+                                                                max_attempts=50,
+                                                                max_iters=50,
+                                                                restarts=0,
+                                                                init_state=None,
+                                                                curve=False,
+                                                                )
+            time_diff = time.time() - start_time
+
+            time_list.append(time_diff)
+            best_fitness_list.append(best_fitness)
+
+        time_mean = np.mean(time_list)
+        time_std = np.std(time_list)
+        # print("best_fitness_list:", best_fitness_list)
+        best_fitness_mean = np.mean(best_fitness_list)
+        best_fitness_std = np.std(best_fitness_list)
+        # print("best_fitness_std:", best_fitness_std)
+        time_mean_list.append(time_mean)
+        time_std_list.append(time_std)
+        best_fitness_mean_list.append(best_fitness_mean)
+        best_fitness_std_list.append(best_fitness_std)
+        alter_list.append(i)
+    # print("best_fitness_std_list:", best_fitness_std_list)
+    writer = open('data_adv/{}_{}.txt'.format(prob_name, algo_name), 'w')
+
+    writer.write('sample size')
+    writer.write(str(alter_list))
+    writer.write("\n\n")
+
+    writer.write('clock time')
+    writer.write(str(time_mean_list))
+    writer.write("\n\n")
+
+    writer.write('clock time std')
+    writer.write(str(time_std_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score')
+    writer.write(str(best_fitness_mean_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score std')
+    writer.write(str(best_fitness_std_list))
+    writer.write("\n\n")
+
+    # return np.array([[alter_list, time_mean_list, "sample size", "clock time"],
+    #                  [alter_list, time_std_list, "sample size", "clock time std"],
+    #                  [alter_list, best_fitness_mean_list, "sample_size", "best_fitness"],
+    #                  [alter_list, best_fitness_std_list, "sample_size", "best_fitness_std"]])
+    # return "sample_size", np.array([alter_list]), \
+    #        "clock time", np.array([time_mean_list]),\
+    #        "clock time std", np.array([time_std_list]), \
+    #        "best fitness", np.array([best_fitness_mean_list]), \
+    #        "best fitness std", np.array([best_fitness_std_list])
+def size_test_KnapSack_SA(prob_name, algo_name):
+    time_mean_list = []
+    time_std_list = []
+    best_fitness_mean_list = []
+    best_fitness_std_list = []
+    alter_list = []
+    for i in range(1, 300, 30):
+        print(prob_name, algo_name, i)
+        problem_list = generate_prob_KnapSack(random_seed=0, length = i, sample_size=5)
+        time_list = []
+        best_fitness_list = []
+
+        # print(problem_list)
+        for problem in problem_list:
+            start_time = time.time()
+            best_state, best_fitness = mlrose.simulated_annealing(problem,
+                                                                  schedule=mlrose.ExpDecay(),
+                                                                  max_attempts=10,
+                                                                  max_iters=20,
+                                                                  )
+            time_diff = time.time() - start_time
+
+            time_list.append(time_diff)
+            best_fitness_list.append(best_fitness)
+
+        time_mean = np.mean(time_list)
+        time_std = np.std(time_list)
+        # print("best_fitness_list:", best_fitness_list)
+        best_fitness_mean = np.mean(best_fitness_list)
+        best_fitness_std = np.std(best_fitness_list)
+        # print("best_fitness_std:", best_fitness_std)
+        time_mean_list.append(time_mean)
+        time_std_list.append(time_std)
+        best_fitness_mean_list.append(best_fitness_mean)
+        best_fitness_std_list.append(best_fitness_std)
+        alter_list.append(i)
+    # print("best_fitness_std_list:", best_fitness_std_list)
+    writer = open('data_adv/{}_{}.txt'.format(prob_name, algo_name), 'w')
+
+    writer.write('sample size')
+    writer.write(str(alter_list))
+    writer.write("\n\n")
+
+    writer.write('clock time')
+    writer.write(str(time_mean_list))
+    writer.write("\n\n")
+
+    writer.write('clock time std')
+    writer.write(str(time_std_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score')
+    writer.write(str(best_fitness_mean_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score std')
+    writer.write(str(best_fitness_std_list))
+    writer.write("\n\n")
+def size_test_KnapSack_GA(prob_name, algo_name):
+    time_mean_list = []
+    time_std_list = []
+    best_fitness_mean_list = []
+    best_fitness_std_list = []
+    alter_list = []
+    for i in range(1, 300, 30):
+        print(prob_name, algo_name, i)
+        problem_list = generate_prob_KnapSack(random_seed=0, length = i, sample_size=5)
+        time_list = []
+        best_fitness_list = []
+
+        # print(problem_list)
+        for problem in problem_list:
+            start_time = time.time()
+            best_state, best_fitness = mlrose.genetic_alg(problem,
+                                                          pop_size=100,
+                                                          mutation_prob=0.5,
+                                                          max_attempts=50,
+                                                          max_iters=50,
+                                                          curve=False,
+                                                          )
+            time_diff = time.time() - start_time
+
+            time_list.append(time_diff)
+            best_fitness_list.append(best_fitness)
+
+        time_mean = np.mean(time_list)
+        time_std = np.std(time_list)
+        # print("best_fitness_list:", best_fitness_list)
+        best_fitness_mean = np.mean(best_fitness_list)
+        best_fitness_std = np.std(best_fitness_list)
+        # print("best_fitness_std:", best_fitness_std)
+        time_mean_list.append(time_mean)
+        time_std_list.append(time_std)
+        best_fitness_mean_list.append(best_fitness_mean)
+        best_fitness_std_list.append(best_fitness_std)
+        alter_list.append(i)
+    # print("best_fitness_std_list:", best_fitness_std_list)
+    writer = open('data_adv/{}_{}.txt'.format(prob_name, algo_name), 'w')
+
+    writer.write('sample size')
+    writer.write(str(alter_list))
+    writer.write("\n\n")
+
+    writer.write('clock time')
+    writer.write(str(time_mean_list))
+    writer.write("\n\n")
+
+    writer.write('clock time std')
+    writer.write(str(time_std_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score')
+    writer.write(str(best_fitness_mean_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score std')
+    writer.write(str(best_fitness_std_list))
+    writer.write("\n\n")
+def size_test_KnapSack_MI(prob_name, algo_name):
+    time_mean_list = []
+    time_std_list = []
+    best_fitness_mean_list = []
+    best_fitness_std_list = []
+    alter_list = []
+    for i in range(1, 300, 30):
+        print(prob_name, algo_name, i)
+        problem_list = generate_prob_KnapSack(random_seed=0, length = i, sample_size=5)
+        time_list = []
+        best_fitness_list = []
+
+        # print(problem_list)
+        for problem in problem_list:
+            start_time = time.time()
+            best_state, best_fitness = mlrose.algorithms.mimic(problem,
+                                                               pop_size=50,
+                                                               keep_pct=0.1,
+                                                               max_attempts=10,
+                                                               max_iters=10,
+                                                               curve=False,
+                                                               )
+            time_diff = time.time() - start_time
+
+            time_list.append(time_diff)
+            best_fitness_list.append(best_fitness)
+
+        time_mean = np.mean(time_list)
+        time_std = np.std(time_list)
+        # print("best_fitness_list:", best_fitness_list)
+        best_fitness_mean = np.mean(best_fitness_list)
+        best_fitness_std = np.std(best_fitness_list)
+        # print("best_fitness_std:", best_fitness_std)
+        time_mean_list.append(time_mean)
+        time_std_list.append(time_std)
+        best_fitness_mean_list.append(best_fitness_mean)
+        best_fitness_std_list.append(best_fitness_std)
+        alter_list.append(i)
+    # print("best_fitness_std_list:", best_fitness_std_list)
+    writer = open('data_adv/{}_{}.txt'.format(prob_name, algo_name), 'w')
+
+    writer.write('sample size')
+    writer.write(str(alter_list))
+    writer.write("\n\n")
+
+    writer.write('clock time')
+    writer.write(str(time_mean_list))
+    writer.write("\n\n")
+
+    writer.write('clock time std')
+    writer.write(str(time_std_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score')
+    writer.write(str(best_fitness_mean_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score std')
+    writer.write(str(best_fitness_std_list))
+    writer.write("\n\n")
+
+def size_test_queens_RHC(prob_name, algo_name):
+    time_mean_list = []
+    time_std_list = []
+    best_fitness_mean_list = []
+    best_fitness_std_list = []
+    alter_list = []
+    for i in range(1, 100, 10):
+        print(prob_name, algo_name, i)
+        problem_list = generate_prob_queens(random_seed=0, length = i, sample_size=5)
+        time_list = []
+        best_fitness_list = []
+
+        # print(problem_list)
+        for problem in problem_list:
+            start_time = time.time()
+            best_state, best_fitness = mlrose.random_hill_climb(problem,
+                                                                max_attempts=50,
+                                                                max_iters=50,
+                                                                restarts=0,
+                                                                init_state=None,
+                                                                curve=False,
+                                                                )
+            time_diff = time.time() - start_time
+
+            time_list.append(time_diff)
+            best_fitness_list.append(best_fitness)
+
+        time_mean = np.mean(time_list)
+        time_std = np.std(time_list)
+        # print("best_fitness_list:", best_fitness_list)
+        best_fitness_mean = np.mean(best_fitness_list)
+        best_fitness_std = np.std(best_fitness_list)
+        # print("best_fitness_std:", best_fitness_std)
+        time_mean_list.append(time_mean)
+        time_std_list.append(time_std)
+        best_fitness_mean_list.append(best_fitness_mean)
+        best_fitness_std_list.append(best_fitness_std)
+        alter_list.append(i)
+    # print("best_fitness_std_list:", best_fitness_std_list)
+    writer = open('data_adv/{}_{}.txt'.format(prob_name, algo_name), 'w')
+
+    writer.write('sample size')
+    writer.write(str(alter_list))
+    writer.write("\n\n")
+
+    writer.write('clock time')
+    writer.write(str(time_mean_list))
+    writer.write("\n\n")
+
+    writer.write('clock time std')
+    writer.write(str(time_std_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score')
+    writer.write(str(best_fitness_mean_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score std')
+    writer.write(str(best_fitness_std_list))
+    writer.write("\n\n")
+
+    # return np.array([[alter_list, time_mean_list, "sample size", "clock time"],
+    #                  [alter_list, time_std_list, "sample size", "clock time std"],
+    #                  [alter_list, best_fitness_mean_list, "sample_size", "best_fitness"],
+    #                  [alter_list, best_fitness_std_list, "sample_size", "best_fitness_std"]])
+    # return "sample_size", np.array([alter_list]), \
+    #        "clock time", np.array([time_mean_list]),\
+    #        "clock time std", np.array([time_std_list]), \
+    #        "best fitness", np.array([best_fitness_mean_list]), \
+    #        "best fitness std", np.array([best_fitness_std_list])
+def size_test_queens_SA(prob_name, algo_name):
+    time_mean_list = []
+    time_std_list = []
+    best_fitness_mean_list = []
+    best_fitness_std_list = []
+    alter_list = []
+    for i in range(1, 100, 10):
+        print(prob_name, algo_name, i)
+        problem_list = generate_prob_queens(random_seed=0, length = i, sample_size=5)
+        time_list = []
+        best_fitness_list = []
+
+        # print(problem_list)
+        for problem in problem_list:
+            start_time = time.time()
+            best_state, best_fitness = mlrose.simulated_annealing(problem,
+                                                                  schedule=mlrose.ExpDecay(),
+                                                                  max_attempts=10,
+                                                                  max_iters=20,
+                                                                  )
+            time_diff = time.time() - start_time
+
+            time_list.append(time_diff)
+            best_fitness_list.append(best_fitness)
+
+        time_mean = np.mean(time_list)
+        time_std = np.std(time_list)
+        # print("best_fitness_list:", best_fitness_list)
+        best_fitness_mean = np.mean(best_fitness_list)
+        best_fitness_std = np.std(best_fitness_list)
+        # print("best_fitness_std:", best_fitness_std)
+        time_mean_list.append(time_mean)
+        time_std_list.append(time_std)
+        best_fitness_mean_list.append(best_fitness_mean)
+        best_fitness_std_list.append(best_fitness_std)
+        alter_list.append(i)
+    # print("best_fitness_std_list:", best_fitness_std_list)
+    writer = open('data_adv/{}_{}.txt'.format(prob_name, algo_name), 'w')
+
+    writer.write('sample size')
+    writer.write(str(alter_list))
+    writer.write("\n\n")
+
+    writer.write('clock time')
+    writer.write(str(time_mean_list))
+    writer.write("\n\n")
+
+    writer.write('clock time std')
+    writer.write(str(time_std_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score')
+    writer.write(str(best_fitness_mean_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score std')
+    writer.write(str(best_fitness_std_list))
+    writer.write("\n\n")
+def size_test_queens_GA(prob_name, algo_name):
+    time_mean_list = []
+    time_std_list = []
+    best_fitness_mean_list = []
+    best_fitness_std_list = []
+    alter_list = []
+    for i in range(1, 100, 10):
+        print(prob_name, algo_name, i)
+        problem_list = generate_prob_queens(random_seed=0, length = i, sample_size=5)
+        time_list = []
+        best_fitness_list = []
+
+        # print(problem_list)
+        for problem in problem_list:
+            start_time = time.time()
+            best_state, best_fitness = mlrose.genetic_alg(problem,
+                                                          pop_size=100,
+                                                          mutation_prob=0.5,
+                                                          max_attempts=50,
+                                                          max_iters=50,
+                                                          curve=False,
+                                                          )
+            time_diff = time.time() - start_time
+
+            time_list.append(time_diff)
+            best_fitness_list.append(best_fitness)
+
+        time_mean = np.mean(time_list)
+        time_std = np.std(time_list)
+        # print("best_fitness_list:", best_fitness_list)
+        best_fitness_mean = np.mean(best_fitness_list)
+        best_fitness_std = np.std(best_fitness_list)
+        # print("best_fitness_std:", best_fitness_std)
+        time_mean_list.append(time_mean)
+        time_std_list.append(time_std)
+        best_fitness_mean_list.append(best_fitness_mean)
+        best_fitness_std_list.append(best_fitness_std)
+        alter_list.append(i)
+    # print("best_fitness_std_list:", best_fitness_std_list)
+    writer = open('data_adv/{}_{}.txt'.format(prob_name, algo_name), 'w')
+
+    writer.write('sample size')
+    writer.write(str(alter_list))
+    writer.write("\n\n")
+
+    writer.write('clock time')
+    writer.write(str(time_mean_list))
+    writer.write("\n\n")
+
+    writer.write('clock time std')
+    writer.write(str(time_std_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score')
+    writer.write(str(best_fitness_mean_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score std')
+    writer.write(str(best_fitness_std_list))
+    writer.write("\n\n")
+def size_test_queens_MI(prob_name, algo_name):
+    time_mean_list = []
+    time_std_list = []
+    best_fitness_mean_list = []
+    best_fitness_std_list = []
+    alter_list = []
+    for i in range(1, 100, 10):
+        print(prob_name, algo_name, i)
+        problem_list = generate_prob_queens(random_seed=0, length = i, sample_size=5)
+        time_list = []
+        best_fitness_list = []
+
+        # print(problem_list)
+        for problem in problem_list:
+            start_time = time.time()
+            best_state, best_fitness = mlrose.algorithms.mimic(problem,
+                                                               pop_size=50,
+                                                               keep_pct=0.1,
+                                                               max_attempts=10,
+                                                               max_iters=10,
+                                                               curve=False,
+                                                               )
+            time_diff = time.time() - start_time
+
+            time_list.append(time_diff)
+            best_fitness_list.append(best_fitness)
+
+        time_mean = np.mean(time_list)
+        time_std = np.std(time_list)
+        # print("best_fitness_list:", best_fitness_list)
+        best_fitness_mean = np.mean(best_fitness_list)
+        best_fitness_std = np.std(best_fitness_list)
+        # print("best_fitness_std:", best_fitness_std)
+        time_mean_list.append(time_mean)
+        time_std_list.append(time_std)
+        best_fitness_mean_list.append(best_fitness_mean)
+        best_fitness_std_list.append(best_fitness_std)
+        alter_list.append(i)
+    # print("best_fitness_std_list:", best_fitness_std_list)
+    writer = open('data_adv/{}_{}.txt'.format(prob_name, algo_name), 'w')
+
+    writer.write('sample size')
+    writer.write(str(alter_list))
+    writer.write("\n\n")
+
+    writer.write('clock time')
+    writer.write(str(time_mean_list))
+    writer.write("\n\n")
+
+    writer.write('clock time std')
+    writer.write(str(time_std_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score')
+    writer.write(str(best_fitness_mean_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score std')
+    writer.write(str(best_fitness_std_list))
+    writer.write("\n\n")
 
 
 if __name__=="__main__":
+    # size_test_OneMax_RHC("OneMax", "RHC")
+    # size_test_OneMax_SA("OneMax", "SA")
+    # size_test_OneMax_GA("OneMax", "GA")
+    # size_test_OneMax_MI("OneMax", "MI")
 
-    plotting(prob_name="OneMax", algo_name="RHC", valuess=size_test_OneMax_RHC(), size_plot=True)
+    # size_test_4peaks_RHC("4peaks", "RHC")
+    # size_test_4peaks_SA("4peaks", "SA")
+    # size_test_4peaks_GA("4peaks", "GA")
+    # size_test_4peaks_MI("4peaks", "MI")
+    #
+    # size_test_Cpeaks_RHC("Cpeaks", "RHC")
+    # size_test_Cpeaks_SA("Cpeaks", "SA")
+    # size_test_Cpeaks_GA("Cpeaks", "GA")
+    # size_test_Cpeaks_MI("Cpeaks", "MI")
+
+    # size_test_MKC_RHC("MKC", "RHC")
+    # size_test_MKC_SA("MKC", "SA")
+    # size_test_MKC_GA("MKC", "GA")
+    # size_test_MKC_MI("MKC", "MI")
+
+    # size_test_TSP_RHC("TSP", "RHC")
+    # size_test_TSP_SA("TSP", "SA")
+    # size_test_TSP_GA("TSP", "GA")
+    # size_test_TSP_MI("TSP", "MI")
+
+    size_test_KnapSack_RHC("KnapSack", "RHC")
+    size_test_KnapSack_SA("KnapSack", "SA")
+    size_test_KnapSack_GA("KnapSack", "GA")
+    size_test_KnapSack_MI("KnapSack", "MI")
+
+    size_test_FlipFlop_RHC("FlipFlop", "RHC")
+    size_test_FlipFlop_SA("FlipFlop", "SA")
+    size_test_FlipFlop_GA("FlipFlop", "GA")
+    size_test_FlipFlop_MI("FlipFlop", "MI")
+
+
+    # plotting(prob_name="OneMax", algo_name="RHC", valuess=size_test_OneMax_RHC(), size_plot=True)
     # plotting(prob_name="OneMax", algo_name="SA", valuess=size_test_OneMax_SA(), size_plot=True)
     # plotting(prob_name="OneMax", algo_name="GA", valuess=size_test_OneMax_GA(), size_plot=True)
     # plotting(prob_name="OneMax", algo_name="MI", valuess=size_test_OneMax_MI(), size_plot=True)  # neet to rerun this

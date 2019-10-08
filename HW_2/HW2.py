@@ -846,7 +846,7 @@ def size_test_Cpeaks_GA():
                                                           pop_size=100,
                                                           mutation_prob=0.1,
                                                           max_attempts=10,
-                                                          max_iters=50,
+                                                          max_iters=10,
                                                           curve=False,
                                                           random_state=0)
 
@@ -1574,10 +1574,10 @@ if __name__=="__main__":
     # plotting(prob_name="OneMax", algo_name="GA", valuess=size_test_OneMax_GA(), size_plot=True)
     # plotting(prob_name="OneMax", algo_name="MI", valuess=size_test_OneMax_MI(), size_plot=True)  # neet to rerun this
     #
-    # plotting(prob_name="Cpeaks", algo_name="RHC", valuess=size_test_Cpeaks_RHC(), size_plot=True)
-    # plotting(prob_name="Cpeaks", algo_name="SA", valuess=size_test_Cpeaks_SA(), size_plot=True)
-    # plotting(prob_name="Cpeaks", algo_name="GA", valuess=size_test_Cpeaks_GA(), size_plot=True)
-    # plotting(prob_name="Cpeaks", algo_name="MI", valuess=size_test_Cpeaks_MI(), size_plot=True)
+    plotting(prob_name="Cpeaks", algo_name="RHC", valuess=size_test_Cpeaks_RHC(), size_plot=True)
+    plotting(prob_name="Cpeaks", algo_name="SA", valuess=size_test_Cpeaks_SA(), size_plot=True)
+    plotting(prob_name="Cpeaks", algo_name="GA", valuess=size_test_Cpeaks_GA(), size_plot=True)
+    plotting(prob_name="Cpeaks", algo_name="MI", valuess=size_test_Cpeaks_MI(), size_plot=True)
     # # #
     # plotting(prob_name="4peaks", algo_name="RHC", valuess=size_test_4peaks_RHC(), size_plot=True)
     # plotting(prob_name="4peaks", algo_name="SA", valuess=size_test_4peaks_SA(), size_plot=True)
@@ -1609,46 +1609,46 @@ if __name__=="__main__":
     # plotting(prob_name="queens", algo_name="GA", valuess=size_test_queens_GA(), size_plot=True)
     # plotting(prob_name="queens", algo_name="MI", valuess=size_test_queens_MI(), size_plot=True)
 
-    '''Problem 1: n-city TSP: over a map of given size,
-    generate N cities for a salesman to travel through each city and find the shortest route'''
-    problem_list_TSP = generate_prob_TSP(random_seed=0, citys=6, sample_size=5)
-    prob_to_curves("nCityTSP", problem_list_TSP)
-
-    '''Problem 2: Max-k color optimization problem. Evaluates the fitness of an n-dimensional state vector
-    𝑥 = [𝑥0, 𝑥1, . . . , 𝑥𝑛−1], where 𝑥𝑖 represents the color of node i, as the number of pairs of adjacent nodes of the
-    same color.'''
-    problem_list_MKC = generate_prob_MKC(random_seed=0, nodes=8, sample_size=5)
-    prob_to_curves("MaxKColor", problem_list_MKC)
-
-    '''Problem 3: 4 peaks
-    # Create list of states with random t_pct'''
-    problem_list_4peaks = generate_prob_4peaks(random_seed=0, length=10, sample_size=5)
-    prob_to_curves("4peaks", problem_list_4peaks)
-
-    '''Problem 4: continous peaks
-    # Create list of states with random t_pct'''
-    problem_list_Cpeaks = generate_prob_Cpeaks(random_seed=0, length=10, sample_size=5)
-    prob_to_curves("Cpeaks", problem_list_Cpeaks)
-
-    '''Problem 5: OneMax
-    # Create an array made by 0 and 1, with a length between 10 and 50'''
-    problem_list_OneMax = generate_prob_OneMax(random_seed=0, length=10, sample_size= 5)
-    prob_to_curves("OneMax", problem_list_OneMax)
-
-    '''Problem 6: Flip-Flop
-    # Create list of states '''
-    problem_list_FlipFlop = generate_prob_FlipFlop(random_seed=0, length=10, sample_size=5)
-    prob_to_curves("FlipFlop", problem_list_FlipFlop)
-
-    '''Problem 7: Knap-sack
-    # Create list of states '''
-    problem_list_Knapsack = generate_prob_KnapSack(random_seed=0, length=10, sample_size=5)
-    prob_to_curves("Knapsack", problem_list_Knapsack)
-
-    '''Problem 8: Queens
-    # Create list of states '''
-    problem_list_queens = generate_prob_queens(random_seed=0, length=10, sample_size=5)
-    prob_to_curves("Kqueens", problem_list_queens)
+    # '''Problem 1: n-city TSP: over a map of given size,
+    # generate N cities for a salesman to travel through each city and find the shortest route'''
+    # problem_list_TSP = generate_prob_TSP(random_seed=0, citys=6, sample_size=5)
+    # prob_to_curves("nCityTSP", problem_list_TSP)
+    #
+    # '''Problem 2: Max-k color optimization problem. Evaluates the fitness of an n-dimensional state vector
+    # 𝑥 = [𝑥0, 𝑥1, . . . , 𝑥𝑛−1], where 𝑥𝑖 represents the color of node i, as the number of pairs of adjacent nodes of the
+    # same color.'''
+    # problem_list_MKC = generate_prob_MKC(random_seed=0, nodes=8, sample_size=5)
+    # prob_to_curves("MaxKColor", problem_list_MKC)
+    #
+    # '''Problem 3: 4 peaks
+    # # Create list of states with random t_pct'''
+    # problem_list_4peaks = generate_prob_4peaks(random_seed=0, length=10, sample_size=5)
+    # prob_to_curves("4peaks", problem_list_4peaks)
+    #
+    # '''Problem 4: continous peaks
+    # # Create list of states with random t_pct'''
+    # problem_list_Cpeaks = generate_prob_Cpeaks(random_seed=0, length=10, sample_size=5)
+    # prob_to_curves("Cpeaks", problem_list_Cpeaks)
+    #
+    # '''Problem 5: OneMax
+    # # Create an array made by 0 and 1, with a length between 10 and 50'''
+    # problem_list_OneMax = generate_prob_OneMax(random_seed=0, length=10, sample_size= 5)
+    # prob_to_curves("OneMax", problem_list_OneMax)
+    #
+    # '''Problem 6: Flip-Flop
+    # # Create list of states '''
+    # problem_list_FlipFlop = generate_prob_FlipFlop(random_seed=0, length=10, sample_size=5)
+    # prob_to_curves("FlipFlop", problem_list_FlipFlop)
+    #
+    # '''Problem 7: Knap-sack
+    # # Create list of states '''
+    # problem_list_Knapsack = generate_prob_KnapSack(random_seed=0, length=10, sample_size=5)
+    # prob_to_curves("Knapsack", problem_list_Knapsack)
+    #
+    # '''Problem 8: Queens
+    # # Create list of states '''
+    # problem_list_queens = generate_prob_queens(random_seed=0, length=10, sample_size=5)
+    # prob_to_curves("Kqueens", problem_list_queens)
 
 
 
