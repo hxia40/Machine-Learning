@@ -1018,8 +1018,8 @@ def size_test_Cpeaks_RHC(prob_name, algo_name):
         for problem in problem_list:
             start_time = time.time()
             best_state, best_fitness = mlrose.random_hill_climb(problem,
-                                                                max_attempts=50,
-                                                                max_iters=50,
+                                                                max_attempts=10,
+                                                                max_iters=10,
                                                                 restarts=0,
                                                                 init_state=None,
                                                                 curve=False,
@@ -1090,7 +1090,7 @@ def size_test_Cpeaks_SA(prob_name, algo_name):
             best_state, best_fitness = mlrose.simulated_annealing(problem,
                                                                   schedule=mlrose.ExpDecay(),
                                                                   max_attempts=10,
-                                                                  max_iters=20,
+                                                                  max_iters=10,
                                                                   )
             time_diff = time.time() - start_time
 
@@ -1146,10 +1146,10 @@ def size_test_Cpeaks_GA(prob_name, algo_name):
         for problem in problem_list:
             start_time = time.time()
             best_state, best_fitness = mlrose.genetic_alg(problem,
-                                                          pop_size=100,
-                                                          mutation_prob=0.5,
-                                                          max_attempts=50,
-                                                          max_iters=50,
+                                                          pop_size=150,
+                                                          mutation_prob=0.1,
+                                                          max_attempts=10,
+                                                          max_iters=10,
                                                           curve=False,
                                                           )
             time_diff = time.time() - start_time
@@ -1206,7 +1206,7 @@ def size_test_Cpeaks_MI(prob_name, algo_name):
         for problem in problem_list:
             start_time = time.time()
             best_state, best_fitness = mlrose.algorithms.mimic(problem,
-                                                               pop_size=50,
+                                                               pop_size=150,
                                                                keep_pct=0.1,
                                                                max_attempts=10,
                                                                max_iters=10,
@@ -1266,14 +1266,18 @@ def size_test_TSP_RHC(prob_name, algo_name):
         # print(problem_list)
         for problem in problem_list:
             start_time = time.time()
-            best_state, best_fitness = mlrose.random_hill_climb(problem,
-                                                                max_attempts=50,
+            try:
+                best_state, best_fitness = mlrose.random_hill_climb(problem,
+                                                                max_attempts=20,
                                                                 max_iters=50,
                                                                 restarts=0,
                                                                 init_state=None,
                                                                 curve=False,
                                                                 )
-            time_diff = time.time() - start_time
+                time_diff = time.time() - start_time
+            except:
+                best_state, best_fitness = np.nan, np.nan
+                time_diff = np.nan
 
             time_list.append(time_diff)
             best_fitness_list.append(best_fitness)
@@ -1336,12 +1340,16 @@ def size_test_TSP_SA(prob_name, algo_name):
         # print(problem_list)
         for problem in problem_list:
             start_time = time.time()
-            best_state, best_fitness = mlrose.simulated_annealing(problem,
-                                                                  schedule=mlrose.ExpDecay(),
-                                                                  max_attempts=10,
-                                                                  max_iters=20,
-                                                                  )
-            time_diff = time.time() - start_time
+            try:
+                best_state, best_fitness = mlrose.simulated_annealing(problem,
+                                                                      schedule=mlrose.ExpDecay(),
+                                                                      max_attempts=1,
+                                                                      max_iters=600,
+                                                                      )
+                time_diff = time.time() - start_time
+            except:
+                best_state, best_fitness = np.nan, np.nan
+                time_diff = np.nan
 
             time_list.append(time_diff)
             best_fitness_list.append(best_fitness)
@@ -1394,15 +1402,18 @@ def size_test_TSP_GA(prob_name, algo_name):
         # print(problem_list)
         for problem in problem_list:
             start_time = time.time()
-            best_state, best_fitness = mlrose.genetic_alg(problem,
-                                                          pop_size=100,
-                                                          mutation_prob=0.5,
-                                                          max_attempts=50,
-                                                          max_iters=50,
-                                                          curve=False,
-                                                          )
-            time_diff = time.time() - start_time
-
+            try:
+                best_state, best_fitness = mlrose.genetic_alg(problem,
+                                                              pop_size=100,
+                                                              mutation_prob=0.1,
+                                                              max_attempts=10,
+                                                              max_iters=10,
+                                                              curve=False,
+                                                              )
+                time_diff = time.time() - start_time
+            except:
+                best_state, best_fitness = np.nan, np.nan
+                time_diff = np.nan
             time_list.append(time_diff)
             best_fitness_list.append(best_fitness)
 
@@ -1454,14 +1465,18 @@ def size_test_TSP_MI(prob_name, algo_name):
         # print(problem_list)
         for problem in problem_list:
             start_time = time.time()
-            best_state, best_fitness = mlrose.algorithms.mimic(problem,
-                                                               pop_size=50,
+            try:
+                best_state, best_fitness = mlrose.algorithms.mimic(problem,
+                                                               pop_size=100,
                                                                keep_pct=0.1,
                                                                max_attempts=10,
                                                                max_iters=10,
                                                                curve=False,
                                                                )
-            time_diff = time.time() - start_time
+                time_diff = time.time() - start_time
+            except:
+                best_state, best_fitness = np.nan, np.nan
+                time_diff = np.nan
 
             time_list.append(time_diff)
             best_fitness_list.append(best_fitness)
@@ -1516,8 +1531,8 @@ def size_test_MKC_RHC(prob_name, algo_name):
         for problem in problem_list:
             start_time = time.time()
             best_state, best_fitness = mlrose.random_hill_climb(problem,
-                                                                max_attempts=50,
-                                                                max_iters=50,
+                                                                max_attempts=20,
+                                                                max_iters=20,
                                                                 restarts=0,
                                                                 init_state=None,
                                                                 curve=False,
@@ -1587,8 +1602,8 @@ def size_test_MKC_SA(prob_name, algo_name):
             start_time = time.time()
             best_state, best_fitness = mlrose.simulated_annealing(problem,
                                                                   schedule=mlrose.ExpDecay(),
-                                                                  max_attempts=10,
-                                                                  max_iters=20,
+                                                                  max_attempts=20,
+                                                                  max_iters=250,
                                                                   )
             time_diff = time.time() - start_time
 
@@ -1644,10 +1659,10 @@ def size_test_MKC_GA(prob_name, algo_name):
         for problem in problem_list:
             start_time = time.time()
             best_state, best_fitness = mlrose.genetic_alg(problem,
-                                                          pop_size=100,
-                                                          mutation_prob=0.5,
-                                                          max_attempts=50,
-                                                          max_iters=50,
+                                                          pop_size=50,
+                                                          mutation_prob=0.1,
+                                                          max_attempts=20,
+                                                          max_iters=20,
                                                           curve=False,
                                                           )
             time_diff = time.time() - start_time
@@ -1706,8 +1721,8 @@ def size_test_MKC_MI(prob_name, algo_name):
             best_state, best_fitness = mlrose.algorithms.mimic(problem,
                                                                pop_size=50,
                                                                keep_pct=0.1,
-                                                               max_attempts=10,
-                                                               max_iters=10,
+                                                               max_attempts=20,
+                                                               max_iters=20,
                                                                curve=False,
                                                                )
             time_diff = time.time() - start_time
@@ -1755,7 +1770,7 @@ def size_test_FlipFlop_RHC(prob_name, algo_name):
     best_fitness_mean_list = []
     best_fitness_std_list = []
     alter_list = []
-    for i in range(1, 300, 30):
+    for i in range(1, 100, 10):
         print(prob_name, algo_name, i)
         problem_list = generate_prob_FlipFlop(random_seed=0, length = i, sample_size=5)
         time_list = []
@@ -1765,8 +1780,8 @@ def size_test_FlipFlop_RHC(prob_name, algo_name):
         for problem in problem_list:
             start_time = time.time()
             best_state, best_fitness = mlrose.random_hill_climb(problem,
-                                                                max_attempts=50,
-                                                                max_iters=50,
+                                                                max_attempts=10,
+                                                                max_iters=100,
                                                                 restarts=0,
                                                                 init_state=None,
                                                                 curve=False,
@@ -1825,7 +1840,7 @@ def size_test_FlipFlop_SA(prob_name, algo_name):
     best_fitness_mean_list = []
     best_fitness_std_list = []
     alter_list = []
-    for i in range(1, 300, 30):
+    for i in range(1, 100, 10):
         print(prob_name, algo_name, i)
         problem_list = generate_prob_FlipFlop(random_seed=0, length = i, sample_size=5)
         time_list = []
@@ -1837,7 +1852,7 @@ def size_test_FlipFlop_SA(prob_name, algo_name):
             best_state, best_fitness = mlrose.simulated_annealing(problem,
                                                                   schedule=mlrose.ExpDecay(),
                                                                   max_attempts=10,
-                                                                  max_iters=20,
+                                                                  max_iters=100,
                                                                   )
             time_diff = time.time() - start_time
 
@@ -1883,7 +1898,7 @@ def size_test_FlipFlop_GA(prob_name, algo_name):
     best_fitness_mean_list = []
     best_fitness_std_list = []
     alter_list = []
-    for i in range(1, 300, 30):
+    for i in range(1, 100, 10):
         print(prob_name, algo_name, i)
         problem_list = generate_prob_FlipFlop(random_seed=0, length = i, sample_size=5)
         time_list = []
@@ -1893,10 +1908,10 @@ def size_test_FlipFlop_GA(prob_name, algo_name):
         for problem in problem_list:
             start_time = time.time()
             best_state, best_fitness = mlrose.genetic_alg(problem,
-                                                          pop_size=100,
-                                                          mutation_prob=0.5,
-                                                          max_attempts=50,
-                                                          max_iters=50,
+                                                          pop_size=200,
+                                                          mutation_prob=0.1,
+                                                          max_attempts=10,
+                                                          max_iters=100,
                                                           curve=False,
                                                           )
             time_diff = time.time() - start_time
@@ -1943,7 +1958,7 @@ def size_test_FlipFlop_MI(prob_name, algo_name):
     best_fitness_mean_list = []
     best_fitness_std_list = []
     alter_list = []
-    for i in range(1, 300, 30):
+    for i in range(1, 100, 10):
         print(prob_name, algo_name, i)
         problem_list = generate_prob_FlipFlop(random_seed=0, length = i, sample_size=5)
         time_list = []
@@ -1953,10 +1968,10 @@ def size_test_FlipFlop_MI(prob_name, algo_name):
         for problem in problem_list:
             start_time = time.time()
             best_state, best_fitness = mlrose.algorithms.mimic(problem,
-                                                               pop_size=50,
+                                                               pop_size=200,
                                                                keep_pct=0.1,
                                                                max_attempts=10,
-                                                               max_iters=10,
+                                                               max_iters=100,
                                                                curve=False,
                                                                )
             time_diff = time.time() - start_time
@@ -2004,7 +2019,7 @@ def size_test_KnapSack_RHC(prob_name, algo_name):
     best_fitness_mean_list = []
     best_fitness_std_list = []
     alter_list = []
-    for i in range(1, 300, 30):
+    for i in range(1, 100, 10):
         print(prob_name, algo_name, i)
         problem_list = generate_prob_KnapSack(random_seed=0, length = i, sample_size=5)
         time_list = []
@@ -2014,8 +2029,8 @@ def size_test_KnapSack_RHC(prob_name, algo_name):
         for problem in problem_list:
             start_time = time.time()
             best_state, best_fitness = mlrose.random_hill_climb(problem,
-                                                                max_attempts=50,
-                                                                max_iters=50,
+                                                                max_attempts=10,
+                                                                max_iters=10,
                                                                 restarts=0,
                                                                 init_state=None,
                                                                 curve=False,
@@ -2074,7 +2089,7 @@ def size_test_KnapSack_SA(prob_name, algo_name):
     best_fitness_mean_list = []
     best_fitness_std_list = []
     alter_list = []
-    for i in range(1, 300, 30):
+    for i in range(1, 100, 10):
         print(prob_name, algo_name, i)
         problem_list = generate_prob_KnapSack(random_seed=0, length = i, sample_size=5)
         time_list = []
@@ -2086,7 +2101,7 @@ def size_test_KnapSack_SA(prob_name, algo_name):
             best_state, best_fitness = mlrose.simulated_annealing(problem,
                                                                   schedule=mlrose.ExpDecay(),
                                                                   max_attempts=10,
-                                                                  max_iters=20,
+                                                                  max_iters=10,
                                                                   )
             time_diff = time.time() - start_time
 
@@ -2132,7 +2147,7 @@ def size_test_KnapSack_GA(prob_name, algo_name):
     best_fitness_mean_list = []
     best_fitness_std_list = []
     alter_list = []
-    for i in range(1, 300, 30):
+    for i in range(1, 100, 10):
         print(prob_name, algo_name, i)
         problem_list = generate_prob_KnapSack(random_seed=0, length = i, sample_size=5)
         time_list = []
@@ -2142,10 +2157,10 @@ def size_test_KnapSack_GA(prob_name, algo_name):
         for problem in problem_list:
             start_time = time.time()
             best_state, best_fitness = mlrose.genetic_alg(problem,
-                                                          pop_size=100,
-                                                          mutation_prob=0.5,
-                                                          max_attempts=50,
-                                                          max_iters=50,
+                                                          pop_size=150,
+                                                          mutation_prob=0.1,
+                                                          max_attempts=10,
+                                                          max_iters=10,
                                                           curve=False,
                                                           )
             time_diff = time.time() - start_time
@@ -2192,7 +2207,7 @@ def size_test_KnapSack_MI(prob_name, algo_name):
     best_fitness_mean_list = []
     best_fitness_std_list = []
     alter_list = []
-    for i in range(1, 300, 30):
+    for i in range(1, 100, 10):
         print(prob_name, algo_name, i)
         problem_list = generate_prob_KnapSack(random_seed=0, length = i, sample_size=5)
         time_list = []
@@ -2202,7 +2217,7 @@ def size_test_KnapSack_MI(prob_name, algo_name):
         for problem in problem_list:
             start_time = time.time()
             best_state, best_fitness = mlrose.algorithms.mimic(problem,
-                                                               pop_size=50,
+                                                               pop_size=150,
                                                                keep_pct=0.1,
                                                                max_attempts=10,
                                                                max_iters=10,
@@ -2263,8 +2278,8 @@ def size_test_queens_RHC(prob_name, algo_name):
         for problem in problem_list:
             start_time = time.time()
             best_state, best_fitness = mlrose.random_hill_climb(problem,
-                                                                max_attempts=50,
-                                                                max_iters=50,
+                                                                max_attempts=10,
+                                                                max_iters=100,
                                                                 restarts=0,
                                                                 init_state=None,
                                                                 curve=False,
@@ -2335,7 +2350,7 @@ def size_test_queens_SA(prob_name, algo_name):
             best_state, best_fitness = mlrose.simulated_annealing(problem,
                                                                   schedule=mlrose.ExpDecay(),
                                                                   max_attempts=10,
-                                                                  max_iters=20,
+                                                                  max_iters=100,
                                                                   )
             time_diff = time.time() - start_time
 
@@ -2392,9 +2407,9 @@ def size_test_queens_GA(prob_name, algo_name):
             start_time = time.time()
             best_state, best_fitness = mlrose.genetic_alg(problem,
                                                           pop_size=100,
-                                                          mutation_prob=0.5,
-                                                          max_attempts=50,
-                                                          max_iters=50,
+                                                          mutation_prob=0.1,
+                                                          max_attempts=10,
+                                                          max_iters=100,
                                                           curve=False,
                                                           )
             time_diff = time.time() - start_time
@@ -2451,10 +2466,10 @@ def size_test_queens_MI(prob_name, algo_name):
         for problem in problem_list:
             start_time = time.time()
             best_state, best_fitness = mlrose.algorithms.mimic(problem,
-                                                               pop_size=50,
+                                                               pop_size=100,
                                                                keep_pct=0.1,
                                                                max_attempts=10,
-                                                               max_iters=10,
+                                                               max_iters=100,
                                                                curve=False,
                                                                )
             time_diff = time.time() - start_time
@@ -2507,7 +2522,12 @@ if __name__=="__main__":
     # size_test_4peaks_SA("4peaks", "SA")
     # size_test_4peaks_GA("4peaks", "GA")
     # size_test_4peaks_MI("4peaks", "MI")
-    #
+
+    # size_test_queens_RHC("queens", "RHC")
+    # size_test_queens_SA("queens", "SA")
+    # size_test_queens_GA("queens", "GA")
+    # size_test_queens_MI("queens", "MI")
+
     # size_test_Cpeaks_RHC("Cpeaks", "RHC")
     # size_test_Cpeaks_SA("Cpeaks", "SA")
     # size_test_Cpeaks_GA("Cpeaks", "GA")
@@ -2527,58 +2547,19 @@ if __name__=="__main__":
     size_test_KnapSack_SA("KnapSack", "SA")
     size_test_KnapSack_GA("KnapSack", "GA")
     size_test_KnapSack_MI("KnapSack", "MI")
-
-    size_test_FlipFlop_RHC("FlipFlop", "RHC")
-    size_test_FlipFlop_SA("FlipFlop", "SA")
-    size_test_FlipFlop_GA("FlipFlop", "GA")
-    size_test_FlipFlop_MI("FlipFlop", "MI")
-
-
-    # plotting(prob_name="OneMax", algo_name="RHC", valuess=size_test_OneMax_RHC(), size_plot=True)
-    # plotting(prob_name="OneMax", algo_name="SA", valuess=size_test_OneMax_SA(), size_plot=True)
-    # plotting(prob_name="OneMax", algo_name="GA", valuess=size_test_OneMax_GA(), size_plot=True)
-    # plotting(prob_name="OneMax", algo_name="MI", valuess=size_test_OneMax_MI(), size_plot=True)  # neet to rerun this
     #
-    # plotting(prob_name="Cpeaks", algo_name="RHC", valuess=size_test_Cpeaks_RHC(), size_plot=True)
-    # plotting(prob_name="Cpeaks", algo_name="SA", valuess=size_test_Cpeaks_SA(), size_plot=True)
-    # plotting(prob_name="Cpeaks", algo_name="GA", valuess=size_test_Cpeaks_GA(), size_plot=True)
-    # plotting(prob_name="Cpeaks", algo_name="MI", valuess=size_test_Cpeaks_MI(), size_plot=True)
-    # # #
-    # plotting(prob_name="4peaks", algo_name="RHC", valuess=size_test_4peaks_RHC(), size_plot=True)
-    # plotting(prob_name="4peaks", algo_name="SA", valuess=size_test_4peaks_SA(), size_plot=True)
-    # plotting(prob_name="4peaks", algo_name="GA", valuess=size_test_4peaks_GA(), size_plot=True)
-    # plotting(prob_name="4peaks", algo_name="MI", valuess=size_test_4peaks_MI(), size_plot=True)  # neet to rerun this
-    #
-    # plotting(prob_name="TSP", algo_name="RHC", valuess=size_test_TSP_RHC(), size_plot=True)
-    # plotting(prob_name="TSP", algo_name="SA", valuess=size_test_TSP_SA(), size_plot=True)
-    # plotting(prob_name="TSP", algo_name="GA", valuess=size_test_TSP_GA(), size_plot=True)
-    # plotting(prob_name="TSP", algo_name="MI", valuess=size_test_TSP_MI(), size_plot=True)
-    #
-    # plotting(prob_name="MKC", algo_name="RHC", valuess=size_test_MKC_RHC(), size_plot=True)
-    # plotting(prob_name="MKC", algo_name="SA", valuess=size_test_MKC_SA(), size_plot=True)
-    # plotting(prob_name="MKC", algo_name="GA", valuess=size_test_MKC_GA(), size_plot=True)
-    # plotting(prob_name="MKC", algo_name="MI", valuess=size_test_MKC_MI(), size_plot=True)
-    # #
-    # plotting(prob_name="FlipFlop", algo_name="RHC", valuess=size_test_FlipFlop_RHC(), size_plot=True)
-    # plotting(prob_name="FlipFlop", algo_name="SA", valuess=size_test_FlipFlop_SA(), size_plot=True)
-    # plotting(prob_name="FlipFlop", algo_name="GA", valuess=size_test_FlipFlop_GA(), size_plot=True)
-    # plotting(prob_name="FlipFlop", algo_name="MI", valuess=size_test_FlipFlop_MI(), size_plot=True)
-    #
-    # plotting(prob_name="KnapSack", algo_name="RHC", valuess=size_test_KnapSack_RHC(), size_plot=True)
-    # plotting(prob_name="KnapSack", algo_name="SA", valuess=size_test_KnapSack_SA(), size_plot=True)
-    # plotting(prob_name="KnapSack", algo_name="GA", valuess=size_test_KnapSack_GA(), size_plot=True)
-    # plotting(prob_name="KnapSack", algo_name="MI", valuess=size_test_KnapSack_MI(), size_plot=True)
+    # size_test_FlipFlop_RHC("FlipFlop", "RHC")
+    # size_test_FlipFlop_SA("FlipFlop", "SA")
+    # size_test_FlipFlop_GA("FlipFlop", "GA")
+    # size_test_FlipFlop_MI("FlipFlop", "MI")
 
-    # plotting(prob_name="queens", algo_name="RHC", valuess=size_test_queens_RHC(), size_plot=True)
-    # plotting(prob_name="queens", algo_name="SA", valuess=size_test_queens_SA(), size_plot=True)
-    # plotting(prob_name="queens", algo_name="GA", valuess=size_test_queens_GA(), size_plot=True)
-    # plotting(prob_name="queens", algo_name="MI", valuess=size_test_queens_MI(), size_plot=True)
+
 
     # '''Problem 1: n-city TSP: over a map of given size,
     # generate N cities for a salesman to travel through each city and find the shortest route'''
     # problem_list_TSP = generate_prob_TSP(random_seed=0, citys=6, sample_size=5)
     # prob_to_curves("nCityTSP", problem_list_TSP)
-    #
+
     # '''Problem 2: Max-k color optimization problem. Evaluates the fitness of an n-dimensional state vector
     # 𝑥 = [𝑥0, 𝑥1, . . . , 𝑥𝑛−1], where 𝑥𝑖 represents the color of node i, as the number of pairs of adjacent nodes of the
     # same color.'''
