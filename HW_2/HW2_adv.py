@@ -1406,7 +1406,7 @@ def size_test_Cpeaks_GA(prob_name, algo_name):
             start_time = time.time()
             best_state, best_fitness = mlrose.genetic_alg(problem,
                                                           pop_size=100,
-                                                          mutation_prob=0.1,
+                                                          mutation_prob=0.05,
                                                           max_attempts=10,
                                                           max_iters=10,
                                                           curve=False,
@@ -1466,7 +1466,7 @@ def size_test_Cpeaks_MI(prob_name, algo_name):
             start_time = time.time()
             best_state, best_fitness = mlrose.algorithms.mimic(problem,
                                                                pop_size=100,
-                                                               keep_pct=0.1,
+                                                               keep_pct=0.05,
                                                                max_attempts=10,
                                                                max_iters=10,
                                                                curve=False,
@@ -2782,15 +2782,15 @@ if __name__=="__main__":
     # size_test_4peaks_GA("4peaks", "GA")
     # size_test_4peaks_MI("4peaks", "MI")
 
-    size_test_6peaks_RHC("6peaks", "RHC")
-    size_test_6peaks_SA("6peaks", "SA")
-    size_test_6peaks_GA("6peaks", "GA")
-    size_test_6peaks_MI("6peaks", "MI")
+    # size_test_6peaks_RHC("6peaks", "RHC")
+    # size_test_6peaks_SA("6peaks", "SA")
+    # size_test_6peaks_GA("6peaks", "GA")
+    # size_test_6peaks_MI("6peaks", "MI")
 
-    # size_test_Cpeaks_RHC("Cpeaks", "RHC")
-    # size_test_Cpeaks_SA("Cpeaks", "SA")
-    # size_test_Cpeaks_GA("Cpeaks", "GA")
-    # size_test_Cpeaks_MI("Cpeaks", "MI")
+    size_test_Cpeaks_RHC("Cpeaks", "RHC")
+    size_test_Cpeaks_SA("Cpeaks", "SA")
+    size_test_Cpeaks_GA("Cpeaks", "GA")
+    size_test_Cpeaks_MI("Cpeaks", "MI")
 
     # size_test_queens_RHC("queens", "RHC")
     # size_test_queens_SA("queens", "SA")
