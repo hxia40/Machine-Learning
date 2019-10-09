@@ -399,6 +399,16 @@ def generate_prob_4peaks(length = 10, sample_size=5):
         problem = mlrose.DiscreteOpt(length=length, fitness_fn=fitness, maximize=True, max_val=2)
         problem_list.append(problem)
     return problem_list
+def generate_prob_6peaks(length = 10, sample_size=5):
+
+    problem_list = []
+    for n in range(sample_size):
+        # t_pct = np.random.random()
+        fitness = mlrose.SixPeaks(t_pct=0.1)
+        # Define optimization problem object
+        problem = mlrose.DiscreteOpt(length=length, fitness_fn=fitness, maximize=True, max_val=2)
+        problem_list.append(problem)
+    return problem_list
 def generate_prob_Cpeaks(length = 10, sample_size=5):
 
     problem_list = []
@@ -958,6 +968,255 @@ def size_test_4peaks_MI(prob_name, algo_name):
             start_time = time.time()
             best_state, best_fitness = mlrose.algorithms.mimic(problem,
                                                                pop_size=50,
+                                                               keep_pct=0.1,
+                                                               max_attempts=10,
+                                                               max_iters=10,
+                                                               curve=False,
+                                                               )
+            time_diff = time.time() - start_time
+
+            time_list.append(time_diff)
+            best_fitness_list.append(best_fitness)
+
+        time_mean = np.mean(time_list)
+        time_std = np.std(time_list)
+        # print("best_fitness_list:", best_fitness_list)
+        best_fitness_mean = np.mean(best_fitness_list)
+        best_fitness_std = np.std(best_fitness_list)
+        # print("best_fitness_std:", best_fitness_std)
+        time_mean_list.append(time_mean)
+        time_std_list.append(time_std)
+        best_fitness_mean_list.append(best_fitness_mean)
+        best_fitness_std_list.append(best_fitness_std)
+        alter_list.append(i)
+    # print("best_fitness_std_list:", best_fitness_std_list)
+    writer = open('data_adv/{}_{}.txt'.format(prob_name, algo_name), 'w')
+
+    writer.write('sample size')
+    writer.write(str(alter_list))
+    writer.write("\n\n")
+
+    writer.write('clock time')
+    writer.write(str(time_mean_list))
+    writer.write("\n\n")
+
+    writer.write('clock time std')
+    writer.write(str(time_std_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score')
+    writer.write(str(best_fitness_mean_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score std')
+    writer.write(str(best_fitness_std_list))
+    writer.write("\n\n")
+
+def size_test_6peaks_RHC(prob_name, algo_name):
+    time_mean_list = []
+    time_std_list = []
+    best_fitness_mean_list = []
+    best_fitness_std_list = []
+    alter_list = []
+    for i in range(1, 100, 10):
+        print(prob_name, algo_name, i)
+        problem_list = generate_prob_6peaks( length = i, sample_size=5)
+        time_list = []
+        best_fitness_list = []
+
+        # print(problem_list)
+        for problem in problem_list:
+            start_time = time.time()
+            best_state, best_fitness = mlrose.random_hill_climb(problem,
+                                                                max_attempts=10,
+                                                                max_iters=10,
+                                                                restarts=0,
+                                                                init_state=None,
+                                                                curve=False,
+                                                                )
+            time_diff = time.time() - start_time
+
+            time_list.append(time_diff)
+            best_fitness_list.append(best_fitness)
+
+        time_mean = np.mean(time_list)
+        time_std = np.std(time_list)
+        # print("best_fitness_list:", best_fitness_list)
+        best_fitness_mean = np.mean(best_fitness_list)
+        best_fitness_std = np.std(best_fitness_list)
+        # print("best_fitness_std:", best_fitness_std)
+        time_mean_list.append(time_mean)
+        time_std_list.append(time_std)
+        best_fitness_mean_list.append(best_fitness_mean)
+        best_fitness_std_list.append(best_fitness_std)
+        alter_list.append(i)
+    # print("best_fitness_std_list:", best_fitness_std_list)
+    writer = open('data_adv/{}_{}.txt'.format(prob_name, algo_name), 'w')
+
+    writer.write('sample size')
+    writer.write(str(alter_list))
+    writer.write("\n\n")
+
+    writer.write('clock time')
+    writer.write(str(time_mean_list))
+    writer.write("\n\n")
+
+    writer.write('clock time std')
+    writer.write(str(time_std_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score')
+    writer.write(str(best_fitness_mean_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score std')
+    writer.write(str(best_fitness_std_list))
+    writer.write("\n\n")
+
+    # return np.array([[alter_list, time_mean_list, "sample size", "clock time"],
+    #                  [alter_list, time_std_list, "sample size", "clock time std"],
+    #                  [alter_list, best_fitness_mean_list, "sample_size", "best_fitness"],
+    #                  [alter_list, best_fitness_std_list, "sample_size", "best_fitness_std"]])
+    # return "sample_size", np.array([alter_list]), \
+    #        "clock time", np.array([time_mean_list]),\
+    #        "clock time std", np.array([time_std_list]), \
+    #        "best fitness", np.array([best_fitness_mean_list]), \
+    #        "best fitness std", np.array([best_fitness_std_list])
+def size_test_6peaks_SA(prob_name, algo_name):
+    time_mean_list = []
+    time_std_list = []
+    best_fitness_mean_list = []
+    best_fitness_std_list = []
+    alter_list = []
+    for i in range(1, 100, 10):
+        print(prob_name, algo_name, i)
+        problem_list = generate_prob_6peaks(length = i, sample_size=5)
+        time_list = []
+        best_fitness_list = []
+
+        # print(problem_list)
+        for problem in problem_list:
+            start_time = time.time()
+            best_state, best_fitness = mlrose.simulated_annealing(problem,
+                                                                  schedule=mlrose.ExpDecay(),
+                                                                  max_attempts=10,
+                                                                  max_iters=10,
+                                                                  )
+            time_diff = time.time() - start_time
+
+            time_list.append(time_diff)
+            best_fitness_list.append(best_fitness)
+
+        time_mean = np.mean(time_list)
+        time_std = np.std(time_list)
+        # print("best_fitness_list:", best_fitness_list)
+        best_fitness_mean = np.mean(best_fitness_list)
+        best_fitness_std = np.std(best_fitness_list)
+        # print("best_fitness_std:", best_fitness_std)
+        time_mean_list.append(time_mean)
+        time_std_list.append(time_std)
+        best_fitness_mean_list.append(best_fitness_mean)
+        best_fitness_std_list.append(best_fitness_std)
+        alter_list.append(i)
+    # print("best_fitness_std_list:", best_fitness_std_list)
+    writer = open('data_adv/{}_{}.txt'.format(prob_name, algo_name), 'w')
+
+    writer.write('sample size')
+    writer.write(str(alter_list))
+    writer.write("\n\n")
+
+    writer.write('clock time')
+    writer.write(str(time_mean_list))
+    writer.write("\n\n")
+
+    writer.write('clock time std')
+    writer.write(str(time_std_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score')
+    writer.write(str(best_fitness_mean_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score std')
+    writer.write(str(best_fitness_std_list))
+    writer.write("\n\n")
+def size_test_6peaks_GA(prob_name, algo_name):
+    time_mean_list = []
+    time_std_list = []
+    best_fitness_mean_list = []
+    best_fitness_std_list = []
+    alter_list = []
+    for i in range(1, 100, 10):
+        print(prob_name, algo_name, i)
+        problem_list = generate_prob_6peaks(length = i, sample_size=5)
+        time_list = []
+        best_fitness_list = []
+
+        # print(problem_list)
+        for problem in problem_list:
+            start_time = time.time()
+            best_state, best_fitness = mlrose.genetic_alg(problem,
+                                                          pop_size=100,
+                                                          mutation_prob=0.1,
+                                                          max_attempts=10,
+                                                          max_iters=10,
+                                                          curve=False,
+                                                          )
+            time_diff = time.time() - start_time
+
+            time_list.append(time_diff)
+            best_fitness_list.append(best_fitness)
+
+        time_mean = np.mean(time_list)
+        time_std = np.std(time_list)
+        # print("best_fitness_list:", best_fitness_list)
+        best_fitness_mean = np.mean(best_fitness_list)
+        best_fitness_std = np.std(best_fitness_list)
+        # print("best_fitness_std:", best_fitness_std)
+        time_mean_list.append(time_mean)
+        time_std_list.append(time_std)
+        best_fitness_mean_list.append(best_fitness_mean)
+        best_fitness_std_list.append(best_fitness_std)
+        alter_list.append(i)
+    # print("best_fitness_std_list:", best_fitness_std_list)
+    writer = open('data_adv/{}_{}.txt'.format(prob_name, algo_name), 'w')
+
+    writer.write('sample size')
+    writer.write(str(alter_list))
+    writer.write("\n\n")
+
+    writer.write('clock time')
+    writer.write(str(time_mean_list))
+    writer.write("\n\n")
+
+    writer.write('clock time std')
+    writer.write(str(time_std_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score')
+    writer.write(str(best_fitness_mean_list))
+    writer.write("\n\n")
+
+    writer.write('fitness score std')
+    writer.write(str(best_fitness_std_list))
+    writer.write("\n\n")
+def size_test_6peaks_MI(prob_name, algo_name):
+    time_mean_list = []
+    time_std_list = []
+    best_fitness_mean_list = []
+    best_fitness_std_list = []
+    alter_list = []
+    for i in range(1, 100, 10):
+        print(prob_name, algo_name, i)
+        problem_list = generate_prob_6peaks(length = i, sample_size=5)
+        time_list = []
+        best_fitness_list = []
+
+        # print(problem_list)
+        for problem in problem_list:
+            start_time = time.time()
+            best_state, best_fitness = mlrose.algorithms.mimic(problem,
+                                                               pop_size=100,
                                                                keep_pct=0.1,
                                                                max_attempts=10,
                                                                max_iters=10,
@@ -2523,15 +2782,20 @@ if __name__=="__main__":
     # size_test_4peaks_GA("4peaks", "GA")
     # size_test_4peaks_MI("4peaks", "MI")
 
+    size_test_6peaks_RHC("6peaks", "RHC")
+    size_test_6peaks_SA("6peaks", "SA")
+    size_test_6peaks_GA("6peaks", "GA")
+    size_test_6peaks_MI("6peaks", "MI")
+
+    # size_test_Cpeaks_RHC("Cpeaks", "RHC")
+    # size_test_Cpeaks_SA("Cpeaks", "SA")
+    # size_test_Cpeaks_GA("Cpeaks", "GA")
+    # size_test_Cpeaks_MI("Cpeaks", "MI")
+
     # size_test_queens_RHC("queens", "RHC")
     # size_test_queens_SA("queens", "SA")
     # size_test_queens_GA("queens", "GA")
     # size_test_queens_MI("queens", "MI")
-
-    size_test_Cpeaks_RHC("Cpeaks", "RHC")
-    size_test_Cpeaks_SA("Cpeaks", "SA")
-    size_test_Cpeaks_GA("Cpeaks", "GA")
-    size_test_Cpeaks_MI("Cpeaks", "MI")
 
     # size_test_MKC_RHC("MKC", "RHC")
     # size_test_MKC_SA("MKC", "SA")
@@ -2595,6 +2859,11 @@ if __name__=="__main__":
     # # Create list of states '''
     # problem_list_queens = generate_prob_queens(length=10, sample_size=5)
     # prob_to_curves("Kqueens", problem_list_queens)
+
+    # '''Problem 9: 6 peaks
+    # # Create list of states with random t_pct'''
+    # problem_list_6peaks = generate_prob_6peaks(length=10, sample_size=5)
+    # prob_to_curves("6peaks", problem_list_6peaks)
 
 
 
