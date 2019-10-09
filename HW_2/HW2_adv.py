@@ -1406,7 +1406,11 @@ def size_test_Cpeaks_GA(prob_name, algo_name):
             start_time = time.time()
             best_state, best_fitness = mlrose.genetic_alg(problem,
                                                           pop_size=100,
+<<<<<<< HEAD
                                                           mutation_prob=0.05,
+=======
+                                                          mutation_prob=0.01,
+>>>>>>> 9c5bc19308913e6cdc40b41de5fd7720afd04b2d
                                                           max_attempts=10,
                                                           max_iters=10,
                                                           curve=False,
@@ -2781,15 +2785,25 @@ if __name__=="__main__":
     # size_test_4peaks_SA("4peaks", "SA")
     # size_test_4peaks_GA("4peaks", "GA")
     # size_test_4peaks_MI("4peaks", "MI")
+<<<<<<< HEAD
 
+=======
+    #
+>>>>>>> 9c5bc19308913e6cdc40b41de5fd7720afd04b2d
     # size_test_6peaks_RHC("6peaks", "RHC")
     # size_test_6peaks_SA("6peaks", "SA")
     # size_test_6peaks_GA("6peaks", "GA")
     # size_test_6peaks_MI("6peaks", "MI")
 
+<<<<<<< HEAD
     size_test_Cpeaks_RHC("Cpeaks", "RHC")
     size_test_Cpeaks_SA("Cpeaks", "SA")
     size_test_Cpeaks_GA("Cpeaks", "GA")
+=======
+    # size_test_Cpeaks_RHC("Cpeaks", "RHC")
+    # size_test_Cpeaks_SA("Cpeaks", "SA")
+    # size_test_Cpeaks_GA("Cpeaks", "GA")
+>>>>>>> 9c5bc19308913e6cdc40b41de5fd7720afd04b2d
     size_test_Cpeaks_MI("Cpeaks", "MI")
 
     # size_test_queens_RHC("queens", "RHC")
