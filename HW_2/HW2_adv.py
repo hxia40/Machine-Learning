@@ -1269,7 +1269,7 @@ def size_test_Cpeaks_RHC(prob_name, algo_name):
     alter_list = []
     for i in range(1, 100, 10):
         print(prob_name, algo_name, i)
-        problem_list = generate_prob_Cpeaks( length = i, sample_size=5)
+        problem_list = generate_prob_Cpeaks( length = i, sample_size=10)
         time_list = []
         best_fitness_list = []
 
@@ -1339,7 +1339,7 @@ def size_test_Cpeaks_SA(prob_name, algo_name):
     alter_list = []
     for i in range(1, 100, 10):
         print(prob_name, algo_name, i)
-        problem_list = generate_prob_Cpeaks(length = i, sample_size=5)
+        problem_list = generate_prob_Cpeaks(length = i, sample_size=10)
         time_list = []
         best_fitness_list = []
 
@@ -1397,7 +1397,7 @@ def size_test_Cpeaks_GA(prob_name, algo_name):
     alter_list = []
     for i in range(1, 100, 10):
         print(prob_name, algo_name, i)
-        problem_list = generate_prob_Cpeaks(length = i, sample_size=5)
+        problem_list = generate_prob_Cpeaks(length = i, sample_size=10)
         time_list = []
         best_fitness_list = []
 
@@ -1406,15 +1406,7 @@ def size_test_Cpeaks_GA(prob_name, algo_name):
             start_time = time.time()
             best_state, best_fitness = mlrose.genetic_alg(problem,
                                                           pop_size=100,
-<<<<<<< HEAD
                                                           mutation_prob=0.05,
-=======
-<<<<<<< HEAD
-                                                          mutation_prob=0.05,
-=======
-                                                          mutation_prob=0.01,
->>>>>>> 9c5bc19308913e6cdc40b41de5fd7720afd04b2d
->>>>>>> 5997ad02c32c72b25d8ce7a9ce3feeb8ea01aa2a
                                                           max_attempts=10,
                                                           max_iters=10,
                                                           curve=False,
@@ -1465,7 +1457,7 @@ def size_test_Cpeaks_MI(prob_name, algo_name):
     alter_list = []
     for i in range(1, 100, 10):
         print(prob_name, algo_name, i)
-        problem_list = generate_prob_Cpeaks(length = i, sample_size=5)
+        problem_list = generate_prob_Cpeaks(length = i, sample_size=10)
         time_list = []
         best_fitness_list = []
 
@@ -1526,7 +1518,7 @@ def size_test_TSP_RHC(prob_name, algo_name):
     alter_list = []
     for i in range(2, 100, 5):
         print(prob_name, algo_name, i)
-        problem_list = generate_prob_TSP(citys = i, sample_size=5)
+        problem_list = generate_prob_TSP(citys = i, sample_size=10)
         time_list = []
         best_fitness_list = []
 
@@ -1535,8 +1527,8 @@ def size_test_TSP_RHC(prob_name, algo_name):
             start_time = time.time()
             try:
                 best_state, best_fitness = mlrose.random_hill_climb(problem,
-                                                                max_attempts=20,
-                                                                max_iters=50,
+                                                                max_attempts=10,
+                                                                max_iters=10,
                                                                 restarts=0,
                                                                 init_state=None,
                                                                 curve=False,
@@ -1600,7 +1592,7 @@ def size_test_TSP_SA(prob_name, algo_name):
     alter_list = []
     for i in range(2, 100, 5):
         print(prob_name, algo_name, i)
-        problem_list = generate_prob_TSP( citys = i, sample_size=5)
+        problem_list = generate_prob_TSP( citys = i, sample_size=10)
         time_list = []
         best_fitness_list = []
 
@@ -1662,7 +1654,7 @@ def size_test_TSP_GA(prob_name, algo_name):
     alter_list = []
     for i in range(2, 100, 5):
         print(prob_name, algo_name, i)
-        problem_list = generate_prob_TSP( citys = i, sample_size=5)
+        problem_list = generate_prob_TSP( citys = i, sample_size=10)
         time_list = []
         best_fitness_list = []
 
@@ -1725,7 +1717,7 @@ def size_test_TSP_MI(prob_name, algo_name):
     alter_list = []
     for i in range(2, 100, 5):
         print(prob_name, algo_name, i)
-        problem_list = generate_prob_TSP( citys = i, sample_size=5)
+        problem_list = generate_prob_TSP( citys = i, sample_size=10)
         time_list = []
         best_fitness_list = []
 
@@ -2288,7 +2280,7 @@ def size_test_KnapSack_RHC(prob_name, algo_name):
     alter_list = []
     for i in range(1, 100, 10):
         print(prob_name, algo_name, i)
-        problem_list = generate_prob_KnapSack( length = i, sample_size=5)
+        problem_list = generate_prob_KnapSack( length = i, sample_size=10)
         time_list = []
         best_fitness_list = []
 
@@ -2358,7 +2350,7 @@ def size_test_KnapSack_SA(prob_name, algo_name):
     alter_list = []
     for i in range(1, 100, 10):
         print(prob_name, algo_name, i)
-        problem_list = generate_prob_KnapSack( length = i, sample_size=5)
+        problem_list = generate_prob_KnapSack( length = i, sample_size=10)
         time_list = []
         best_fitness_list = []
 
@@ -2416,7 +2408,7 @@ def size_test_KnapSack_GA(prob_name, algo_name):
     alter_list = []
     for i in range(1, 100, 10):
         print(prob_name, algo_name, i)
-        problem_list = generate_prob_KnapSack( length = i, sample_size=5)
+        problem_list = generate_prob_KnapSack( length = i, sample_size=10)
         time_list = []
         best_fitness_list = []
 
@@ -2476,7 +2468,7 @@ def size_test_KnapSack_MI(prob_name, algo_name):
     alter_list = []
     for i in range(1, 100, 10):
         print(prob_name, algo_name, i)
-        problem_list = generate_prob_KnapSack( length = i, sample_size=5)
+        problem_list = generate_prob_KnapSack( length = i, sample_size=10)
         time_list = []
         best_fitness_list = []
 
@@ -2780,6 +2772,21 @@ def size_test_queens_MI(prob_name, algo_name):
 
 
 if __name__=="__main__":
+    size_test_Cpeaks_RHC("Cpeaks", "RHC")
+    size_test_Cpeaks_SA("Cpeaks", "SA")
+    size_test_Cpeaks_GA("Cpeaks", "GA")
+    size_test_Cpeaks_MI("Cpeaks", "MI")
+
+    size_test_TSP_RHC("TSP", "RHC")
+    size_test_TSP_SA("TSP", "SA")
+    size_test_TSP_GA("TSP", "GA")
+    size_test_TSP_MI("TSP", "MI")
+
+    size_test_KnapSack_RHC("KnapSack", "RHC")
+    size_test_KnapSack_SA("KnapSack", "SA")
+    size_test_KnapSack_GA("KnapSack", "GA")
+    size_test_KnapSack_MI("KnapSack", "MI")
+
     # size_test_OneMax_RHC("OneMax", "RHC")
     # size_test_OneMax_SA("OneMax", "SA")
     # size_test_OneMax_GA("OneMax", "GA")
@@ -2789,33 +2796,13 @@ if __name__=="__main__":
     # size_test_4peaks_SA("4peaks", "SA")
     # size_test_4peaks_GA("4peaks", "GA")
     # size_test_4peaks_MI("4peaks", "MI")
-<<<<<<< HEAD
 
-=======
-    #
->>>>>>> 9c5bc19308913e6cdc40b41de5fd7720afd04b2d
     # size_test_6peaks_RHC("6peaks", "RHC")
     # size_test_6peaks_SA("6peaks", "SA")
     # size_test_6peaks_GA("6peaks", "GA")
     # size_test_6peaks_MI("6peaks", "MI")
 
-<<<<<<< HEAD
-    size_test_Cpeaks_RHC("Cpeaks", "RHC")
-    size_test_Cpeaks_SA("Cpeaks", "SA")
-    size_test_Cpeaks_GA("Cpeaks", "GA")
-    # size_test_Cpeaks_MI("Cpeaks", "MI")
-=======
-<<<<<<< HEAD
-    size_test_Cpeaks_RHC("Cpeaks", "RHC")
-    size_test_Cpeaks_SA("Cpeaks", "SA")
-    size_test_Cpeaks_GA("Cpeaks", "GA")
-=======
-    # size_test_Cpeaks_RHC("Cpeaks", "RHC")
-    # size_test_Cpeaks_SA("Cpeaks", "SA")
-    # size_test_Cpeaks_GA("Cpeaks", "GA")
->>>>>>> 9c5bc19308913e6cdc40b41de5fd7720afd04b2d
-    size_test_Cpeaks_MI("Cpeaks", "MI")
->>>>>>> 5997ad02c32c72b25d8ce7a9ce3feeb8ea01aa2a
+
 
     # size_test_queens_RHC("queens", "RHC")
     # size_test_queens_SA("queens", "SA")
@@ -2827,16 +2814,6 @@ if __name__=="__main__":
     # size_test_MKC_GA("MKC", "GA")
     # size_test_MKC_MI("MKC", "MI")
 
-    # size_test_TSP_RHC("TSP", "RHC")
-    # size_test_TSP_SA("TSP", "SA")
-    # size_test_TSP_GA("TSP", "GA")
-    # size_test_TSP_MI("TSP", "MI")
-
-    # size_test_KnapSack_RHC("KnapSack", "RHC")
-    # size_test_KnapSack_SA("KnapSack", "SA")
-    # size_test_KnapSack_GA("KnapSack", "GA")
-    # size_test_KnapSack_MI("KnapSack", "MI")
-    #
     # size_test_FlipFlop_RHC("FlipFlop", "RHC")
     # size_test_FlipFlop_SA("FlipFlop", "SA")
     # size_test_FlipFlop_GA("FlipFlop", "GA")
