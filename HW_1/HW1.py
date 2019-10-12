@@ -910,7 +910,7 @@ if __name__=="__main__":
     #                                   n_estimators=5, learning_rate=1),
     #            X_train, X_test, y_train, y_test)
     score_time_default("MNIST", "ANN",
-               MLPClassifier(hidden_layer_sizes=(5, ), max_iter=500, alpha=0.0001, random_state=1),
+               MLPClassifier(hidden_layer_sizes=(50, ), max_iter=500, alpha=0.0001, random_state=1),
                X_train, X_test, y_train, y_test)
     # score_time_default("MNIST", "kNN",
     #            neighbors.KNeighborsClassifier(n_neighbors=5, algorithm='auto'),

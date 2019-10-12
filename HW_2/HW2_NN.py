@@ -50,7 +50,7 @@ def recording_and_plotting(dataset_name, name, alter, train, validation,
     plt.legend(loc="best")
     plt.savefig('{}/{}.png'.format(dataset_name, name))
     plt.gcf().clear()
-def ann_learning_curve_size_post(dataset_name, X_train, y_train, hidden_layer_sizes=(5, ), max_iter=500, alpha=0.0001): # ANN experiment 1: Sample size vs Accuracy
+def ann_learning_curve_size_post(dataset_name, X_train, y_train, hidden_layer_sizes=(50, ), max_iter=500, alpha=0.0001): # ANN experiment 1: Sample size vs Accuracy
     clf = MLPClassifier(hidden_layer_sizes=hidden_layer_sizes, max_iter=max_iter, alpha=alpha, random_state=1)
     start_time = time.time()
     cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
@@ -68,7 +68,7 @@ def ann_learning_curve_size_post(dataset_name, X_train, y_train, hidden_layer_si
                            alter=train_sizes,
                            train=train_scores,
                            validation=test_scores, x_title="Sample size", y_title="Score")
-def ann_learning_curve_size_pre(dataset_name, X_train, y_train, hidden_layer_sizes=(5, ), max_iter=500, alpha=0.0001): # ANN experiment 1: Sample size vs Accuracy
+def ann_learning_curve_size_pre(dataset_name, X_train, y_train, hidden_layer_sizes=(50, ), max_iter=500, alpha=0.0001): # ANN experiment 1: Sample size vs Accuracy
     clf = MLPClassifier(hidden_layer_sizes=hidden_layer_sizes, max_iter=max_iter, alpha=alpha, random_state=1)
     start_time = time.time()
     cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
@@ -87,7 +87,7 @@ def ann_learning_curve_size_pre(dataset_name, X_train, y_train, hidden_layer_siz
                            train=train_scores,
                            validation=test_scores, x_title="Sample size", y_title="Score")
 
-def ann_learning_curve_size_RHC(dataset_name, X_train, y_train, hidden_nodes = [100], max_iter=500, alpha=0.0001): # ANN experiment 1: Sample size vs Accuracy
+def ann_learning_curve_size_RHC(dataset_name, X_train, y_train, hidden_nodes = [50], max_iter=500, alpha=0.0001): # ANN experiment 1: Sample size vs Accuracy
     # clf = MLPClassifier(hidden_layer_sizes=hidden_layer_sizes, max_iter=max_iter, alpha=alpha, random_state=1)
     clf = mlrose.NeuralNetwork(hidden_nodes=hidden_nodes, activation='relu',
                                algorithm='random_hill_climb', max_iters=max_iter,
@@ -111,6 +111,33 @@ def ann_learning_curve_size_RHC(dataset_name, X_train, y_train, hidden_nodes = [
                            alter=train_sizes,
                            train=train_scores,
                            validation=test_scores, x_title="Sample size", y_title="Score")
+def ann_learning_curve_size_GD(X_train, y_train, X_test, y_test, hidden_nodes = [50]): # ANN experiment 1: Sample size vs Accuracy
+    best_fitness = 0
+    best_fitness_param = {
+        "learning_rate": 0,
+        "max_iters": 0}
+    for learning_rate in np.arange(0.01, 10.01, 1):
+        for max_iter in range(1, 501, 100):
+            print("learning rate at:", learning_rate, "\n", "max_iters at:", max_iter)
+            clf = mlrose.NeuralNetwork(hidden_nodes=hidden_nodes, activation='relu',
+                                       algorithm='random_hill_climb', max_iters=max_iter,
+                                       bias=True, is_classifier=True, learning_rate=learning_rate,
+                                       early_stopping=True, clip_max=5, max_attempts=100,
+                                       restarts=20
+                                       )
+            start_time = time.time()
+            clf.fit(X_train, y_train)
+            y_test_pred = clf.predict(X_test)
+            y_fitness = accuracy_score(y_test, y_test_pred)
+            if y_fitness > best_fitness:
+                best_fitness = y_fitness
+                best_fitness_param['learning_rate'] = learning_rate
+                best_fitness_param['max_iters'] = max_iter
+            print("time consumed:", time.time()-start_time)
+    print("GD learning rate:", learning_rate)
+    print("GD max iteration:", max_iter)
+
+
 
 def ann_RHC_vld_curve_1(dataset_name, X_train, y_train, hidden_nodes = [50], max_iter=500, alpha=0.0001): # ANN experiment 1: Sample size vs Accuracy
     clf = mlrose.NeuralNetwork(hidden_nodes=hidden_nodes, activation='relu',
@@ -159,6 +186,53 @@ def score_time_default(dataset_name, clf_name, clf, X_train, X_test, y_train, y_
     txt.write(str(difference/10))
     txt.write("\n\n")
 
+#
+# def grid_search_gd():
+#     max_accuracy = 0
+#     best_params = {}
+#     count = 0
+#
+#     for learning_rate in np.arange(0.0001, 1.0001, 0.0001):
+# 		for max_attempts in range(50, 1001, 50):
+# 			count += 1
+# 			print('Running ', count)
+# 			nn = mlrose.NeuralNetwork(hidden_nodes = [75],
+#
+# 											  activation = 'relu',
+#
+# 											  algorithm = 'gradient_descent',
+#
+# 											  max_iters = 100,
+#
+# 											  bias = True,
+#
+# 											  is_classifier = True,
+#
+# 											  learning_rate = learning_rate,
+#
+# 											  early_stopping = True,
+#
+# 											  clip_max = 10,
+#
+# 											  max_attempts = max_attempts)
+#
+# 			nn.fit(X_train, y_train)
+# 			y_test_pred = nn.predict(X_test)
+# 			y_test_accuracy = accuracy_score(y_test, y_test_pred)
+# 			if y_test_accuracy > max_accuracy:
+# 				max_accuracy = y_test_accuracy
+# 				best_params['learning_rate'] = learning_rate
+# 				best_params['max_attempts'] = max_attempts
+#
+# 	print('GD: ')
+# 	print('Max accuracy: ', max_accuracy)
+# 	print('Best params: ', best_params)
+#
+
+
+
+
+
 if __name__=="__main__":
     '''Load and standardize data set MNIST'''
 
@@ -206,10 +280,11 @@ if __name__=="__main__":
     y_test_hot = one_hot.transform(y2_test.reshape(-1, 1)).todense()
     set1_name = "mnist"
 
-    # ann_learning_curve_size_pre(set1_name, X_train_scaled, y_train_hot)
-    # ann_learning_curve_size_post(set1_name, X_train_scaled, y_train_hot, hidden_layer_sizes=(50,), alpha=6.25)
+    ann_learning_curve_size_GD(X_train_scaled, y_train_hot, X_test_scaled, y_test_hot,
+                               hidden_nodes=[50]) # ANN experiment 1: Sample size vs Accuracy
 
-    # ann_learning_curve_size_RHC(set1_name, X_train_scaled, y_train_hot, hidden_nodes=[50], max_iter=500, alpha=0.0001)
+
+    '''========================================
 
     for i in range(10):
         start = time.time()
@@ -238,7 +313,7 @@ if __name__=="__main__":
         # Predict labels for test set and assess accuracy
         y_test_pred = clf.predict(X_test_scaled)
         y_test_accuracy = accuracy_score(y_test_hot, y_test_pred)
-        print(y_test_accuracy)
+        print(y_test_accuracy)'''
 
 
 
