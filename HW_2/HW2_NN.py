@@ -399,7 +399,7 @@ if __name__=="__main__":
     y_test_hot = one_hot.transform(y2_test.reshape(-1, 1)).todense()
     set1_name = "mnist"
 
-    GD_valid_curve_learning_rate(X_train_scaled, y_train_hot, hidden_layer_sizes=(50,))
+    # GD_valid_curve_learning_rate(X_train_scaled, y_train_hot, hidden_layer_sizes=(50,))
     GD_valid_curve_max_iter(X_train_scaled, y_train_hot, hidden_layer_sizes=(50,))
 
     '''========================================
