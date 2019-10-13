@@ -172,47 +172,6 @@ def GD_valid_curve_max_atte(X, y, hidden_layer_sizes=(50, )):
             writer.write(str(int(i))+ str(",") + str(y_train_accuracy)+ str(",") + str(y_valid_accuracy)+str("\n"))
         print("\n")
         writer.write(str("\n\n"))
-
-
-
-
-    # # recording
-    # name = 'ann_learning_curve_epoch_post'
-    # # n_alter_mean = np.mean(n_alter, axis=1)
-    # train_scores_mean = np.mean(scores_train, axis=0)
-    # train_scores_std = np.std(scores_train, axis=0)
-    # test_scores_mean = np.mean(scores_test, axis=0)
-    # test_scores_std = np.std(scores_test, axis=0)
-    # DT_1 = open('{}/{}.txt'.format(dataset_name, name), 'w')
-    # DT_1.write('{}/{}'.format(dataset_name, name))
-    # DT_1.write("\n\n")
-    # DT_1.write(str(n_alter))
-    # DT_1.write("\n\n")
-    # DT_1.write(str(train_scores_mean))
-    # DT_1.write("\n\n")
-    # DT_1.write(str(test_scores_mean))
-    #
-    # # plotting
-    # plt.grid()
-    # ylim = (0, 1.1)
-    # plt.ylim(*ylim)
-    # plt.fill_between(n_alter, train_scores_mean - train_scores_std,
-    #                  train_scores_mean + train_scores_std, alpha=0.1,
-    #                  color="r")
-    # plt.fill_between(n_alter, test_scores_mean - test_scores_std,
-    #                  test_scores_mean + test_scores_std, alpha=0.1, color="g")
-    # plt.plot(n_alter, train_scores_mean, color="r",
-    #          label="Training score")
-    # plt.plot(n_alter, test_scores_mean, color="g",
-    #          label="Cross-validation score")
-    # x_title = "Epochs"
-    # y_title = "Score"
-    # plt.xlabel(x_title)
-    # plt.ylabel(y_title)
-    # plt.legend(loc="best")
-    # plt.savefig('{}/{}.png'.format(dataset_name, name))
-    # # plt.savefig('22222.png')
-    # plt.gcf().clear()
 def GD_valid_curve_max_iter(X, y, hidden_layer_sizes=(50, )):
     writer = open('ANN_curve/GD_learning_rate.txt', 'w')
     rs = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
@@ -229,7 +188,7 @@ def GD_valid_curve_max_iter(X, y, hidden_layer_sizes=(50, )):
             # print("===========i===========", i)
             clf = mlrose.NeuralNetwork(hidden_nodes=[50, ], activation='relu',
                                        algorithm='gradient_descent', max_iters=int(i),
-                                       bias=True, is_classifier=True, learning_rate=0.01,
+                                       bias=True, is_classifier=True, learning_rate=0.00032,
                                        early_stopping=True,
                                        # clip_max=5,
                                        max_attempts=100,
@@ -296,7 +255,7 @@ def GD_valid_curve_max_iter(X, y, hidden_layer_sizes=(50, )):
     # plt.gcf().clear()
 
 def RHC_valid_curve_learning_rate(X, y, hidden_layer_sizes=(50, )):
-    writer = open('ANN_curve/GD_learning_rate.txt', 'w')
+    writer = open('ANN_curve/RHC_learning_rate.txt', 'w')
     rs = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
 
     for train_index, validation_index in rs.split(X):
@@ -377,7 +336,7 @@ def RHC_valid_curve_learning_rate(X, y, hidden_layer_sizes=(50, )):
     # # plt.savefig('22222.png')
     # plt.gcf().clear()
 def RHC_valid_curve_max_atte(X, y, hidden_layer_sizes=(50, )):
-    writer = open('ANN_curve/GD_learning_rate.txt', 'w')
+    writer = open('ANN_curve/RHC_max_atte.txt', 'w')
     rs = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
 
     for train_index, validation_index in rs.split(X):
@@ -457,9 +416,8 @@ def RHC_valid_curve_max_atte(X, y, hidden_layer_sizes=(50, )):
     # plt.savefig('{}/{}.png'.format(dataset_name, name))
     # # plt.savefig('22222.png')
     # plt.gcf().clear()
-
-def SA_valid_curve_learning_rate(X, y, hidden_layer_sizes=(50, )):
-    writer = open('ANN_curve/GD_learning_rate.txt', 'w')
+def RHC_valid_curve_max_iter(X, y, hidden_layer_sizes=(50, )):
+    writer = open('ANN_curve/RHC_max_iter.txt', 'w')
     rs = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
 
     for train_index, validation_index in rs.split(X):
@@ -470,7 +428,89 @@ def SA_valid_curve_learning_rate(X, y, hidden_layer_sizes=(50, )):
         y_valid = y[validation_index]
         # print "y_train", y_train, '\n', "valid:", y_test
 
-        for i in np.logspace(-4, 2, 50):
+        for i in np.arange(1,1000,20):
+            # print("===========i===========", i)
+            clf = mlrose.NeuralNetwork(hidden_nodes=[50, ], activation='relu',
+                                       algorithm='gradient_descent', max_iters=int(i),
+                                       bias=True, is_classifier=True, learning_rate=0.00032,
+                                       early_stopping=True,
+                                       # clip_max=5,
+                                       max_attempts=100,
+                                       # restarts=20,
+                                       # schedule= mlrose.GeomDecay(),
+                                       # pop_size = 200,
+                                       # mutation_prob = 0.1,
+                                       random_state=1)
+            clf.fit(X_train, y_train)
+            # Predict labels for train set and assess accuracy
+            y_train_pred = clf.predict(X_train)
+            # print("time:", time.time()-start)
+            y_train_accuracy = accuracy_score(y_train, y_train_pred)
+
+            # Predict labels for test set and assess accuracy
+            y_valid_pred = clf.predict(X_valid)
+            y_valid_accuracy = accuracy_score(y_valid, y_valid_pred)
+            print(int(i), y_train_accuracy, y_valid_accuracy)
+
+            writer = open('ANN_curve/RHC_max_iter.txt', 'a')
+            writer.write(str(int(i))+ str(",") + str(y_train_accuracy)+ str(",") + str(y_valid_accuracy)+str("\n"))
+        print("\n")
+        writer.write(str("\n\n"))
+
+
+
+
+    # # recording
+    # name = 'ann_learning_curve_epoch_post'
+    # # n_alter_mean = np.mean(n_alter, axis=1)
+    # train_scores_mean = np.mean(scores_train, axis=0)
+    # train_scores_std = np.std(scores_train, axis=0)
+    # test_scores_mean = np.mean(scores_test, axis=0)
+    # test_scores_std = np.std(scores_test, axis=0)
+    # DT_1 = open('{}/{}.txt'.format(dataset_name, name), 'w')
+    # DT_1.write('{}/{}'.format(dataset_name, name))
+    # DT_1.write("\n\n")
+    # DT_1.write(str(n_alter))
+    # DT_1.write("\n\n")
+    # DT_1.write(str(train_scores_mean))
+    # DT_1.write("\n\n")
+    # DT_1.write(str(test_scores_mean))
+    #
+    # # plotting
+    # plt.grid()
+    # ylim = (0, 1.1)
+    # plt.ylim(*ylim)
+    # plt.fill_between(n_alter, train_scores_mean - train_scores_std,
+    #                  train_scores_mean + train_scores_std, alpha=0.1,
+    #                  color="r")
+    # plt.fill_between(n_alter, test_scores_mean - test_scores_std,
+    #                  test_scores_mean + test_scores_std, alpha=0.1, color="g")
+    # plt.plot(n_alter, train_scores_mean, color="r",
+    #          label="Training score")
+    # plt.plot(n_alter, test_scores_mean, color="g",
+    #          label="Cross-validation score")
+    # x_title = "Epochs"
+    # y_title = "Score"
+    # plt.xlabel(x_title)
+    # plt.ylabel(y_title)
+    # plt.legend(loc="best")
+    # plt.savefig('{}/{}.png'.format(dataset_name, name))
+    # # plt.savefig('22222.png')
+    # plt.gcf().clear()
+
+def SA_valid_curve_learning_rate(X, y, hidden_layer_sizes=(50, )):
+    writer = open('ANN_curve/SA_learning_rate.txt', 'w')
+    rs = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
+
+    for train_index, validation_index in rs.split(X):
+
+        X_train = X[train_index]
+        X_valid = X[validation_index]
+        y_train = y[train_index]
+        y_valid = y[validation_index]
+        # print "y_train", y_train, '\n', "valid:", y_test
+
+        for i in np.logspace(-2, 2, 50):
             # print("===========i===========", i)
             clf = mlrose.NeuralNetwork(hidden_nodes=[50, ], activation='relu',
                                        algorithm='gradient_descent', max_iters=100,
@@ -479,7 +519,7 @@ def SA_valid_curve_learning_rate(X, y, hidden_layer_sizes=(50, )):
                                        # clip_max=5,
                                        max_attempts=100,
                                        # restarts=20,
-                                       # schedule= mlrose.GeomDecay(),
+                                       schedule= mlrose.GeomDecay(),
                                        # pop_size = 200,
                                        # mutation_prob = 0.1,
                                        random_state=1)
@@ -540,7 +580,7 @@ def SA_valid_curve_learning_rate(X, y, hidden_layer_sizes=(50, )):
     # # plt.savefig('22222.png')
     # plt.gcf().clear()
 def SA_valid_curve_max_atte(X, y, hidden_layer_sizes=(50, )):
-    writer = open('ANN_curve/GD_learning_rate.txt', 'w')
+    writer = open('ANN_curve/SA_max_atte.txt', 'w')
     rs = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
 
     for train_index, validation_index in rs.split(X):
@@ -575,7 +615,88 @@ def SA_valid_curve_max_atte(X, y, hidden_layer_sizes=(50, )):
             y_valid_accuracy = accuracy_score(y_valid, y_valid_pred)
             print(int(i), y_train_accuracy, y_valid_accuracy)
 
-            writer = open('ANN_curve/RHC_max_atte.txt', 'a')
+            writer = open('ANN_curve/SA_max_atte.txt', 'a')
+            writer.write(str(int(i))+ str(",") + str(y_train_accuracy)+ str(",") + str(y_valid_accuracy)+str("\n"))
+        print("\n")
+        writer.write(str("\n\n"))
+
+
+
+
+    # # recording
+    # name = 'ann_learning_curve_epoch_post'
+    # # n_alter_mean = np.mean(n_alter, axis=1)
+    # train_scores_mean = np.mean(scores_train, axis=0)
+    # train_scores_std = np.std(scores_train, axis=0)
+    # test_scores_mean = np.mean(scores_test, axis=0)
+    # test_scores_std = np.std(scores_test, axis=0)
+    # DT_1 = open('{}/{}.txt'.format(dataset_name, name), 'w')
+    # DT_1.write('{}/{}'.format(dataset_name, name))
+    # DT_1.write("\n\n")
+    # DT_1.write(str(n_alter))
+    # DT_1.write("\n\n")
+    # DT_1.write(str(train_scores_mean))
+    # DT_1.write("\n\n")
+    # DT_1.write(str(test_scores_mean))
+    #
+    # # plotting
+    # plt.grid()
+    # ylim = (0, 1.1)
+    # plt.ylim(*ylim)
+    # plt.fill_between(n_alter, train_scores_mean - train_scores_std,
+    #                  train_scores_mean + train_scores_std, alpha=0.1,
+    #                  color="r")
+    # plt.fill_between(n_alter, test_scores_mean - test_scores_std,
+    #                  test_scores_mean + test_scores_std, alpha=0.1, color="g")
+    # plt.plot(n_alter, train_scores_mean, color="r",
+    #          label="Training score")
+    # plt.plot(n_alter, test_scores_mean, color="g",
+    #          label="Cross-validation score")
+    # x_title = "Epochs"
+    # y_title = "Score"
+    # plt.xlabel(x_title)
+    # plt.ylabel(y_title)
+    # plt.legend(loc="best")
+    # plt.savefig('{}/{}.png'.format(dataset_name, name))
+    # # plt.savefig('22222.png')
+    # plt.gcf().clear()
+def SA_valid_curve_max_iter(X, y, hidden_layer_sizes=(50, )):
+    writer = open('ANN_curve/SA_max_iter.txt', 'w')
+    rs = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
+
+    for train_index, validation_index in rs.split(X):
+
+        X_train = X[train_index]
+        X_valid = X[validation_index]
+        y_train = y[train_index]
+        y_valid = y[validation_index]
+        # print "y_train", y_train, '\n', "valid:", y_test
+
+        for i in np.arange(1,1000,20):
+            # print("===========i===========", i)
+            clf = mlrose.NeuralNetwork(hidden_nodes=[50, ], activation='relu',
+                                       algorithm='gradient_descent', max_iters=int(i),
+                                       bias=True, is_classifier=True, learning_rate=0.00032,
+                                       early_stopping=True,
+                                       # clip_max=5,
+                                       max_attempts=100,
+                                       # restarts=20,
+                                       # schedule= mlrose.GeomDecay(),
+                                       # pop_size = 200,
+                                       # mutation_prob = 0.1,
+                                       random_state=1)
+            clf.fit(X_train, y_train)
+            # Predict labels for train set and assess accuracy
+            y_train_pred = clf.predict(X_train)
+            # print("time:", time.time()-start)
+            y_train_accuracy = accuracy_score(y_train, y_train_pred)
+
+            # Predict labels for test set and assess accuracy
+            y_valid_pred = clf.predict(X_valid)
+            y_valid_accuracy = accuracy_score(y_valid, y_valid_pred)
+            print(int(i), y_train_accuracy, y_valid_accuracy)
+
+            writer = open('ANN_curve/SA_max_iter.txt', 'a')
             writer.write(str(int(i))+ str(",") + str(y_train_accuracy)+ str(",") + str(y_valid_accuracy)+str("\n"))
         print("\n")
         writer.write(str("\n\n"))
@@ -622,7 +743,7 @@ def SA_valid_curve_max_atte(X, y, hidden_layer_sizes=(50, )):
     # plt.gcf().clear()
 
 def GA_valid_curve_learning_rate(X, y, hidden_layer_sizes=(50, )):
-    writer = open('ANN_curve/GD_learning_rate.txt', 'w')
+    writer = open('ANN_curve/GA_learning_rate.txt', 'w')
     rs = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
 
     for train_index, validation_index in rs.split(X):
@@ -633,7 +754,7 @@ def GA_valid_curve_learning_rate(X, y, hidden_layer_sizes=(50, )):
         y_valid = y[validation_index]
         # print "y_train", y_train, '\n', "valid:", y_test
 
-        for i in np.logspace(-4, 1, 50):
+        for i in np.logspace(-2, 2, 50):
             # print("===========i===========", i)
             clf = mlrose.NeuralNetwork(hidden_nodes=[50, ], activation='relu',
                                        algorithm='gradient_descent', max_iters=100,
@@ -642,7 +763,7 @@ def GA_valid_curve_learning_rate(X, y, hidden_layer_sizes=(50, )):
                                        # clip_max=5,
                                        max_attempts=100,
                                        # restarts=20,
-                                       # schedule= mlrose.GeomDecay(),
+                                       schedule= mlrose.GeomDecay(),
                                        # pop_size = 200,
                                        # mutation_prob = 0.1,
                                        random_state=1)
@@ -657,7 +778,7 @@ def GA_valid_curve_learning_rate(X, y, hidden_layer_sizes=(50, )):
             y_valid_accuracy = accuracy_score(y_valid, y_valid_pred)
             print(i, y_train_accuracy, y_valid_accuracy)
 
-            writer = open('ANN_curve/RHC_learning_rate.txt', 'a')
+            writer = open('ANN_curve/GA_learning_rate.txt', 'a')
             writer.write(str(i)+ str(",") + str(y_train_accuracy)+ str(",") + str(y_valid_accuracy)+str("\n"))
         print("\n")
         writer.write(str("\n\n"))
@@ -702,8 +823,49 @@ def GA_valid_curve_learning_rate(X, y, hidden_layer_sizes=(50, )):
     # plt.savefig('{}/{}.png'.format(dataset_name, name))
     # # plt.savefig('22222.png')
     # plt.gcf().clear()
+def GA_valid_curve_mutation_prob(X, y, hidden_layer_sizes=(50, )):
+    writer = open('ANN_curve/GA_mutation_prob.txt', 'w')
+    rs = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
+
+    for train_index, validation_index in rs.split(X):
+
+        X_train = X[train_index]
+        X_valid = X[validation_index]
+        y_train = y[train_index]
+        y_valid = y[validation_index]
+        # print "y_train", y_train, '\n', "valid:", y_test
+
+        for i in np.arange(0.01, 1, 0.03):
+            start_time = time.time()
+            clf = mlrose.NeuralNetwork(hidden_nodes=[50, ], activation='relu',
+                                       algorithm='genetic_alg', max_iters=10,
+                                       bias=True, is_classifier=True, learning_rate=5,
+                                       early_stopping=True,
+                                       clip_max=10,
+                                       max_attempts=35,
+                                       # restarts=20,
+                                       # schedule= mlrose.GeomDecay(),
+                                       pop_size = 200,
+                                       mutation_prob = i,
+                                       )
+            clf.fit(X_train, y_train)
+            # Predict labels for train set and assess accuracy
+            y_train_pred = clf.predict(X_train)
+            # print("time:", time.time()-start)
+            y_train_accuracy = accuracy_score(y_train, y_train_pred)
+
+            # Predict labels for test set and assess accuracy
+            y_valid_pred = clf.predict(X_valid)
+            y_valid_accuracy = accuracy_score(y_valid, y_valid_pred)
+            print("time:", time.time()-start_time)
+            print(i, y_train_accuracy, y_valid_accuracy)
+
+            writer = open('ANN_curve/GA_mutation_prob.txt', 'a')
+            writer.write(str(i)+ str(",") + str(y_train_accuracy)+ str(",") + str(y_valid_accuracy)+str("\n"))
+        print("\n")
+        writer.write(str("\n\n"))
 def GA_valid_curve_max_atte(X, y, hidden_layer_sizes=(50, )):
-    writer = open('ANN_curve/GD_learning_rate.txt', 'w')
+    writer = open('ANN_curve/GA_max_atte.txt', 'w')
     rs = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
 
     for train_index, validation_index in rs.split(X):
@@ -738,7 +900,7 @@ def GA_valid_curve_max_atte(X, y, hidden_layer_sizes=(50, )):
             y_valid_accuracy = accuracy_score(y_valid, y_valid_pred)
             print(int(i), y_train_accuracy, y_valid_accuracy)
 
-            writer = open('ANN_curve/RHC_max_atte.txt', 'a')
+            writer = open('ANN_curve/GA_max_atte.txt', 'a')
             writer.write(str(int(i))+ str(",") + str(y_train_accuracy)+ str(",") + str(y_valid_accuracy)+str("\n"))
         print("\n")
         writer.write(str("\n\n"))
@@ -783,9 +945,8 @@ def GA_valid_curve_max_atte(X, y, hidden_layer_sizes=(50, )):
     # plt.savefig('{}/{}.png'.format(dataset_name, name))
     # # plt.savefig('22222.png')
     # plt.gcf().clear()
-
-def MIMIC_valid_curve_learning_rate(X, y, hidden_layer_sizes=(50, )):
-    writer = open('ANN_curve/GD_learning_rate.txt', 'w')
+def GA_valid_curve_max_iter(X, y, hidden_layer_sizes=(50, )):
+    writer = open('ANN_curve/GA_max_iter.txt', 'w')
     rs = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
 
     for train_index, validation_index in rs.split(X):
@@ -796,11 +957,11 @@ def MIMIC_valid_curve_learning_rate(X, y, hidden_layer_sizes=(50, )):
         y_valid = y[validation_index]
         # print "y_train", y_train, '\n', "valid:", y_test
 
-        for i in np.logspace(-4, 1, 50):
+        for i in np.arange(1,1000,20):
             # print("===========i===========", i)
             clf = mlrose.NeuralNetwork(hidden_nodes=[50, ], activation='relu',
-                                       algorithm='gradient_descent', max_iters=100,
-                                       bias=True, is_classifier=True, learning_rate=i,
+                                       algorithm='gradient_descent', max_iters=int(i),
+                                       bias=True, is_classifier=True, learning_rate=0.00032,
                                        early_stopping=True,
                                        # clip_max=5,
                                        max_attempts=100,
@@ -818,90 +979,9 @@ def MIMIC_valid_curve_learning_rate(X, y, hidden_layer_sizes=(50, )):
             # Predict labels for test set and assess accuracy
             y_valid_pred = clf.predict(X_valid)
             y_valid_accuracy = accuracy_score(y_valid, y_valid_pred)
-            print(i, y_train_accuracy, y_valid_accuracy)
-
-            writer = open('ANN_curve/RHC_learning_rate.txt', 'a')
-            writer.write(str(i)+ str(",") + str(y_train_accuracy)+ str(",") + str(y_valid_accuracy)+str("\n"))
-        print("\n")
-        writer.write(str("\n\n"))
-
-
-
-
-    # # recording
-    # name = 'ann_learning_curve_epoch_post'
-    # # n_alter_mean = np.mean(n_alter, axis=1)
-    # train_scores_mean = np.mean(scores_train, axis=0)
-    # train_scores_std = np.std(scores_train, axis=0)
-    # test_scores_mean = np.mean(scores_test, axis=0)
-    # test_scores_std = np.std(scores_test, axis=0)
-    # DT_1 = open('{}/{}.txt'.format(dataset_name, name), 'w')
-    # DT_1.write('{}/{}'.format(dataset_name, name))
-    # DT_1.write("\n\n")
-    # DT_1.write(str(n_alter))
-    # DT_1.write("\n\n")
-    # DT_1.write(str(train_scores_mean))
-    # DT_1.write("\n\n")
-    # DT_1.write(str(test_scores_mean))
-    #
-    # # plotting
-    # plt.grid()
-    # ylim = (0, 1.1)
-    # plt.ylim(*ylim)
-    # plt.fill_between(n_alter, train_scores_mean - train_scores_std,
-    #                  train_scores_mean + train_scores_std, alpha=0.1,
-    #                  color="r")
-    # plt.fill_between(n_alter, test_scores_mean - test_scores_std,
-    #                  test_scores_mean + test_scores_std, alpha=0.1, color="g")
-    # plt.plot(n_alter, train_scores_mean, color="r",
-    #          label="Training score")
-    # plt.plot(n_alter, test_scores_mean, color="g",
-    #          label="Cross-validation score")
-    # x_title = "Epochs"
-    # y_title = "Score"
-    # plt.xlabel(x_title)
-    # plt.ylabel(y_title)
-    # plt.legend(loc="best")
-    # plt.savefig('{}/{}.png'.format(dataset_name, name))
-    # # plt.savefig('22222.png')
-    # plt.gcf().clear()
-def MIMIC_valid_curve_max_atte(X, y, hidden_layer_sizes=(50, )):
-    writer = open('ANN_curve/GD_learning_rate.txt', 'w')
-    rs = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
-
-    for train_index, validation_index in rs.split(X):
-
-        X_train = X[train_index]
-        X_valid = X[validation_index]
-        y_train = y[train_index]
-        y_valid = y[validation_index]
-        # print "y_train", y_train, '\n', "valid:", y_test
-
-        for i in np.arange(1,1000,20):
-            # print("===========i===========", i)
-            clf = mlrose.NeuralNetwork(hidden_nodes=[50, ], activation='relu',
-                                       algorithm='gradient_descent', max_iters=100,
-                                       bias=True, is_classifier=True, learning_rate=0.01,
-                                       early_stopping=True,
-                                       # clip_max=5,
-                                       max_attempts=int(i),
-                                       # restarts=20,
-                                       # schedule= mlrose.GeomDecay(),
-                                       # pop_size = 200,
-                                       # mutation_prob = 0.1,
-                                       random_state=1)
-            clf.fit(X_train, y_train)
-            # Predict labels for train set and assess accuracy
-            y_train_pred = clf.predict(X_train)
-            # print("time:", time.time()-start)
-            y_train_accuracy = accuracy_score(y_train, y_train_pred)
-
-            # Predict labels for test set and assess accuracy
-            y_valid_pred = clf.predict(X_valid)
-            y_valid_accuracy = accuracy_score(y_valid, y_valid_pred)
             print(int(i), y_train_accuracy, y_valid_accuracy)
 
-            writer = open('ANN_curve/RHC_max_atte.txt', 'a')
+            writer = open('ANN_curve/GA_max_iter.txt', 'a')
             writer.write(str(int(i))+ str(",") + str(y_train_accuracy)+ str(",") + str(y_valid_accuracy)+str("\n"))
         print("\n")
         writer.write(str("\n\n"))
@@ -1046,67 +1126,8 @@ def score_time_default(dataset_name, clf_name, clf, X_train, X_test, y_train, y_
     txt.write(str(difference/10))
     txt.write("\n\n")
 
-#
-# def grid_search_gd():
-#     max_accuracy = 0
-#     best_params = {}
-#     count = 0
-#
-#     for learning_rate in np.arange(0.0001, 1.0001, 0.0001):
-# 		for max_attempts in range(50, 1001, 50):
-# 			count += 1
-# 			print('Running ', count)
-# 			nn = mlrose.NeuralNetwork(hidden_nodes = [75],
-#
-# 											  activation = 'relu',
-#
-# 											  algorithm = 'gradient_descent',
-#
-# 											  max_iters = 100,
-#
-# 											  bias = True,
-#
-# 											  is_classifier = True,
-#
-# 											  learning_rate = learning_rate,
-#
-# 											  early_stopping = True,
-#
-# 											  clip_max = 10,
-#
-# 											  max_attempts = max_attempts)
-#
-# 			nn.fit(X_train, y_train)
-# 			y_test_pred = nn.predict(X_test)
-# 			y_test_accuracy = accuracy_score(y_test, y_test_pred)
-# 			if y_test_accuracy > max_accuracy:
-# 				max_accuracy = y_test_accuracy
-# 				best_params['learning_rate'] = learning_rate
-# 				best_params['max_attempts'] = max_attempts
-#
-# 	print('GD: ')
-# 	print('Max accuracy: ', max_accuracy)
-# 	print('Best params: ', best_params)
-#
-
 if __name__=="__main__":
-    '''Load and standardize data set MNIST'''
-    # train = np.genfromtxt('fashion-mnist_train_minor.csv', delimiter=',')[1:, :]
-    # test = np.genfromtxt('fashion-mnist_test_minor.csv', delimiter=',')[1:, :]
-    #
-    # # X_train = train[:, 1:]
-    # # y_train = train[:, 0]
-    # # X_test = test[:, 1:]
-    # # y_test = test[:, 0]
-    #
-    # X = train[:, 1:]
-    # y = train[:, 0]
-    #
-    # X_train, X_test, y_train, y_test = train_test_split(X, y,
-    #                                                     test_size=0.2,
-    #                                                     random_state=0,
-    #                                                     shuffle=True,
-    #                                                     stratify=y)
+    '''Load and standardize data set ESR'''
     set2 = np.genfromtxt('Epileptic_Seizure_Recognition.csv', delimiter=',', dtype=None)[1:6001, 1:]
     set2 = set2.astype(int)
 
@@ -1116,57 +1137,143 @@ if __name__=="__main__":
     X2 = scaler.fit_transform(X2)
     y2 = set2[:, -1]
     X2_train, X2_test, y2_train, y2_test = train_test_split(X2, y2, test_size=0.2, random_state=0, stratify=y2)
-    #
     set2_name = "ESR"
 
     # standardize the original data - this is important but usually neglected by newbies.
     scaler = preprocessing.StandardScaler()
-    # X_train = scaler.fit_transform(X_train)
-    # X_test = scaler.transform(X_test)
 
-    # scaler = MinMaxScaler()
     X_train_scaled = scaler.fit_transform(X2_train)
     X_test_scaled = scaler.transform(X2_test)
 
     one_hot = OneHotEncoder()
     y_train_hot = one_hot.fit_transform(y2_train.reshape(-1, 1)).todense()
     y_test_hot = one_hot.transform(y2_test.reshape(-1, 1)).todense()
-    set1_name = "mnist"
+    set2_name = "ESR"
 
-    # GD_valid_curve_learning_rate(X_train_scaled, y_train_hot, hidden_layer_sizes=(50,))
-    # GD_valid_curve_max_atte(X_train_scaled, y_train_hot, hidden_layer_sizes=(50,))
-    # GD_valid_curve_max_iter(X_train_scaled, y_train_hot, hidden_layer_sizes=(50,))
+    GD_valid_curve_learning_rate(X_train_scaled, y_train_hot, hidden_layer_sizes=(50,))
+    GD_valid_curve_max_atte(X_train_scaled, y_train_hot, hidden_layer_sizes=(50,))
+    GD_valid_curve_max_iter(X_train_scaled, y_train_hot, hidden_layer_sizes=(50,))
 
     RHC_valid_curve_learning_rate(X_train_scaled, y_train_hot, hidden_layer_sizes=(50,))
-    # RHC_valid_curve_max_atte(X_train_scaled, y_train_hot, hidden_layer_sizes=(50,))
+    RHC_valid_curve_max_atte(X_train_scaled, y_train_hot, hidden_layer_sizes=(50,))
+    RHC_valid_curve_max_iter(X_train_scaled, y_train_hot, hidden_layer_sizes=(50,))
 
-    '''========================================
-    for i in np.logspace(-4, 1, 50):
-        start = time.time()
-        print("===========i===========", i)
-        clf = mlrose.NeuralNetwork(hidden_nodes=[50,], activation='relu',
-                                   algorithm='gradient_descent', max_iters=100,
-                                   bias=True, is_classifier=True, learning_rate=i,
-                                   early_stopping=True,
-                                   # clip_max=5,
-                                   max_attempts=100,
-                                   # restarts=20,
-                                   # schedule= mlrose.GeomDecay(),
-                                   # pop_size = 200,
-                                   # mutation_prob = 0.1,
-                                   random_state=1)
-        clf.fit(X_train_scaled, y_train_hot)
-        # Predict labels for train set and assess accuracy
-        y_train_pred = clf.predict(X_train_scaled)
-        # print("time:", time.time()-start)
-        y_train_accuracy = accuracy_score(y_train_hot, y_train_pred)
+    SA_valid_curve_learning_rate(X_train_scaled, y_train_hot, hidden_layer_sizes=(50,))
+    SA_valid_curve_max_atte(X_train_scaled, y_train_hot, hidden_layer_sizes=(50,))
+    SA_valid_curve_max_iter(X_train_scaled, y_train_hot, hidden_layer_sizes=(50,))
+
+    GA_valid_curve_learning_rate(X_train_scaled, y_train_hot, hidden_layer_sizes=(50,))
+    GA_valid_curve_mutation_prob(X_train_scaled, y_train_hot, hidden_layer_sizes=(50,))
+    GA_valid_curve_max_atte(X_train_scaled, y_train_hot, hidden_layer_sizes=(50,))
+    GA_valid_curve_max_iter(X_train_scaled, y_train_hot, hidden_layer_sizes=(50,))
+
+    print("===========GD===========")
+    time_list = []
+    accuracy_list = []
+    for i in range(10):
+        start_time = time.time()
+        clf_gd = mlrose.NeuralNetwork(hidden_nodes=[50,], activation='relu',
+                                    algorithm='gradient_descent', max_iters=200,
+                                    bias=True, is_classifier=True, learning_rate=0.00037,
+                                    early_stopping=True,
+                                    # clip_max=5,
+                                    max_attempts=20,
+                                    # restarts=20,
+                                    # schedule= mlrose.GeomDecay(),
+                                    # pop_size = 200,
+                                    # mutation_prob = 0.1,
+                                    )
+        clf_gd.fit(X_test_scaled, y_test_hot)
 
         # Predict labels for test set and assess accuracy
-        y_test_pred = clf.predict(X_test_scaled)
+        y_test_pred = clf_gd.predict(X_test_scaled)
         y_test_accuracy = accuracy_score(y_test_hot, y_test_pred)
-        print(i, y_test_accuracy,y_train_accuracy)
+        accuracy_list.append(y_test_accuracy)
+        time_list.append(time.time()-start_time)
+    time_mean = np.mean(time_list)
+    accuracy_mean = np.mean(accuracy_list)
+    print("GD", time_mean, accuracy_mean)
 
-        # '''
+    print("===========RHC===========")
+    time_list = []
+    accuracy_list = []
+    for i in range(10):
+        start_time = time.time()
+        clf_rhc = mlrose.NeuralNetwork(hidden_nodes=[50, ], activation='relu',
+                                       algorithm='random_hill_climb', max_iters=500,
+                                       bias=True, is_classifier=True, learning_rate=10,
+                                       early_stopping=True,
+                                       # clip_max=5,
+                                       max_attempts=500
+                                       # restarts=20,
+                                       # schedule= mlrose.GeomDecay(),
+                                       # pop_size = 200,
+                                       # mutation_prob = 0.1,
+                                       )
+        clf_rhc.fit(X_test_scaled, y_test_hot)
+
+        # Predict labels for test set and assess accuracy
+        y_test_pred = clf_rhc.predict(X_test_scaled)
+        y_test_accuracy = accuracy_score(y_test_hot, y_test_pred)
+        accuracy_list.append(y_test_accuracy)
+        time_list.append(time.time() - start_time)
+    time_mean = np.mean(time_list)
+    accuracy_mean = np.mean(accuracy_list)
+    print("RHC", time_mean, accuracy_mean)
+
+    print("===========SA===========")
+    time_list = []
+    accuracy_list = []
+    for i in range(10):
+        start_time = time.time()
+        clf_sa = mlrose.NeuralNetwork(hidden_nodes=[50, ], activation='relu',
+                                      algorithm='simulated_annealing', max_iters=500,
+                                      bias=True, is_classifier=True, learning_rate=10,
+                                      early_stopping=True,
+                                      # clip_max=5,
+                                      max_attempts=500,
+                                      # restarts=20,
+                                      schedule=mlrose.GeomDecay()
+                                      # pop_size = 200,
+                                      # mutation_prob = 0.1,
+                                      )
+        clf_sa.fit(X_test_scaled, y_test_hot)
+
+        # Predict labels for test set and assess accuracy
+        y_test_pred = clf_sa.predict(X_test_scaled)
+        y_test_accuracy = accuracy_score(y_test_hot, y_test_pred)
+        accuracy_list.append(y_test_accuracy)
+        time_list.append(time.time() - start_time)
+    time_mean = np.mean(time_list)
+    accuracy_mean = np.mean(accuracy_list)
+    print("SA", time_mean, accuracy_mean)
+
+    print("===========GA===========")
+    time_list = []
+    accuracy_list = []
+    for i in range(10):
+        start_time = time.time()
+        clf_ga = mlrose.NeuralNetwork(hidden_nodes=[50, ], activation='relu',
+                                      algorithm='genetic_alg', max_iters=200,
+                                      bias=True, is_classifier=True, learning_rate=10,
+                                      early_stopping=True,
+                                      # clip_max=5,
+                                      max_attempts=50,
+                                      # restarts=20,
+                                      # schedule= mlrose.GeomDecay()
+                                      pop_size=200,
+                                      mutation_prob=0.26
+                                      )
+        clf_ga.fit(X_test_scaled, y_test_hot)
+
+        # Predict labels for test set and assess accuracy
+        y_test_pred = clf_ga.predict(X_test_scaled)
+        y_test_accuracy = accuracy_score(y_test_hot, y_test_pred)
+        accuracy_list.append(y_test_accuracy)
+        time_list.append(time.time() - start_time)
+    time_mean = np.mean(time_list)
+    accuracy_mean = np.mean(accuracy_list)
+    print("GA", time_mean, accuracy_mean)
 
 
 
