@@ -1127,7 +1127,7 @@ def score_time_default(dataset_name, clf_name, clf, X_train, X_test, y_train, y_
 
 
 if __name__=="__main__":
-    '''Section 1: parameter optimization. '''
+
     set2 = np.genfromtxt('Epileptic_Seizure_Recognition.csv', delimiter=',', dtype=None)[1:6001, 1:]
     set2 = set2.astype(int)
 
@@ -1149,6 +1149,7 @@ if __name__=="__main__":
     y_train_hot = one_hot.fit_transform(y2_train.reshape(-1, 1)).todense()
     y_test_hot = one_hot.transform(y2_test.reshape(-1, 1)).todense()
     set2_name = "ESR"
+    '''Section 1: parameter optimization. '''
 
     GD_valid_curve_learning_rate(X_train_scaled, y_train_hot, hidden_layer_sizes=(50,))
     GD_valid_curve_max_atte(X_train_scaled, y_train_hot, hidden_layer_sizes=(50,))

@@ -4,8 +4,7 @@ Assignment 2
 
 Use this Dropbox link to find the code and dataset files, and other associated files needed:
 
-
-https://www.dropbox.com/sh/tcyqnync50xmp7o/AAAJH-kokjYgRyLp9_gAO7GRa?dl=0
+https://www.dropbox.com/sh/9jbb4s49pgdtp2a/AACayXFcVpL6wmpMrNpatNCra?dl=0
 
 
 ====================== Useful Information ====================
@@ -35,7 +34,7 @@ The version of these packages are:
 	scikit-learn - 0.21.3
 	scipy 1.3.1
 
-To run the code, copy all the above-mentioned dataset files (*.csv), the code (*.py), and all the three folders (i.e. copy everything from the provided dropbox folder) into same folder. After that, simply run the code. 
+To run the code, copy all the above-mentioned dataset files (*.csv), the code (*.py), and all the folders (i.e. copy everything from the provided dropbox folder) into same folder. After that, simply run the code. 
 
 Note: 
 
