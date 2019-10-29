@@ -18,41 +18,41 @@ if __name__=="__main__":
     one_hot = preprocessing.OneHotEncoder()
 
     '''Load and standardize data set MNIST'''
-    # set1_name = "mnist"
-    #
-    # train = np.genfromtxt('fashion-mnist_train_minor.csv', delimiter=',')[1:, :]
-    # test = np.genfromtxt('fashion-mnist_test_minor.csv', delimiter=',')[1:, :]
-    #
-    # data1_X_train = train[:, 1:]
-    # data1_y_train = train[:, 0]
-    # data1_X_test = test[:, 1:]
-    # data1_y_test = test[:, 0]
-    #
-    # data1_X_train = scaler.fit_transform(data1_X_train)
-    # data1_X_test = scaler.transform(data1_X_test)
+    set1_name = "mnist"
+
+    train = np.genfromtxt('fashion-mnist_train_minor.csv', delimiter=',')[1:, :]
+    test = np.genfromtxt('fashion-mnist_test_minor.csv', delimiter=',')[1:, :]
+
+    data1_X_train = train[:, 1:]
+    data1_y_train = train[:, 0]
+    data1_X_test = test[:, 1:]
+    data1_y_test = test[:, 0]
+
+    data1_X_train = scaler.fit_transform(data1_X_train)
+    data1_X_test = scaler.transform(data1_X_test)
+
     #
     # # data1_y_train = one_hot.fit_transform(data1_y_train.reshape(-1, 1)).todense()
     # # data1_y_test = one_hot.transform(data1_y_test.reshape(-1, 1)).todense()
-    set1_name = "ESR"
-    set1 = np.genfromtxt('Epileptic_Seizure_Recognition.csv', delimiter=',', dtype=None)[1:6001, 1:]
-    # set1 = np.genfromtxt('default_of_credit_card_clients.csv', delimiter=',', dtype=None)[1:6001, 1:]
 
-    set1 = set1.astype(int)
-
-    data1_X = set1[:, :-1]
-    data1_X = scaler.fit_transform(data1_X)
-    data1_y = set1[:, -1]
-    data1_X = scaler.fit_transform(data1_X)
-
-    data1_X_train, data1_X_test, data1_y_train, data1_y_test = train_test_split(data1_X, data1_y, test_size=0.2,
-                                                                                random_state=0, stratify=data1_y)
-
-
+    # set1_name = "ESR"
+    # set1 = np.genfromtxt('Epileptic_Seizure_Recognition.csv', delimiter=',', dtype=None)[1:6001, 1:]
+    # # set1 = np.genfromtxt('default_of_credit_card_clients.csv', delimiter=',', dtype=None)[1:6001, 1:]
+    #
+    # set1 = set1.astype(int)
+    #
+    # data1_X = set1[:, :-1]
+    # data1_X = scaler.fit_transform(data1_X)
+    # data1_y = set1[:, -1]
+    # data1_X = scaler.fit_transform(data1_X)
+    #
+    # data1_X_train, data1_X_test, data1_y_train, data1_y_test = train_test_split(data1_X, data1_y, test_size=0.2,
+    #                                                                             random_state=0, stratify=data1_y)
 
     '''Load and standardize data set ESR'''
     set2_name = "ESR"
-    # set2 = np.genfromtxt('Epileptic_Seizure_Recognition.csv', delimiter=',', dtype=None)[1:6001, 1:]
-    set2 = np.loadtxt(open("default_of_credit_card_clients.csv", "rb"), delimiter=",", skiprows=1)
+    set2 = np.genfromtxt('Epileptic_Seizure_Recognition.csv', delimiter=',', dtype=None)[1:6001, 1:]
+    # set2 = np.loadtxt(open("default_of_credit_card_clients.csv", "rb"), delimiter=",", skiprows=1)
 
     set2 = set2.astype(int)
 
@@ -146,16 +146,41 @@ if __name__=="__main__":
     ############################## ICA - finding number of features ##############################
 
     ica = FastICA(random_state=5)
-    # error_rate_train_1 = np.zeros(np.shape(data1_X_train)[1])
-    # error_rate_test_1 = np.zeros(np.shape(data1_X_train)[1])
-    # for i in range(0, np.shape(data1_X_train)[1]):
-    #     print i
-    #     ica.set_params(n_components=i + 1)
-    #     DT1 = tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=0.005)
-    #     error_rate_train_1[i] = sum(
-    #         DT1.fit(ica.fit_transform(data1_X_train), data1_y_train).predict(ica.fit_transform(data1_X_train)) == data1_y_train) * 1.0 /data1_y_train.shape[0]
-    #     error_rate_test_1[i] = sum(
-    #         DT1.fit(ica.fit_transform(data1_X_train), data1_y_train).predict(ica.fit_transform(data1_X_test)) == data1_y_test) * 1.0 /data1_y_test.shape[0]
+    error_rate_train_1 = np.zeros(np.shape(data1_X_train)[1])
+    error_rate_test_1 = np.zeros(np.shape(data1_X_train)[1])
+    DT1 = tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=0.005)
+    for i in range(0, np.shape(data1_X_train)[1]):
+        print i
+        ica.set_params(n_components=i + 1)
+
+        error_rate_train_1[i] = sum(
+            DT1.fit(ica.fit_transform(data1_X_train), data1_y_train).predict(ica.fit_transform(data1_X_train)) == data1_y_train) * 1.0 /data1_y_train.shape[0]
+        error_rate_test_1[i] = sum(
+            DT1.fit(ica.fit_transform(data1_X_train), data1_y_train).predict(ica.fit_transform(data1_X_test)) == data1_y_test) * 1.0 / data1_y_test.shape[0]
+    error_rate_train_DT_1 = sum(
+            DT1.fit(data1_X_train, data1_y_train).predict(data1_X_train) == data1_y_train) * 1.0 / data1_y_train.shape[0]
+    error_rate_test_DT_1 = sum(
+            DT1.fit(data1_X_train, data1_y_train).predict(data1_X_test) == data1_y_test) * 1.0 / data1_y_test.shape[0]
+
+    file_2.write("ICA_error_rate_train_1")
+    for i in range(0, len(error_rate_train_1)):
+        file_2.write(";")
+        file_2.write("%1.9f" % error_rate_train_1[i])
+    file_2.write("\n")
+
+    file_2.write("ICA_free_error_rate_test_1;")
+    file_2.write("%1.9f" % error_rate_train_DT_1)
+    file_2.write("\n")
+
+    file_2.write("ICA_error_rate_test_1")
+    for i in range(0, len(error_rate_test_1)):
+        file_2.write(";")
+        file_2.write("%1.9f" % error_rate_test_1[i])
+    file_2.write("\n")
+
+    file_2.write("ICA_free_error_rate_test_1;")
+    file_2.write("%1.9f" % error_rate_test_DT_1)
+    file_2.write("\n")
 
     error_rate_train_2 = np.zeros(np.shape(data2_X_train)[1])
     error_rate_test_2 = np.zeros(np.shape(data2_X_train)[1])
@@ -168,11 +193,10 @@ if __name__=="__main__":
             DT2.fit(ica.fit_transform(data2_X_train), data2_y_train).predict(ica.fit_transform(data2_X_train)) == data2_y_train) * 1.0 /data2_y_train.shape[0]
         error_rate_test_2[i] = sum(
             DT2.fit(ica.fit_transform(data2_X_train), data2_y_train).predict(ica.fit_transform(data2_X_test)) == data2_y_test) * 1.0 / data2_y_test.shape[0]
-    error_rate_train_DT = sum(
+    error_rate_train_DT_2 = sum(
             DT2.fit(data2_X_train, data2_y_train).predict(data2_X_train) == data2_y_train) * 1.0 / data2_y_train.shape[0]
-    error_rate_test_DT = sum(
+    error_rate_test_DT_2 = sum(
             DT2.fit(data2_X_train, data2_y_train).predict(data2_X_test) == data2_y_test) * 1.0 / data2_y_test.shape[0]
-
 
     # ica.set_params(n_components=15)
     # print "component = 15"
@@ -205,7 +229,7 @@ if __name__=="__main__":
     file_2.write("\n")
 
     file_2.write("ICA_free_error_rate_test_2;")
-    file_2.write("%1.9f" % error_rate_train_DT)
+    file_2.write("%1.9f" % error_rate_train_DT_2)
     file_2.write("\n")
 
     file_2.write("ICA_error_rate_test_2")
@@ -215,7 +239,7 @@ if __name__=="__main__":
     file_2.write("\n")
 
     file_2.write("ICA_free_error_rate_test_2;")
-    file_2.write("%1.9f" % error_rate_test_DT)
+    file_2.write("%1.9f" % error_rate_test_DT_2)
     file_2.write("\n")
 
     # ############################## ICA - calculate kurotosis ##############################
@@ -226,10 +250,10 @@ if __name__=="__main__":
     # temp1 = pd.DataFrame(temp1)
     # kurt1 = temp1.kurt(axis=0)
     #
-    ica.set_params(n_components=15)
-    temp2 = ica.fit_transform(data2_X_train)
-    temp2 = pd.DataFrame(temp2)
-    kurt2 = temp2.kurt(axis=0)
+    # ica.set_params(n_components=15)
+    # temp2 = ica.fit_transform(data2_X_train)
+    # temp2 = pd.DataFrame(temp2)
+    # kurt2 = temp2.kurt(axis=0)
 
     # file_2.write("ICA_kurt1")
     # for i in range(0, len(kurt1)):
@@ -237,11 +261,11 @@ if __name__=="__main__":
     #     file_2.write("%1.9f" % kurt1[i])
     # file_2.write("\n")
     #
-    file_2.write("ICA_kurt2_n_component=15")
-    for i in range(0, len(kurt2)):
-        file_2.write(";")
-        file_2.write("%1.9f" % kurt2[i])
-    file_2.write("\n")
+    # file_2.write("ICA_kurt2_n_component=15")
+    # for i in range(0, len(kurt2)):
+    #     file_2.write(";")
+    #     file_2.write("%1.9f" % kurt2[i])
+    # file_2.write("\n")
 
     # ############################## RP ##############################
     #
