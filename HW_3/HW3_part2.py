@@ -18,18 +18,18 @@ if __name__=="__main__":
     one_hot = preprocessing.OneHotEncoder()
 
     '''Load and standardize data set MNIST'''
-    set1_name = "mnist"
-
-    train = np.genfromtxt('fashion-mnist_train_minor.csv', delimiter=',')[1:, :]
-    test = np.genfromtxt('fashion-mnist_test_minor.csv', delimiter=',')[1:, :]
-
-    data1_X_train = train[:, 1:]
-    data1_y_train = train[:, 0]
-    data1_X_test = test[:, 1:]
-    data1_y_test = test[:, 0]
-
-    data1_X_train = scaler.fit_transform(data1_X_train)
-    data1_X_test = scaler.transform(data1_X_test)
+    # set1_name = "mnist"
+    #
+    # train = np.genfromtxt('fashion-mnist_train_minor.csv', delimiter=',')[1:, :]
+    # test = np.genfromtxt('fashion-mnist_test_minor.csv', delimiter=',')[1:, :]
+    #
+    # data1_X_train = train[:, 1:]
+    # data1_y_train = train[:, 0]
+    # data1_X_test = test[:, 1:]
+    # data1_y_test = test[:, 0]
+    #
+    # data1_X_train = scaler.fit_transform(data1_X_train)
+    # data1_X_test = scaler.transform(data1_X_test)
 
     #
     # # data1_y_train = one_hot.fit_transform(data1_y_train.reshape(-1, 1)).todense()
@@ -146,41 +146,41 @@ if __name__=="__main__":
     ############################## ICA - finding number of features ##############################
 
     ica = FastICA(random_state=5)
-    error_rate_train_1 = np.zeros(np.shape(data1_X_train)[1])
-    error_rate_test_1 = np.zeros(np.shape(data1_X_train)[1])
-    DT1 = tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=0.005)
-    for i in range(0, np.shape(data1_X_train)[1]):
-        print i
-        ica.set_params(n_components=i + 1)
+    # error_rate_train_1 = np.zeros(np.shape(data1_X_train)[1])
+    # error_rate_test_1 = np.zeros(np.shape(data1_X_train)[1])
+    # DT1 = tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=0.005)
+    # for i in range(0, np.shape(data1_X_train)[1]):
+    #     print i
+    #     ica.set_params(n_components=i + 1)
+    #
+    #     error_rate_train_1[i] = sum(
+    #         DT1.fit(ica.fit_transform(data1_X_train), data1_y_train).predict(ica.fit_transform(data1_X_train)) == data1_y_train) * 1.0 /data1_y_train.shape[0]
+    #     error_rate_test_1[i] = sum(
+    #         DT1.fit(ica.fit_transform(data1_X_train), data1_y_train).predict(ica.fit_transform(data1_X_test)) == data1_y_test) * 1.0 / data1_y_test.shape[0]
+    # error_rate_train_DT_1 = sum(
+    #         DT1.fit(data1_X_train, data1_y_train).predict(data1_X_train) == data1_y_train) * 1.0 / data1_y_train.shape[0]
+    # error_rate_test_DT_1 = sum(
+    #         DT1.fit(data1_X_train, data1_y_train).predict(data1_X_test) == data1_y_test) * 1.0 / data1_y_test.shape[0]
 
-        error_rate_train_1[i] = sum(
-            DT1.fit(ica.fit_transform(data1_X_train), data1_y_train).predict(ica.fit_transform(data1_X_train)) == data1_y_train) * 1.0 /data1_y_train.shape[0]
-        error_rate_test_1[i] = sum(
-            DT1.fit(ica.fit_transform(data1_X_train), data1_y_train).predict(ica.fit_transform(data1_X_test)) == data1_y_test) * 1.0 / data1_y_test.shape[0]
-    error_rate_train_DT_1 = sum(
-            DT1.fit(data1_X_train, data1_y_train).predict(data1_X_train) == data1_y_train) * 1.0 / data1_y_train.shape[0]
-    error_rate_test_DT_1 = sum(
-            DT1.fit(data1_X_train, data1_y_train).predict(data1_X_test) == data1_y_test) * 1.0 / data1_y_test.shape[0]
-
-    file_2.write("ICA_error_rate_train_1")
-    for i in range(0, len(error_rate_train_1)):
-        file_2.write(";")
-        file_2.write("%1.9f" % error_rate_train_1[i])
-    file_2.write("\n")
-
-    file_2.write("ICA_free_error_rate_test_1;")
-    file_2.write("%1.9f" % error_rate_train_DT_1)
-    file_2.write("\n")
-
-    file_2.write("ICA_error_rate_test_1")
-    for i in range(0, len(error_rate_test_1)):
-        file_2.write(";")
-        file_2.write("%1.9f" % error_rate_test_1[i])
-    file_2.write("\n")
-
-    file_2.write("ICA_free_error_rate_test_1;")
-    file_2.write("%1.9f" % error_rate_test_DT_1)
-    file_2.write("\n")
+    # file_2.write("ICA_error_rate_train_1")
+    # for i in range(0, len(error_rate_train_1)):
+    #     file_2.write(";")
+    #     file_2.write("%1.9f" % error_rate_train_1[i])
+    # file_2.write("\n")
+    #
+    # file_2.write("ICA_free_error_rate_test_1;")
+    # file_2.write("%1.9f" % error_rate_train_DT_1)
+    # file_2.write("\n")
+    #
+    # file_2.write("ICA_error_rate_test_1")
+    # for i in range(0, len(error_rate_test_1)):
+    #     file_2.write(";")
+    #     file_2.write("%1.9f" % error_rate_test_1[i])
+    # file_2.write("\n")
+    #
+    # file_2.write("ICA_free_error_rate_test_1;")
+    # file_2.write("%1.9f" % error_rate_test_DT_1)
+    # file_2.write("\n")
 
     error_rate_train_2 = np.zeros(np.shape(data2_X_train)[1])
     error_rate_test_2 = np.zeros(np.shape(data2_X_train)[1])
