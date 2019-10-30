@@ -18,18 +18,18 @@ if __name__=="__main__":
     one_hot = preprocessing.OneHotEncoder()
 
     '''Load and standardize data set MNIST'''
-    # set1_name = "mnist"
-    #
-    # train = np.genfromtxt('fashion-mnist_train_minor.csv', delimiter=',')[1:, :]
-    # test = np.genfromtxt('fashion-mnist_test_minor.csv', delimiter=',')[1:, :]
-    #
-    # data1_X_train = train[:, 1:]
-    # data1_y_train = train[:, 0]
-    # data1_X_test = test[:, 1:]
-    # data1_y_test = test[:, 0]
-    #
-    # data1_X_train = scaler.fit_transform(data1_X_train)
-    # data1_X_test = scaler.transform(data1_X_test)
+    set1_name = "mnist"
+
+    train = np.genfromtxt('fashion-mnist_train_minor.csv', delimiter=',')[1:, :]
+    test = np.genfromtxt('fashion-mnist_test_minor.csv', delimiter=',')[1:, :]
+
+    data1_X_train = train[:, 1:]
+    data1_y_train = train[:, 0]
+    data1_X_test = test[:, 1:]
+    data1_y_test = test[:, 0]
+
+    data1_X_train = scaler.fit_transform(data1_X_train)
+    data1_X_test = scaler.transform(data1_X_test)
 
     #
     # # data1_y_train = one_hot.fit_transform(data1_y_train.reshape(-1, 1)).todense()
@@ -146,57 +146,94 @@ if __name__=="__main__":
     ############################## ICA - finding number of features ##############################
 
     ica = FastICA(random_state=5)
-    # error_rate_train_1 = np.zeros(np.shape(data1_X_train)[1])
-    # error_rate_test_1 = np.zeros(np.shape(data1_X_train)[1])
-    # DT1 = tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=0.005)
-    # for i in range(0, np.shape(data1_X_train)[1]):
-    #     print i
-    #     ica.set_params(n_components=i + 1)
-    #
-    #     error_rate_train_1[i] = sum(
-    #         DT1.fit(ica.fit_transform(data1_X_train), data1_y_train).predict(ica.fit_transform(data1_X_train)) == data1_y_train) * 1.0 /data1_y_train.shape[0]
-    #     error_rate_test_1[i] = sum(
-    #         DT1.fit(ica.fit_transform(data1_X_train), data1_y_train).predict(ica.fit_transform(data1_X_test)) == data1_y_test) * 1.0 / data1_y_test.shape[0]
-    # error_rate_train_DT_1 = sum(
-    #         DT1.fit(data1_X_train, data1_y_train).predict(data1_X_train) == data1_y_train) * 1.0 / data1_y_train.shape[0]
-    # error_rate_test_DT_1 = sum(
-    #         DT1.fit(data1_X_train, data1_y_train).predict(data1_X_test) == data1_y_test) * 1.0 / data1_y_test.shape[0]
+    error_rate_train_1 = np.zeros(np.shape(data1_X_train)[1])
+    error_rate_test_1 = np.zeros(np.shape(data1_X_train)[1])
+    kurt1_train = np.zeros(np.shape(data1_X_train)[1])
+    kurt1_test = np.zeros(np.shape(data1_X_test)[1])
 
-    # file_2.write("ICA_error_rate_train_1")
-    # for i in range(0, len(error_rate_train_1)):
-    #     file_2.write(";")
-    #     file_2.write("%1.9f" % error_rate_train_1[i])
-    # file_2.write("\n")
-    #
-    # file_2.write("ICA_free_error_rate_test_1;")
-    # file_2.write("%1.9f" % error_rate_train_DT_1)
-    # file_2.write("\n")
-    #
-    # file_2.write("ICA_error_rate_test_1")
-    # for i in range(0, len(error_rate_test_1)):
-    #     file_2.write(";")
-    #     file_2.write("%1.9f" % error_rate_test_1[i])
-    # file_2.write("\n")
-    #
-    # file_2.write("ICA_free_error_rate_test_1;")
-    # file_2.write("%1.9f" % error_rate_test_DT_1)
-    # file_2.write("\n")
+    DT1 = tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=0.005)
+    error_rate_train_DT_1 = sum(
+            DT1.fit(data1_X_train, data1_y_train).predict(data1_X_train) == data1_y_train) * 1.0 / data1_y_train.shape[0]
+    print "error_rate_train_DT_1", error_rate_train_DT_1
+    error_rate_test_DT_1 = sum(
+            DT1.fit(data1_X_train, data1_y_train).predict(data1_X_test) == data1_y_test) * 1.0 / data1_y_test.shape[0]
+    print "error_rate_test_DT_2", error_rate_test_DT_1
 
+    for i in range(0, np.shape(data1_X_train)[1]):
+        print i
+        ica.set_params(n_components=i + 1)
+        data1_X_train_ica = ica.fit_transform(data1_X_train)  # data2_X_train is observation, data2_X_train_ica is ICAed
+        A_1 = ica.mixing_  # Get estimated mixing matrix
+        # print "A_2", A_2
+        data1_X_test_ica = np.dot(data1_X_test, A_1)
+
+        error_rate_train_1[i] = sum(
+            DT1.fit(data1_X_train_ica, data1_y_train).predict(data1_X_train_ica) == data1_y_train) * 1.0 /data1_y_train.shape[0]
+        print("error_rate_train_1[%f]" %i), error_rate_train_1[i]
+        error_rate_test_1[i] = sum(
+            DT1.fit(data1_X_train_ica, data1_y_train).predict(data1_X_test_ica) == data1_y_test) * 1.0 / data1_y_test.shape[0]
+        print("error_rate_test_1[%f]" % i), error_rate_test_1[i]
+
+
+    file_2.write("ICA_error_rate_train_1")
+    for i in range(0, len(error_rate_train_1)):
+        file_2.write(";")
+        file_2.write("%1.9f" % error_rate_train_1[i])
+    file_2.write("\n")
+
+    file_2.write("ICA_free_error_rate_test_1;")
+    file_2.write("%1.9f" % error_rate_train_DT_1)
+    file_2.write("\n")
+
+    file_2.write("ICA_error_rate_test_1")
+    for i in range(0, len(error_rate_test_1)):
+        file_2.write(";")
+        file_2.write("%1.9f" % error_rate_test_1[i])
+    file_2.write("\n")
+
+    file_2.write("ICA_free_error_rate_test_1;")
+    file_2.write("%1.9f" % error_rate_test_DT_1)
+    file_2.write("\n")
+    '''=========sec_2========='''
     error_rate_train_2 = np.zeros(np.shape(data2_X_train)[1])
     error_rate_test_2 = np.zeros(np.shape(data2_X_train)[1])
+    kurt2_train = np.zeros(np.shape(data2_X_train)[1])
+    kurt2_test = np.zeros(np.shape(data2_X_test)[1])
+
     DT2 = tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=0.005)
+    error_rate_train_DT_2 = sum(
+            DT2.fit(data2_X_train, data2_y_train).predict(data2_X_train) == data2_y_train) * 1.0 / data2_y_train.shape[0]
+    print "error_rate_train_DT_2", error_rate_train_DT_2
+    error_rate_test_DT_2 = sum(
+            DT2.fit(data2_X_train, data2_y_train).predict(data2_X_test) == data2_y_test) * 1.0 / data2_y_test.shape[0]
+    print "error_rate_test_DT_2", error_rate_test_DT_2
+
     for i in range(0, np.shape(data2_X_train)[1]):
         print i
         ica.set_params(n_components=i + 1)
+        data2_X_train_ica = ica.fit_transform(data2_X_train)  # data2_X_train is observation, data2_X_train_ica is ICAed
+        A_2 = ica.mixing_  # Get estimated mixing matrix
+        # print "A_2", A_2
+        data2_X_test_ica = np.dot(data2_X_test, A_2)
 
         error_rate_train_2[i] = sum(
-            DT2.fit(ica.fit_transform(data2_X_train), data2_y_train).predict(ica.fit_transform(data2_X_train)) == data2_y_train) * 1.0 /data2_y_train.shape[0]
+            DT2.fit(data2_X_train_ica, data2_y_train).predict(data2_X_train_ica) == data2_y_train) * 1.0 /data2_y_train.shape[0]
+        print("error_rate_train_2[%f]" %i), error_rate_train_2[i]
         error_rate_test_2[i] = sum(
-            DT2.fit(ica.fit_transform(data2_X_train), data2_y_train).predict(ica.fit_transform(data2_X_test)) == data2_y_test) * 1.0 / data2_y_test.shape[0]
-    error_rate_train_DT_2 = sum(
-            DT2.fit(data2_X_train, data2_y_train).predict(data2_X_train) == data2_y_train) * 1.0 / data2_y_train.shape[0]
-    error_rate_test_DT_2 = sum(
-            DT2.fit(data2_X_train, data2_y_train).predict(data2_X_test) == data2_y_test) * 1.0 / data2_y_test.shape[0]
+            DT2.fit(data2_X_train_ica, data2_y_train).predict(data2_X_test_ica) == data2_y_test) * 1.0 / data2_y_test.shape[0]
+        print("error_rate_test_2[%f]" % i), error_rate_test_2[i]
+        # # ica.set_params(n_components=15)
+        # temp2 = ica.fit_transform(data2_X_train)
+        # temp2 = pd.DataFrame(temp2)
+        # print "temp2", temp2
+        # print "data2_X_train_ica", data2_X_train_ica
+        # print "pd.Dataframe(data2_X_train_ica)", pd.Dataframe(data2_X_train_ica)
+        # # print "kurt2", temp2.kurt(axis=0)
+        # print "========="
+        # # kurt2_train[i] = pd.Dataframe(data2_X_train_ica).kurt(axis=0)
+        # # print("kurt2_train[%f]" % i), kurt2_train[i]
+        # # kurt2_test[i] = pd.Dataframe(data2_X_test_ica).kurt(axis=0)
+        # # print("kurt2_test[%f]" % i), kurt2_test[i]
 
     # ica.set_params(n_components=15)
     # print "component = 15"
@@ -241,19 +278,32 @@ if __name__=="__main__":
     file_2.write("ICA_free_error_rate_test_2;")
     file_2.write("%1.9f" % error_rate_test_DT_2)
     file_2.write("\n")
+    '''=========sec_2_end========='''
+
+    # file_2.write("ICA_kurt2_train")
+    # for i in range(0, len(kurt2_train)):
+    #     file_2.write(";")
+    #     file_2.write("%1.9f" % kurt2_train[i])
+    # file_2.write("\n")
+    #
+    # file_2.write("ICA_kurt2_test")
+    # for i in range(0, len(kurt2_test)):
+    #     file_2.write(";")
+    #     file_2.write("%1.9f" % kurt2_test[i])
+    # file_2.write("\n")
 
     # ############################## ICA - calculate kurotosis ##############################
     #
-    # i1 = np.argmax(error_rate_1) + 1
+    #
     # ica.set_params(n_components=i1)
     # temp1 = ica.fit_transform(data1_X_train)
     # temp1 = pd.DataFrame(temp1)
     # kurt1 = temp1.kurt(axis=0)
     #
-    # ica.set_params(n_components=15)
-    # temp2 = ica.fit_transform(data2_X_train)
-    # temp2 = pd.DataFrame(temp2)
-    # kurt2 = temp2.kurt(axis=0)
+    ica.set_params(n_components=88)
+    temp2 = ica.fit_transform(data2_X_train)
+    temp2 = pd.DataFrame(temp2)
+    kurt2 = temp2.kurt(axis=0)
 
     # file_2.write("ICA_kurt1")
     # for i in range(0, len(kurt1)):
@@ -261,11 +311,11 @@ if __name__=="__main__":
     #     file_2.write("%1.9f" % kurt1[i])
     # file_2.write("\n")
     #
-    # file_2.write("ICA_kurt2_n_component=15")
-    # for i in range(0, len(kurt2)):
-    #     file_2.write(";")
-    #     file_2.write("%1.9f" % kurt2[i])
-    # file_2.write("\n")
+    file_2.write("ICA_kurt2_n_component=88")
+    for i in range(0, len(kurt2)):
+        file_2.write(";")
+        file_2.write("%1.9f" % kurt2[i])
+    file_2.write("\n")
 
     # ############################## RP ##############################
     #
