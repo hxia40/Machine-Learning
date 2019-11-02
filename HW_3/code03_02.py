@@ -55,7 +55,7 @@ if __name__=="__main__":
     from sklearn.metrics.pairwise import pairwise_distances
     def pairwiseDistCorr(X1,X2):
         assert X1.shape[0] == X2.shape[0]
-    
+
         d1 = pairwise_distances(X1)
         d2 = pairwise_distances(X2)
         return np.corrcoef(d1.ravel(),d2.ravel())[0,1]
