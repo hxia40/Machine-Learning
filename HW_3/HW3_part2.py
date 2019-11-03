@@ -22,6 +22,7 @@ from sklearn.cluster import FeatureAgglomeration
 
 
 if __name__=="__main__":
+
     # Data Loading & Preprocessing
     scaler = preprocessing.StandardScaler()
     one_hot = preprocessing.OneHotEncoder()
@@ -93,127 +94,127 @@ if __name__=="__main__":
     # # data2_y_train = one_hot.fit_transform(data2_y_train.reshape(-1, 1)).todense()
     # # data2_y_test = one_hot.transform(data2_y_test.reshape(-1, 1)).todense()
 
-    file_2 = open('file_2.txt', 'w')
+    file_2 = open('part_2.txt', 'w')
 
     ''' PCA '''
-    pca = PCA()
-    ########### MNIST - PCA #############
-
-    error_rate_train_1 = np.zeros(np.shape(data1_X_train)[1])
-    error_rate_test_1 = np.zeros(np.shape(data1_X_train)[1])
-
-    DT1 = tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=1, max_depth = None )
-
-    error_rate_train_DT_1 = sum(
-            DT1.fit(data1_X_train, data1_y_train).predict(data1_X_train) == data1_y_train) * 1.0 / data1_y_train.shape[0]
-    print "error_rate_train_DT_1", error_rate_train_DT_1
-    error_rate_test_DT_1 = sum(
-            DT1.fit(data1_X_train, data1_y_train).predict(data1_X_test) == data1_y_test) * 1.0 / data1_y_test.shape[0]
-    print "error_rate_test_DT_2", error_rate_test_DT_1
-
-    for i in range(0, np.shape(data1_X_train)[1]):
-        print i
-        start_time = time.time()
-        pca.set_params(n_components=i + 1)
-        data1_X_train_pca = pca.fit_transform(data1_X_train)
-
-        data1_X_test_pca = pca.transform(data1_X_test)
-
-        error_rate_train_1[i] = sum(
-            DT1.fit(data1_X_train_pca, data1_y_train).predict(data1_X_train_pca) == data1_y_train) * 1.0 /data1_y_train.shape[0]
-        print("error_rate_train_1[%f]" %i), error_rate_train_1[i]
-        error_rate_test_1[i] = sum(
-            DT1.fit(data1_X_train_pca, data1_y_train).predict(data1_X_test_pca) == data1_y_test) * 1.0 / data1_y_test.shape[0]
-        print("error_rate_test_1[%f]" % i), error_rate_test_1[i]
-        print "time consumed:", time.time()-start_time
-
-    file_2.write("PCA_error_rate_train_1")
-    for i in range(0, len(error_rate_train_1)):
-        file_2.write(";")
-        file_2.write("%1.9f" % error_rate_train_1[i])
-    file_2.write("\n")
-
-    file_2.write("PCA_free_error_rate_test_1;")
-    file_2.write("%1.9f" % error_rate_train_DT_1)
-    file_2.write("\n")
-
-    file_2.write("PCA_error_rate_test_1")
-    for i in range(0, len(error_rate_test_1)):
-        file_2.write(";")
-        file_2.write("%1.9f" % error_rate_test_1[i])
-    file_2.write("\n")
-
-    file_2.write("PCA_free_error_rate_test_1;")
-    file_2.write("%1.9f" % error_rate_test_DT_1)
-    file_2.write("\n")
-
-    ########## _ESR - PCA #############
-    error_rate_train_2 = np.zeros(np.shape(data2_X_train)[1])
-    error_rate_test_2 = np.zeros(np.shape(data2_X_train)[1])
-
-    DT2 = tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=33, max_depth = None )
-    error_rate_train_DT_2 = sum(
-            DT2.fit(data2_X_train, data2_y_train).predict(data2_X_train) == data2_y_train) * 1.0 / data2_y_train.shape[0]
-    print "error_rate_train_DT_2", error_rate_train_DT_2
-    error_rate_test_DT_2 = sum(
-            DT2.fit(data2_X_train, data2_y_train).predict(data2_X_test) == data2_y_test) * 1.0 / data2_y_test.shape[0]
-    print "error_rate_test_DT_2", error_rate_test_DT_2
-
-    for i in range(0, np.shape(data2_X_train)[1]):
-        print i
-        start_time = time.time()
-        pca.set_params(n_components=i + 1)
-        data2_X_train_pca = pca.fit_transform(data2_X_train)
-        data2_X_test_pca = pca.transform(data2_X_test)
-
-        error_rate_train_2[i] = sum(
-            DT2.fit(data2_X_train_pca, data2_y_train).predict(data2_X_train_pca) == data2_y_train) * 1.0 /data2_y_train.shape[0]
-        print("error_rate_train_2[%f]" %i), error_rate_train_2[i]
-        error_rate_test_2[i] = sum(
-            DT2.fit(data2_X_train_pca, data2_y_train).predict(data2_X_test_pca) == data2_y_test) * 1.0 / data2_y_test.shape[0]
-        print("error_rate_test_2[%f]" % i), error_rate_test_2[i]
-        print "time consumed:", time.time() - start_time
-
-    file_2.write("PCA_error_rate_train_2")
-    for i in range(0, len(error_rate_train_2)):
-        file_2.write(";")
-        file_2.write("%1.9f" % error_rate_train_2[i])
-    file_2.write("\n")
-
-    file_2.write("PCA_free_error_rate_test_2;")
-    file_2.write("%1.9f" % error_rate_train_DT_2)
-    file_2.write("\n")
-
-    file_2.write("PCA_error_rate_test_2")
-    for i in range(0, len(error_rate_test_2)):
-        file_2.write(";")
-        file_2.write("%1.9f" % error_rate_test_2[i])
-    file_2.write("\n")
-
-    file_2.write("PCA_free_error_rate_test_2;")
-    file_2.write("%1.9f" % error_rate_test_DT_2)
-    file_2.write("\n")
+    # pca = PCA()
+    # ########### MNIST - PCA #############
     #
+    # error_rate_train_1 = np.zeros(np.shape(data1_X_train)[1])
+    # error_rate_test_1 = np.zeros(np.shape(data1_X_train)[1])
     #
+    # DT1 = tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=5, max_depth = None )
     #
-    # # pca = PCA(random_state=5)
-    # # pca.fit(data1_X_train).transform(data1_X_train)
-    # # pca_var_1 = pca.explained_variance_ratio_
+    # error_rate_train_DT_1 = sum(
+    #         DT1.fit(data1_X_train, data1_y_train).predict(data1_X_train) == data1_y_train) * 1.0 / data1_y_train.shape[0]
+    # print "error_rate_train_DT_1", error_rate_train_DT_1
+    # error_rate_test_DT_1 = sum(
+    #         DT1.fit(data1_X_train, data1_y_train).predict(data1_X_test) == data1_y_test) * 1.0 / data1_y_test.shape[0]
+    # print "error_rate_test_DT_2", error_rate_test_DT_1
+    #
+    # for i in range(0, np.shape(data1_X_train)[1]):
+    #     print i
+    #     start_time = time.time()
+    #     pca.set_params(n_components=i + 1)
+    #     data1_X_train_pca = pca.fit_transform(data1_X_train)
+    #
+    #     data1_X_test_pca = pca.transform(data1_X_test)
+    #
+    #     error_rate_train_1[i] = sum(
+    #         DT1.fit(data1_X_train_pca, data1_y_train).predict(data1_X_train_pca) == data1_y_train) * 1.0 /data1_y_train.shape[0]
+    #     print("error_rate_train_1[%f]" %i), error_rate_train_1[i]
+    #     error_rate_test_1[i] = sum(
+    #         DT1.fit(data1_X_train_pca, data1_y_train).predict(data1_X_test_pca) == data1_y_test) * 1.0 / data1_y_test.shape[0]
+    #     print("error_rate_test_1[%f]" % i), error_rate_test_1[i]
+    #     print "time consumed:", time.time()-start_time
+    #
+    # file_2.write("PCA_error_rate_train_1")
+    # for i in range(0, len(error_rate_train_1)):
+    #     file_2.write(";")
+    #     file_2.write("%1.9f" % error_rate_train_1[i])
+    # file_2.write("\n")
+    #
+    # file_2.write("PCA_free_error_rate_test_1;")
+    # file_2.write("%1.9f" % error_rate_train_DT_1)
+    # file_2.write("\n")
+    #
+    # file_2.write("PCA_error_rate_test_1")
+    # for i in range(0, len(error_rate_test_1)):
+    #     file_2.write(";")
+    #     file_2.write("%1.9f" % error_rate_test_1[i])
+    # file_2.write("\n")
+    #
+    # file_2.write("PCA_free_error_rate_test_1;")
+    # file_2.write("%1.9f" % error_rate_test_DT_1)
+    # file_2.write("\n")
+    #
+    # ########## _ESR - PCA #############
+    # error_rate_train_2 = np.zeros(np.shape(data2_X_train)[1])
+    # error_rate_test_2 = np.zeros(np.shape(data2_X_train)[1])
+    #
+    # DT2 = tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=33, max_depth = None )
+    # error_rate_train_DT_2 = sum(
+    #         DT2.fit(data2_X_train, data2_y_train).predict(data2_X_train) == data2_y_train) * 1.0 / data2_y_train.shape[0]
+    # print "error_rate_train_DT_2", error_rate_train_DT_2
+    # error_rate_test_DT_2 = sum(
+    #         DT2.fit(data2_X_train, data2_y_train).predict(data2_X_test) == data2_y_test) * 1.0 / data2_y_test.shape[0]
+    # print "error_rate_test_DT_2", error_rate_test_DT_2
+    #
+    # for i in range(0, np.shape(data2_X_train)[1]):
+    #     print i
+    #     start_time = time.time()
+    #     pca.set_params(n_components=i + 1)
+    #     data2_X_train_pca = pca.fit_transform(data2_X_train)
+    #     data2_X_test_pca = pca.transform(data2_X_test)
+    #
+    #     error_rate_train_2[i] = sum(
+    #         DT2.fit(data2_X_train_pca, data2_y_train).predict(data2_X_train_pca) == data2_y_train) * 1.0 /data2_y_train.shape[0]
+    #     print("error_rate_train_2[%f]" %i), error_rate_train_2[i]
+    #     error_rate_test_2[i] = sum(
+    #         DT2.fit(data2_X_train_pca, data2_y_train).predict(data2_X_test_pca) == data2_y_test) * 1.0 / data2_y_test.shape[0]
+    #     print("error_rate_test_2[%f]" % i), error_rate_test_2[i]
+    #     print "time consumed:", time.time() - start_time
+    #
+    # file_2.write("PCA_error_rate_train_2")
+    # for i in range(0, len(error_rate_train_2)):
+    #     file_2.write(";")
+    #     file_2.write("%1.9f" % error_rate_train_2[i])
+    # file_2.write("\n")
+    #
+    # file_2.write("PCA_free_error_rate_test_2;")
+    # file_2.write("%1.9f" % error_rate_train_DT_2)
+    # file_2.write("\n")
+    #
+    # file_2.write("PCA_error_rate_test_2")
+    # for i in range(0, len(error_rate_test_2)):
+    #     file_2.write(";")
+    #     file_2.write("%1.9f" % error_rate_test_2[i])
+    # file_2.write("\n")
+    #
+    # file_2.write("PCA_free_error_rate_test_2;")
+    # file_2.write("%1.9f" % error_rate_test_DT_2)
+    # file_2.write("\n")
     # #
-    # # pca.fit(data2_X_train).transform(data2_X_train)
-    # # pca_var_2 = pca.explained_variance_ratio_
     # #
-    # # file_2.write("PCA_variance_1")
-    # # for i in range(0, len(pca_var_1)):
-    # #     file_2.write(";")
-    # #     file_2.write("%1.9f" % pca_var_1[i])
-    # # file_2.write("\n")
     # #
-    # # file_2.write("PCA_variance_2")
-    # # for i in range(0, len(pca_var_2)):
-    # #     file_2.write(";")
-    # #     file_2.write("%1.9f" % pca_var_2[i])
-    # # file_2.write("\n")
+    # # # pca = PCA(random_state=5)
+    # # # pca.fit(data1_X_train).transform(data1_X_train)
+    # # # pca_var_1 = pca.explained_variance_ratio_
+    # # #
+    # # # pca.fit(data2_X_train).transform(data2_X_train)
+    # # # pca_var_2 = pca.explained_variance_ratio_
+    # # #
+    # # # file_2.write("PCA_variance_1")
+    # # # for i in range(0, len(pca_var_1)):
+    # # #     file_2.write(";")
+    # # #     file_2.write("%1.9f" % pca_var_1[i])
+    # # # file_2.write("\n")
+    # # #
+    # # # file_2.write("PCA_variance_2")
+    # # # for i in range(0, len(pca_var_2)):
+    # # #     file_2.write(";")
+    # # #     file_2.write("%1.9f" % pca_var_2[i])
+    # # # file_2.write("\n")
 
     ''' ICA - finding number of features '''
 
@@ -224,7 +225,7 @@ if __name__=="__main__":
     kurt1_train = np.zeros(np.shape(data1_X_train)[1])
     kurt1_test = np.zeros(np.shape(data1_X_test)[1])
 
-    DT1 = tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=1, max_depth = None )
+    DT1 = tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=5, max_depth = None )
     # DT1 = neighbors.KNeighborsClassifier(n_neighbors=5, algorithm='auto')
     # DT1 = svm.SVC(C=0.418, kernel='rbf', max_iter=-1)
     error_rate_train_DT_1 = sum(
@@ -387,216 +388,216 @@ if __name__=="__main__":
     # file_2.write("\n")
 
     ''' RP '''
-    grp = GaussianRandomProjection()
-    ########## MNIST - RP ###########
-
-    error_rate_train_1 = np.zeros(np.shape(data1_X_train)[1])
-    error_rate_test_1 = np.zeros(np.shape(data1_X_train)[1])
-
-    DT1 = tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=1, max_depth=None)
-
-    error_rate_train_DT_1 = sum(
-        DT1.fit(data1_X_train, data1_y_train).predict(data1_X_train) == data1_y_train) * 1.0 / data1_y_train.shape[0]
-    print "error_rate_train_DT_1", error_rate_train_DT_1
-    error_rate_test_DT_1 = sum(
-        DT1.fit(data1_X_train, data1_y_train).predict(data1_X_test) == data1_y_test) * 1.0 / data1_y_test.shape[0]
-    print "error_rate_test_DT_2", error_rate_test_DT_1
-
-    for i in range(0, np.shape(data1_X_train)[1]):
-        print i
-        start_time = time.time()
-        grp.set_params(n_components=i + 1)
-        data1_X_train_grp = grp.fit_transform(data1_X_train)  # data2_X_train is observation, data2_X_train_ica is ICAed
-        # A_1 = ica.mixing_  # Get estimated mixing matrix
-        # # print "A_2", A_2
-        # data1_X_test_ica = np.dot(data1_X_test, A_1)
-        data1_X_test_grp = grp.transform(data1_X_test)
-
-        error_rate_train_1[i] = sum(
-            DT1.fit(data1_X_train_grp, data1_y_train).predict(data1_X_train_grp) == data1_y_train) * 1.0 / \
-                                data1_y_train.shape[0]
-        print("error_rate_train_1[%f]" % i), error_rate_train_1[i]
-        error_rate_test_1[i] = sum(
-            DT1.fit(data1_X_train_grp, data1_y_train).predict(data1_X_test_grp) == data1_y_test) * 1.0 / \
-                               data1_y_test.shape[0]
-        print("error_rate_test_1[%f]" % i), error_rate_test_1[i]
-        print "time consumed:", time.time() - start_time
-
-    file_2.write("GRP_error_rate_train_1")
-    for i in range(0, len(error_rate_train_1)):
-        file_2.write(";")
-        file_2.write("%1.9f" % error_rate_train_1[i])
-    file_2.write("\n")
-
-    file_2.write("GRP_free_error_rate_test_1;")
-    file_2.write("%1.9f" % error_rate_train_DT_1)
-    file_2.write("\n")
-
-    file_2.write("GRP_error_rate_test_1")
-    for i in range(0, len(error_rate_test_1)):
-        file_2.write(";")
-        file_2.write("%1.9f" % error_rate_test_1[i])
-    file_2.write("\n")
-
-    file_2.write("GRP_free_error_rate_test_1;")
-    file_2.write("%1.9f" % error_rate_test_DT_1)
-    file_2.write("\n")
-
-    ########## ESR - RP ###########
-    error_rate_train_2 = np.zeros(np.shape(data2_X_train)[1])
-    error_rate_test_2 = np.zeros(np.shape(data2_X_train)[1])
-    kurt2_train = np.zeros(np.shape(data2_X_train)[1])
-    kurt2_test = np.zeros(np.shape(data2_X_test)[1])
-
-    DT2 = tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=33, max_depth=None)
-    error_rate_train_DT_2 = sum(
-        DT2.fit(data2_X_train, data2_y_train).predict(data2_X_train) == data2_y_train) * 1.0 / data2_y_train.shape[0]
-    print "error_rate_train_DT_2", error_rate_train_DT_2
-    error_rate_test_DT_2 = sum(
-        DT2.fit(data2_X_train, data2_y_train).predict(data2_X_test) == data2_y_test) * 1.0 / data2_y_test.shape[0]
-    print "error_rate_test_DT_2", error_rate_test_DT_2
-
-    for i in range(0, np.shape(data2_X_train)[1]):
-        print i
-        start_time = time.time()
-        grp.set_params(n_components=i + 1)
-        data2_X_train_grp = grp.fit_transform(data2_X_train)  # data2_X_train is observation, data2_X_train_ica is ICAed
-        # A_2 = ica.mixing_  # Get estimated mixing matrix
-        # # print "A_2", A_2
-        # data2_X_test_ica = np.dot(data2_X_test, A_2)
-        data2_X_test_grp = grp.transform(data2_X_test)
-
-        error_rate_train_2[i] = sum(
-            DT2.fit(data2_X_train_grp, data2_y_train).predict(data2_X_train_grp) == data2_y_train) * 1.0 / \
-                                data2_y_train.shape[0]
-        print("error_rate_train_2[%f]" % i), error_rate_train_2[i]
-        error_rate_test_2[i] = sum(
-            DT2.fit(data2_X_train_grp, data2_y_train).predict(data2_X_test_grp) == data2_y_test) * 1.0 / \
-                               data2_y_test.shape[0]
-        print("error_rate_test_2[%f]" % i), error_rate_test_2[i]
-        print "time consumed:", time.time() - start_time
-
-    file_2.write("GRP_error_rate_train_2")
-    for i in range(0, len(error_rate_train_2)):
-        file_2.write(";")
-        file_2.write("%1.9f" % error_rate_train_2[i])
-    file_2.write("\n")
-
-    file_2.write("GRP_free_error_rate_test_2;")
-    file_2.write("%1.9f" % error_rate_train_DT_2)
-    file_2.write("\n")
-
-    file_2.write("GRP_error_rate_test_2")
-    for i in range(0, len(error_rate_test_2)):
-        file_2.write(";")
-        file_2.write("%1.9f" % error_rate_test_2[i])
-    file_2.write("\n")
-
-    file_2.write("GRP_free_error_rate_test_2;")
-    file_2.write("%1.9f" % error_rate_test_DT_2)
-    file_2.write("\n")
+    # grp = GaussianRandomProjection()
+    # ########## MNIST - RP ###########
+    #
+    # error_rate_train_1 = np.zeros(np.shape(data1_X_train)[1])
+    # error_rate_test_1 = np.zeros(np.shape(data1_X_train)[1])
+    #
+    # DT1 = tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=5, max_depth=None)
+    #
+    # error_rate_train_DT_1 = sum(
+    #     DT1.fit(data1_X_train, data1_y_train).predict(data1_X_train) == data1_y_train) * 1.0 / data1_y_train.shape[0]
+    # print "error_rate_train_DT_1", error_rate_train_DT_1
+    # error_rate_test_DT_1 = sum(
+    #     DT1.fit(data1_X_train, data1_y_train).predict(data1_X_test) == data1_y_test) * 1.0 / data1_y_test.shape[0]
+    # print "error_rate_test_DT_2", error_rate_test_DT_1
+    #
+    # for i in range(0, np.shape(data1_X_train)[1]):
+    #     print i
+    #     start_time = time.time()
+    #     grp.set_params(n_components=i + 1)
+    #     data1_X_train_grp = grp.fit_transform(data1_X_train)  # data2_X_train is observation, data2_X_train_ica is ICAed
+    #     # A_1 = ica.mixing_  # Get estimated mixing matrix
+    #     # # print "A_2", A_2
+    #     # data1_X_test_ica = np.dot(data1_X_test, A_1)
+    #     data1_X_test_grp = grp.transform(data1_X_test)
+    #
+    #     error_rate_train_1[i] = sum(
+    #         DT1.fit(data1_X_train_grp, data1_y_train).predict(data1_X_train_grp) == data1_y_train) * 1.0 / \
+    #                             data1_y_train.shape[0]
+    #     print("error_rate_train_1[%f]" % i), error_rate_train_1[i]
+    #     error_rate_test_1[i] = sum(
+    #         DT1.fit(data1_X_train_grp, data1_y_train).predict(data1_X_test_grp) == data1_y_test) * 1.0 / \
+    #                            data1_y_test.shape[0]
+    #     print("error_rate_test_1[%f]" % i), error_rate_test_1[i]
+    #     print "time consumed:", time.time() - start_time
+    #
+    # file_2.write("GRP_error_rate_train_1")
+    # for i in range(0, len(error_rate_train_1)):
+    #     file_2.write(";")
+    #     file_2.write("%1.9f" % error_rate_train_1[i])
+    # file_2.write("\n")
+    #
+    # file_2.write("GRP_free_error_rate_test_1;")
+    # file_2.write("%1.9f" % error_rate_train_DT_1)
+    # file_2.write("\n")
+    #
+    # file_2.write("GRP_error_rate_test_1")
+    # for i in range(0, len(error_rate_test_1)):
+    #     file_2.write(";")
+    #     file_2.write("%1.9f" % error_rate_test_1[i])
+    # file_2.write("\n")
+    #
+    # file_2.write("GRP_free_error_rate_test_1;")
+    # file_2.write("%1.9f" % error_rate_test_DT_1)
+    # file_2.write("\n")
+    #
+    # ########## ESR - RP ###########
+    # error_rate_train_2 = np.zeros(np.shape(data2_X_train)[1])
+    # error_rate_test_2 = np.zeros(np.shape(data2_X_train)[1])
+    # kurt2_train = np.zeros(np.shape(data2_X_train)[1])
+    # kurt2_test = np.zeros(np.shape(data2_X_test)[1])
+    #
+    # DT2 = tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=33, max_depth=None)
+    # error_rate_train_DT_2 = sum(
+    #     DT2.fit(data2_X_train, data2_y_train).predict(data2_X_train) == data2_y_train) * 1.0 / data2_y_train.shape[0]
+    # print "error_rate_train_DT_2", error_rate_train_DT_2
+    # error_rate_test_DT_2 = sum(
+    #     DT2.fit(data2_X_train, data2_y_train).predict(data2_X_test) == data2_y_test) * 1.0 / data2_y_test.shape[0]
+    # print "error_rate_test_DT_2", error_rate_test_DT_2
+    #
+    # for i in range(0, np.shape(data2_X_train)[1]):
+    #     print i
+    #     start_time = time.time()
+    #     grp.set_params(n_components=i + 1)
+    #     data2_X_train_grp = grp.fit_transform(data2_X_train)  # data2_X_train is observation, data2_X_train_ica is ICAed
+    #     # A_2 = ica.mixing_  # Get estimated mixing matrix
+    #     # # print "A_2", A_2
+    #     # data2_X_test_ica = np.dot(data2_X_test, A_2)
+    #     data2_X_test_grp = grp.transform(data2_X_test)
+    #
+    #     error_rate_train_2[i] = sum(
+    #         DT2.fit(data2_X_train_grp, data2_y_train).predict(data2_X_train_grp) == data2_y_train) * 1.0 / \
+    #                             data2_y_train.shape[0]
+    #     print("error_rate_train_2[%f]" % i), error_rate_train_2[i]
+    #     error_rate_test_2[i] = sum(
+    #         DT2.fit(data2_X_train_grp, data2_y_train).predict(data2_X_test_grp) == data2_y_test) * 1.0 / \
+    #                            data2_y_test.shape[0]
+    #     print("error_rate_test_2[%f]" % i), error_rate_test_2[i]
+    #     print "time consumed:", time.time() - start_time
+    #
+    # file_2.write("GRP_error_rate_train_2")
+    # for i in range(0, len(error_rate_train_2)):
+    #     file_2.write(";")
+    #     file_2.write("%1.9f" % error_rate_train_2[i])
+    # file_2.write("\n")
+    #
+    # file_2.write("GRP_free_error_rate_test_2;")
+    # file_2.write("%1.9f" % error_rate_train_DT_2)
+    # file_2.write("\n")
+    #
+    # file_2.write("GRP_error_rate_test_2")
+    # for i in range(0, len(error_rate_test_2)):
+    #     file_2.write(";")
+    #     file_2.write("%1.9f" % error_rate_test_2[i])
+    # file_2.write("\n")
+    #
+    # file_2.write("GRP_free_error_rate_test_2;")
+    # file_2.write("%1.9f" % error_rate_test_DT_2)
+    # file_2.write("\n")
 
     ''' FA '''
-    fa = FeatureAgglomeration()
-    ########### MNIST - FA #############
-
-    error_rate_train_1 = np.zeros(np.shape(data1_X_train)[1])
-    error_rate_test_1 = np.zeros(np.shape(data1_X_train)[1])
-
-    DT1 = tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=1, max_depth=None)
-
-    error_rate_train_DT_1 = sum(
-        DT1.fit(data1_X_train, data1_y_train).predict(data1_X_train) == data1_y_train) * 1.0 / data1_y_train.shape[0]
-    print "error_rate_train_DT_1", error_rate_train_DT_1
-    error_rate_test_DT_1 = sum(
-        DT1.fit(data1_X_train, data1_y_train).predict(data1_X_test) == data1_y_test) * 1.0 / data1_y_test.shape[0]
-    print "error_rate_test_DT_2", error_rate_test_DT_1
-
-    for i in range(0, np.shape(data1_X_train)[1]):
-        print i
-        start_time = time.time()
-        fa.set_params(n_clusters=i + 1)
-        data1_X_train_fa = fa.fit_transform(data1_X_train)
-        data1_X_test_fa = fa.transform(data1_X_test)
-
-        error_rate_train_1[i] = sum(
-            DT1.fit(data1_X_train_fa, data1_y_train).predict(data1_X_train_fa) == data1_y_train) * 1.0 / \
-                                data1_y_train.shape[0]
-        print("error_rate_train_1[%f]" % i), error_rate_train_1[i]
-        error_rate_test_1[i] = sum(
-            DT1.fit(data1_X_train_fa, data1_y_train).predict(data1_X_test_fa) == data1_y_test) * 1.0 / \
-                               data1_y_test.shape[0]
-        print("error_rate_test_1[%f]" % i), error_rate_test_1[i]
-        print "time consumed:", time.time() - start_time
-
-    file_2.write("FA_error_rate_train_1")
-    for i in range(0, len(error_rate_train_1)):
-        file_2.write(";")
-        file_2.write("%1.9f" % error_rate_train_1[i])
-    file_2.write("\n")
-
-    file_2.write("FA_free_error_rate_test_1;")
-    file_2.write("%1.9f" % error_rate_train_DT_1)
-    file_2.write("\n")
-
-    file_2.write("FA_error_rate_test_1")
-    for i in range(0, len(error_rate_test_1)):
-        file_2.write(";")
-        file_2.write("%1.9f" % error_rate_test_1[i])
-    file_2.write("\n")
-
-    file_2.write("FA_free_error_rate_test_1;")
-    file_2.write("%1.9f" % error_rate_test_DT_1)
-    file_2.write("\n")
-
-    ########### _ESR - FA #############
-    error_rate_train_2 = np.zeros(np.shape(data2_X_train)[1])
-    error_rate_test_2 = np.zeros(np.shape(data2_X_train)[1])
-
-    DT2 = tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=33, max_depth=None)
-    error_rate_train_DT_2 = sum(
-        DT2.fit(data2_X_train, data2_y_train).predict(data2_X_train) == data2_y_train) * 1.0 / data2_y_train.shape[0]
-    print "error_rate_train_DT_2", error_rate_train_DT_2
-    error_rate_test_DT_2 = sum(
-        DT2.fit(data2_X_train, data2_y_train).predict(data2_X_test) == data2_y_test) * 1.0 / data2_y_test.shape[0]
-    print "error_rate_test_DT_2", error_rate_test_DT_2
-
-    for i in range(0, np.shape(data2_X_train)[1]):
-        print i
-        start_time = time.time()
-        fa.set_params(n_clusters=i + 1)
-        data2_X_train_fa = fa.fit_transform(data2_X_train)  # data2_X_train is observation, data2_X_train_ica is ICAed
-        data2_X_test_fa = fa.transform(data2_X_test)
-
-        error_rate_train_2[i] = sum(
-            DT2.fit(data2_X_train_fa, data2_y_train).predict(data2_X_train_fa) == data2_y_train) * 1.0 / \
-                                data2_y_train.shape[0]
-        print("error_rate_train_2[%f]" % i), error_rate_train_2[i]
-        error_rate_test_2[i] = sum(
-            DT2.fit(data2_X_train_fa, data2_y_train).predict(data2_X_test_fa) == data2_y_test) * 1.0 / \
-                               data2_y_test.shape[0]
-        print("error_rate_test_2[%f]" % i), error_rate_test_2[i]
-        print "time consumed:", time.time() - start_time
-
-    file_2.write("FA_error_rate_train_2")
-    for i in range(0, len(error_rate_train_2)):
-        file_2.write(";")
-        file_2.write("%1.9f" % error_rate_train_2[i])
-    file_2.write("\n")
-
-    file_2.write("FA_free_error_rate_test_2;")
-    file_2.write("%1.9f" % error_rate_train_DT_2)
-    file_2.write("\n")
-
-    file_2.write("FA_error_rate_test_2")
-    for i in range(0, len(error_rate_test_2)):
-        file_2.write(";")
-        file_2.write("%1.9f" % error_rate_test_2[i])
-    file_2.write("\n")
-
-    file_2.write("FA_free_error_rate_test_2;")
-    file_2.write("%1.9f" % error_rate_test_DT_2)
-    file_2.write("\n")
+    # fa = FeatureAgglomeration()
+    # ########### MNIST - FA #############
+    #
+    # error_rate_train_1 = np.zeros(np.shape(data1_X_train)[1])
+    # error_rate_test_1 = np.zeros(np.shape(data1_X_train)[1])
+    #
+    # DT1 = tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=5, max_depth=None)
+    #
+    # error_rate_train_DT_1 = sum(
+    #     DT1.fit(data1_X_train, data1_y_train).predict(data1_X_train) == data1_y_train) * 1.0 / data1_y_train.shape[0]
+    # print "error_rate_train_DT_1", error_rate_train_DT_1
+    # error_rate_test_DT_1 = sum(
+    #     DT1.fit(data1_X_train, data1_y_train).predict(data1_X_test) == data1_y_test) * 1.0 / data1_y_test.shape[0]
+    # print "error_rate_test_DT_2", error_rate_test_DT_1
+    #
+    # for i in range(0, np.shape(data1_X_train)[1]):
+    #     print i
+    #     start_time = time.time()
+    #     fa.set_params(n_clusters=i + 1)
+    #     data1_X_train_fa = fa.fit_transform(data1_X_train)
+    #     data1_X_test_fa = fa.transform(data1_X_test)
+    #
+    #     error_rate_train_1[i] = sum(
+    #         DT1.fit(data1_X_train_fa, data1_y_train).predict(data1_X_train_fa) == data1_y_train) * 1.0 / \
+    #                             data1_y_train.shape[0]
+    #     print("error_rate_train_1[%f]" % i), error_rate_train_1[i]
+    #     error_rate_test_1[i] = sum(
+    #         DT1.fit(data1_X_train_fa, data1_y_train).predict(data1_X_test_fa) == data1_y_test) * 1.0 / \
+    #                            data1_y_test.shape[0]
+    #     print("error_rate_test_1[%f]" % i), error_rate_test_1[i]
+    #     print "time consumed:", time.time() - start_time
+    #
+    # file_2.write("FA_error_rate_train_1")
+    # for i in range(0, len(error_rate_train_1)):
+    #     file_2.write(";")
+    #     file_2.write("%1.9f" % error_rate_train_1[i])
+    # file_2.write("\n")
+    #
+    # file_2.write("FA_free_error_rate_test_1;")
+    # file_2.write("%1.9f" % error_rate_train_DT_1)
+    # file_2.write("\n")
+    #
+    # file_2.write("FA_error_rate_test_1")
+    # for i in range(0, len(error_rate_test_1)):
+    #     file_2.write(";")
+    #     file_2.write("%1.9f" % error_rate_test_1[i])
+    # file_2.write("\n")
+    #
+    # file_2.write("FA_free_error_rate_test_1;")
+    # file_2.write("%1.9f" % error_rate_test_DT_1)
+    # file_2.write("\n")
+    #
+    # ########### _ESR - FA #############
+    # error_rate_train_2 = np.zeros(np.shape(data2_X_train)[1])
+    # error_rate_test_2 = np.zeros(np.shape(data2_X_train)[1])
+    #
+    # DT2 = tree.DecisionTreeClassifier(criterion='gini', min_samples_leaf=33, max_depth=None)
+    # error_rate_train_DT_2 = sum(
+    #     DT2.fit(data2_X_train, data2_y_train).predict(data2_X_train) == data2_y_train) * 1.0 / data2_y_train.shape[0]
+    # print "error_rate_train_DT_2", error_rate_train_DT_2
+    # error_rate_test_DT_2 = sum(
+    #     DT2.fit(data2_X_train, data2_y_train).predict(data2_X_test) == data2_y_test) * 1.0 / data2_y_test.shape[0]
+    # print "error_rate_test_DT_2", error_rate_test_DT_2
+    #
+    # for i in range(0, np.shape(data2_X_train)[1]):
+    #     print i
+    #     start_time = time.time()
+    #     fa.set_params(n_clusters=i + 1)
+    #     data2_X_train_fa = fa.fit_transform(data2_X_train)  # data2_X_train is observation, data2_X_train_ica is ICAed
+    #     data2_X_test_fa = fa.transform(data2_X_test)
+    #
+    #     error_rate_train_2[i] = sum(
+    #         DT2.fit(data2_X_train_fa, data2_y_train).predict(data2_X_train_fa) == data2_y_train) * 1.0 / \
+    #                             data2_y_train.shape[0]
+    #     print("error_rate_train_2[%f]" % i), error_rate_train_2[i]
+    #     error_rate_test_2[i] = sum(
+    #         DT2.fit(data2_X_train_fa, data2_y_train).predict(data2_X_test_fa) == data2_y_test) * 1.0 / \
+    #                            data2_y_test.shape[0]
+    #     print("error_rate_test_2[%f]" % i), error_rate_test_2[i]
+    #     print "time consumed:", time.time() - start_time
+    #
+    # file_2.write("FA_error_rate_train_2")
+    # for i in range(0, len(error_rate_train_2)):
+    #     file_2.write(";")
+    #     file_2.write("%1.9f" % error_rate_train_2[i])
+    # file_2.write("\n")
+    #
+    # file_2.write("FA_free_error_rate_test_2;")
+    # file_2.write("%1.9f" % error_rate_train_DT_2)
+    # file_2.write("\n")
+    #
+    # file_2.write("FA_error_rate_test_2")
+    # for i in range(0, len(error_rate_test_2)):
+    #     file_2.write(";")
+    #     file_2.write("%1.9f" % error_rate_test_2[i])
+    # file_2.write("\n")
+    #
+    # file_2.write("FA_free_error_rate_test_2;")
+    # file_2.write("%1.9f" % error_rate_test_DT_2)
+    # file_2.write("\n")
 
 
 print "========== END =========="

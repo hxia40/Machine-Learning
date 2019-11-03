@@ -59,8 +59,7 @@ if __name__=="__main__":
     for i in range(0, len(clusters)):
         clusters[i] = int(clusters[i])
     print clusters
-        # [ 2, 3, 4, 5, 6, 8, 10, 15, 20, 25, 30,  40,  50, 75, 100 , 200]
-    # clusters =  [20, 50, 200]
+
     temp = len(clusters)
     km = kmeans()
     gmm = GMM()
@@ -129,7 +128,7 @@ if __name__=="__main__":
 
         print i+1
 
-    file_1 = open('file_1.txt','w')
+    file_1 = open('part_1.txt','w')
 
     file_1.write("Cluster")
     for i in range(0, temp):
