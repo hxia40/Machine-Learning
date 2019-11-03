@@ -25,7 +25,7 @@ if __name__=="__main__":
     
     # Data Loading & Preprocessing
     scaler = preprocessing.StandardScaler()
-    one_hot = preprocessing.OneHotEncoder()
+
 
     '''Load and standardize data set MNIST'''
     set1_name = "mnist"
@@ -89,14 +89,16 @@ if __name__=="__main__":
     # data2_X_gmm_test = np.concatenate((data2_X_test, one_hot.transform(gmm2.predict(data2_X_test).reshape(-1, 1)).todense()), axis=1)
 
     ###### clustered data only ######
-    km1 = kmeans(n_clusters=100)
+    km1 = kmeans(n_clusters=200)
+    one_hot1 = preprocessing.OneHotEncoder()
     km1.fit(data1_X_train)
-    data1_X_km = one_hot.fit_transform(km1.predict(data1_X_train).reshape(-1, 1)).todense()
-    data1_X_km_test = one_hot.transform(km1.predict(data1_X_test).reshape(-1, 1)).todense()
-    km2 = kmeans(n_clusters=100)
+    data1_X_km = one_hot1.fit_transform(km1.predict(data1_X_train).reshape(-1, 1)).todense()
+    data1_X_km_test = one_hot1.transform(km1.predict(data1_X_test).reshape(-1, 1)).todense()
+    km2 = kmeans(n_clusters=200)
+    one_hot2 = preprocessing.OneHotEncoder()
     km2.fit(data2_X_train)
-    data2_X_km = one_hot.fit_transform(km2.predict(data2_X_train).reshape(-1, 1)).todense()
-    data2_X_km_test = one_hot.transform(km2.predict(data2_X_test).reshape(-1, 1)).todense()
+    data2_X_km = one_hot2.fit_transform(km2.predict(data2_X_train).reshape(-1, 1)).todense()
+    data2_X_km_test = one_hot2.transform(km2.predict(data2_X_test).reshape(-1, 1)).todense()
 
     # km1 = kmeans(n_clusters = 3)
     # data1_X_km = km1.fit_transform(data1_X_train)
@@ -105,14 +107,16 @@ if __name__=="__main__":
     # data2_X_km = km2.fit_transform(data2_X_train)
     # data2_X_km_test = km2.transform(data2_X_test)
 
-    gmm1 = GMM(n_components=100)
+    gmm1 = GMM(n_components=200)
     gmm1.fit(data1_X_train)
-    data1_X_gmm = one_hot.fit_transform(gmm1.predict(data1_X_train).reshape(-1, 1)).todense()
-    data1_X_gmm_test = one_hot.transform(gmm1.predict(data1_X_test).reshape(-1, 1)).todense()
-    gmm2 = GMM(n_components=100)
+    one_hot3 = preprocessing.OneHotEncoder()
+    data1_X_gmm = one_hot3.fit_transform(gmm1.predict(data1_X_train).reshape(-1, 1)).todense()
+    data1_X_gmm_test = one_hot3.transform(gmm1.predict(data1_X_test).reshape(-1, 1)).todense()
+    gmm2 = GMM(n_components=200)
+    one_hot4 = preprocessing.OneHotEncoder()
     gmm2.fit(data2_X_train)
-    data2_X_gmm = one_hot.fit_transform(gmm2.predict(data2_X_train).reshape(-1, 1)).todense()
-    data2_X_gmm_test = one_hot.transform(gmm2.predict(data2_X_test).reshape(-1, 1)).todense()
+    data2_X_gmm = one_hot4.fit_transform(gmm2.predict(data2_X_train).reshape(-1, 1)).todense()
+    data2_X_gmm_test = one_hot4.transform(gmm2.predict(data2_X_test).reshape(-1, 1)).todense()
 
     ''' neuron network '''
     file_5 = open('part_5.txt', 'w')
