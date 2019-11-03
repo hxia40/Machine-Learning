@@ -59,40 +59,63 @@ if __name__=="__main__":
     ''' clutering '''
     ###### old data + clustered data ######
 
-    km1 = kmeans(n_clusters = 3)
-    data1_X_km = np.concatenate((data1_X_train, km1.fit_transform(data1_X_train)), axis=1)
-    data1_X_km_test = np.concatenate((data1_X_test, km1.transform(data1_X_test)), axis=1)
-    km2 = kmeans(n_clusters=3)
-    data2_X_km = np.concatenate((data2_X_train, km2.fit_transform(data2_X_train)), axis=1)
-    data2_X_km_test = np.concatenate((data2_X_test, km2.transform(data2_X_test)), axis=1)
+    # km1 = kmeans(n_clusters = 3)
+    # data1_X_km = np.concatenate((data1_X_train, km1.fit_transform(data1_X_train)), axis=1)
+    # data1_X_km_test = np.concatenate((data1_X_test, km1.transform(data1_X_test)), axis=1)
+    # km2 = kmeans(n_clusters=3)
+    # data2_X_km = np.concatenate((data2_X_train, km2.fit_transform(data2_X_train)), axis=1)
+    # data2_X_km_test = np.concatenate((data2_X_test, km2.transform(data2_X_test)), axis=1)
 
-    gmm1 = GMM(n_components=3)
-    gmm1.fit(data1_X_train)
-    data1_X_gmm = np.concatenate((data1_X_train, gmm1.transform(data1_X_train)), axis=1)
-    data1_X_gmm_test = np.concatenate((data1_X_test, gmm1.transform(data1_X_test)), axis=1)
-    gmm2 = GMM(n_components=3)
-    gmm2.fit(data2_X_train)
-    data2_X_gmm = np.concatenate((data2_X_train, gmm2.transform(data2_X_train)), axis=1)
-    data2_X_gmm_test = np.concatenate((data2_X_test, gmm2.transform(data2_X_test)), axis=1)
+    # km1 = kmeans(n_clusters=3)
+    # km1.fit(data1_X_train)
+    # data1_X_km = np.concatenate(
+    #     (data1_X_train, one_hot.fit_transform(km1.predict(data1_X_train).reshape(-1, 1)).todense()), axis=1)
+    # data1_X_km_test = np.concatenate(
+    #     (data1_X_test, one_hot.transform(km1.predict(data1_X_test).reshape(-1, 1)).todense()), axis=1)
+    # km2 = kmeans(n_clusters=3)
+    # km2.fit(data2_X_train)
+    # data2_X_km = np.concatenate(
+    #     (data2_X_train, one_hot.fit_transform(km2.predict(data2_X_train).reshape(-1, 1)).todense()), axis=1)
+    # data2_X_km_test = np.concatenate(
+    #     (data2_X_test, one_hot.transform(km2.predict(data2_X_test).reshape(-1, 1)).todense()), axis=1)
+
+    # gmm1 = GMM(n_components=3)
+    # gmm1.fit(data1_X_train)
+    # data1_X_gmm = np.concatenate((data1_X_train, one_hot.fit_transform(gmm1.predict(data1_X_train).reshape(-1, 1)).todense()), axis=1)
+    # data1_X_gmm_test = np.concatenate((data1_X_test, one_hot.transform(gmm1.predict(data1_X_test).reshape(-1, 1)).todense()), axis=1)
+    # gmm2 = GMM(n_components=3)
+    # gmm2.fit(data2_X_train)
+    # data2_X_gmm = np.concatenate((data2_X_train, one_hot.fit_transform(gmm2.predict(data2_X_train).reshape(-1, 1)).todense()), axis=1)
+    # data2_X_gmm_test = np.concatenate((data2_X_test, one_hot.transform(gmm2.predict(data2_X_test).reshape(-1, 1)).todense()), axis=1)
 
     ###### clustered data only ######
+    km1 = kmeans(n_clusters=100)
+    km1.fit(data1_X_train)
+    data1_X_km = one_hot.fit_transform(km1.predict(data1_X_train).reshape(-1, 1)).todense()
+    data1_X_km_test = one_hot.transform(km1.predict(data1_X_test).reshape(-1, 1)).todense()
+    km2 = kmeans(n_clusters=100)
+    km2.fit(data2_X_train)
+    data2_X_km = one_hot.fit_transform(km2.predict(data2_X_train).reshape(-1, 1)).todense()
+    data2_X_km_test = one_hot.transform(km2.predict(data2_X_test).reshape(-1, 1)).todense()
 
-    # grp1 = GaussianRandomProjection(n_components = 20)
-    # data1_X_grp = grp1.fit_transform(data1_X_train)
-    # data1_X_grp_test = grp1.transform(data1_X_test)
-    # grp2 = GaussianRandomProjection(n_components = 90)
-    # data2_X_grp = grp2.fit_transform(data2_X_train)
-    # data2_X_grp_test = grp2.transform(data2_X_test)
-    #
-    # fa1 = FeatureAgglomeration(n_clusters = 20)
-    # data1_X_fa = fa1.fit_transform(data1_X_train)
-    # data1_X_fa_test = fa1.transform(data1_X_test)
-    # fa2 = FeatureAgglomeration(n_clusters = 90)
-    # data2_X_fa = fa2.fit_transform(data2_X_train)
-    # data2_X_fa_test = fa2.transform(data2_X_test)
+    # km1 = kmeans(n_clusters = 3)
+    # data1_X_km = km1.fit_transform(data1_X_train)
+    # data1_X_km_test = km1.transform(data1_X_test)
+    # km2 = kmeans(n_clusters = 3)
+    # data2_X_km = km2.fit_transform(data2_X_train)
+    # data2_X_km_test = km2.transform(data2_X_test)
+
+    gmm1 = GMM(n_components=100)
+    gmm1.fit(data1_X_train)
+    data1_X_gmm = one_hot.fit_transform(gmm1.predict(data1_X_train).reshape(-1, 1)).todense()
+    data1_X_gmm_test = one_hot.transform(gmm1.predict(data1_X_test).reshape(-1, 1)).todense()
+    gmm2 = GMM(n_components=100)
+    gmm2.fit(data2_X_train)
+    data2_X_gmm = one_hot.fit_transform(gmm2.predict(data2_X_train).reshape(-1, 1)).todense()
+    data2_X_gmm_test = one_hot.transform(gmm2.predict(data2_X_test).reshape(-1, 1)).todense()
 
     ''' neuron network '''
-    file_4 = open('part_4.txt', 'w')
+    file_5 = open('part_5.txt', 'w')
     # ann_learning_curve_size_post(set1_name, data1_X_train, data1_y_train, hidden_layer_sizes=(50,), alpha=6.25)
     # ann_learning_curve_size_post(set2_name, data2_X_train, data2_y_train, hidden_layer_sizes=(50, ), alpha=0.417)
 
