@@ -88,7 +88,7 @@ if __name__=="__main__":
     # data2_X_gmm = np.concatenate((data2_X_train, one_hot.fit_transform(gmm2.predict(data2_X_train).reshape(-1, 1)).todense()), axis=1)
     # data2_X_gmm_test = np.concatenate((data2_X_test, one_hot.transform(gmm2.predict(data2_X_test).reshape(-1, 1)).todense()), axis=1)
 
-    ###### clustered data only ######
+    ''' clustered data only '''
     km1 = kmeans(n_clusters=200)
     one_hot1 = preprocessing.OneHotEncoder()
     km1.fit(data1_X_train)
@@ -99,13 +99,6 @@ if __name__=="__main__":
     km2.fit(data2_X_train)
     data2_X_km = one_hot2.fit_transform(km2.predict(data2_X_train).reshape(-1, 1)).todense()
     data2_X_km_test = one_hot2.transform(km2.predict(data2_X_test).reshape(-1, 1)).todense()
-
-    # km1 = kmeans(n_clusters = 3)
-    # data1_X_km = km1.fit_transform(data1_X_train)
-    # data1_X_km_test = km1.transform(data1_X_test)
-    # km2 = kmeans(n_clusters = 3)
-    # data2_X_km = km2.fit_transform(data2_X_train)
-    # data2_X_km_test = km2.transform(data2_X_test)
 
     gmm1 = GMM(n_components=200)
     gmm1.fit(data1_X_train)
@@ -120,8 +113,6 @@ if __name__=="__main__":
 
     ''' neuron network '''
     file_5 = open('part_5.txt', 'w')
-    # ann_learning_curve_size_post(set1_name, data1_X_train, data1_y_train, hidden_layer_sizes=(50,), alpha=6.25)
-    # ann_learning_curve_size_post(set2_name, data2_X_train, data2_y_train, hidden_layer_sizes=(50, ), alpha=0.417)
 
     ########## MNIST###########
 

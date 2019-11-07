@@ -22,78 +22,6 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.metrics import accuracy_score
 
 
-def recording_and_plotting(dataset_name, name, alter, train, validation,
-                           x_title="Sample size", y_title="Score"):
-    train_scores_mean = np.mean(train, axis=1)
-    train_scores_std = np.std(train, axis=1)
-    test_scores_mean = np.mean(validation, axis=1)
-    test_scores_std = np.std(validation, axis=1)
-
-    # recording
-    DT_1 = open('part4_{}_{}.txt'.format(dataset_name, name), 'w')
-    DT_1.write('{}/{}'.format(dataset_name, name))
-    DT_1.write("\n\n")
-    DT_1.write(str(alter))
-    DT_1.write("\n\n")
-    DT_1.write(str(train_scores_mean))
-    DT_1.write("\n\n")
-    DT_1.write(str(test_scores_mean))
-
-    # plotting
-    plt.grid()
-    ylim = (0, 1.1)
-    plt.ylim(*ylim)
-    plt.fill_between(alter, train_scores_mean - train_scores_std,
-                     train_scores_mean + train_scores_std, alpha=0.1,
-                     color="r")
-    plt.fill_between(alter, test_scores_mean - test_scores_std,
-                     test_scores_mean + test_scores_std, alpha=0.1, color="g")
-    plt.plot(alter, train_scores_mean, color="r",
-             label="Training score")
-    plt.plot(alter, test_scores_mean, color="g",
-             label="Cross-validation score")
-    plt.xlabel(x_title)
-    plt.ylabel(y_title)
-    plt.legend(loc="best")
-    plt.savefig('part4_{}_{}.png'.format(dataset_name, name))
-    plt.gcf().clear()
-
-def ann_learning_curve_size_post(dataset_name, X_train, y_train, hidden_layer_sizes=(5, ), max_iter=500, alpha=0.0001):
-    clf = MLPClassifier(hidden_layer_sizes=hidden_layer_sizes, max_iter=max_iter, alpha=alpha, random_state=1)
-    start_time = time.time()
-    cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
-    # cv = None
-
-    train_sizes = np.linspace(.01, 1.0, 2)
-    train_sizes, train_scores, test_scores = learning_curve(clf, X_train, y_train,
-                                                            cv=cv,
-                                                            train_sizes=train_sizes)
-    end_time = time.time()
-    difference = end_time - start_time
-    print("ann_learning_curve_size_post", difference)
-
-    recording_and_plotting(dataset_name, name="ann_learning_curve_size_post",
-                           alter=train_sizes,
-                           train=train_scores,
-                           validation=test_scores, x_title="Sample size", y_title="Score")
-
-def score_time(dataset_name, clf_name, clf, X_train, X_test, y_train, y_test):
-    start_time = time.time()
-    score = 0
-    difference = 0
-    for i in range(1):
-        clf.fit(X_train, y_train).predict(X_test)
-        score += accuracy_score(y_test, clf.fit(X_train, y_train).predict(X_test))
-        end_time = time.time()
-        difference += (end_time - start_time)
-    txt = open('part_4', 'a')
-    txt.write('{}_{} score:'.format(dataset_name, clf_name))
-    txt.write(str(score/1))
-    txt.write("\n")
-    txt.write('{}_{} time:'.format(dataset_name, clf_name))
-    txt.write(str(difference/1))
-    txt.write("\n\n")
-
 if __name__=="__main__":
     
     # Data Loading & Preprocessing
@@ -246,13 +174,6 @@ if __name__=="__main__":
     file_4.write('score_fa_2:')
     file_4.write(str(score_fa_2))
     file_4.write('\n')
-
-    # score_time("MNIST", "ANN",
-    #            MLPClassifier(hidden_layer_sizes=(50, ), max_iter=500, alpha=6.25, random_state=1),
-    #            data1_X_train, data1_X_test, data1_y_train, data1_y_test)
-    # score_time("ESR", "ANN",
-    #            MLPClassifier(hidden_layer_sizes=(50, ), max_iter=500, alpha=0.417, random_state=1),
-    #            data1_X_train, data1_X_test, data1_y_train, data1_y_test)
 
 
 print "========== END =========="
