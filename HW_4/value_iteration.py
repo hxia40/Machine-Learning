@@ -92,7 +92,7 @@ def value_iteration(env, gamma = 1.0):
 
 if __name__ == '__main__':
     env_name  = 'FrozenLake8x8-v0'
-    gamma = 0.99
+    gamma = 0.98
     env = gym.make(env_name)
     optimal_v = value_iteration(env, gamma)
     policy = extract_policy(optimal_v, gamma)
