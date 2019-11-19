@@ -6,47 +6,8 @@ import numpy as np
 import gym
 from gym import wrappers
 
-def run_episode(env, policy, gamma = 1.0, render = False):
-    """ Evaluates policy by using it to run an episode and finding its
-    total reward.
-    args:
-    env: gym environment.
-    policy: the policy to be used.
-    gamma: discount factor.
-    render: boolean to turn rendering on/off.
-    returns:
-    total reward: real value of the total reward recieved by agent under policy.
-    """
-    obs = env.reset()  # Resetting the environment will return an integer. This number will be our initial state.
-    total_reward = 0
-    step_idx = 0
-    while True:
-        if render:
-            env.render()
-        obs, reward, done , _ = env.step(int(policy[obs]))
-        # total_reward += (gamma ** step_idx * reward)
-        # the above code is from Moustafa Alzantot , which this is problematic.
-        # As the policy's target here is never to finish in shortest time. Rather,
-        # the only thing matters is that if u can successfully recover ur stuff, or drop into one of the ice-hole.
-        total_reward += reward    # HX
-        step_idx += 1
-        if done:
-            break
-    # print "total_reward:", total_reward
-    return total_reward
 
-
-def evaluate_policy(env, policy, gamma = 1.0,  n = 1000):
-    """ Evaluates a policy by running it n times.
-    returns:
-    average total reward
-    """
-    scores = [
-            run_episode(env, policy, gamma = gamma, render = False)
-            for _ in range(n)]
-    return np.mean(scores)
-
-class Agent:
+class PI:
     def __init__(self, env):
         self.env = env
 
