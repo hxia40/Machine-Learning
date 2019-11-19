@@ -25,10 +25,10 @@ def Q_update():
     time_list = []
     time_list_jr = []
 
-    range_end = 200000
+    range_end = 1000000
     for episode in range(range_end):
         # alpha = 1 - math.log(episode+1, 10) / math.log(range_end, 10)
-        alpha = 0.001
+        alpha = 0.0001
         if (episode + 1) % (range_end / 100) == 0:
             print "episode = ", episode + 1, "learnng rate = ", alpha
             episode_list.append(episode + 1)
