@@ -7,6 +7,8 @@ Created on Sun Apr 16 18:59:45 2017
 
 import numpy
 from numpy.random import random_integers as rand
+import matplotlib
+matplotlib.use('TkAgg')
 import matplotlib.pyplot as pyplot
 
 def maze(width=30, height=30, complexity=.75, density=.75):
@@ -41,4 +43,4 @@ def maze(width=30, height=30, complexity=.75, density=.75):
 pyplot.figure(figsize=(10, 5))
 pyplot.imshow(maze(32, 32,0.95,0.70), cmap=pyplot.cm.binary, interpolation='nearest')
 pyplot.xticks([]), pyplot.yticks([])
-pyplot.show()
+pyplot.savefig('1.png')
