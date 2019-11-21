@@ -10,9 +10,9 @@ import pandas as pd
 import time
 
 
-class XQLearningTable:
+class XQPlusLearningTable:
 
-    def __init__(self, actions, learning_rate=0.01, reward_decay=0.9, e_greedy=0.9, verbose=False):
+    def __init__(self, actions, learning_rate=0.01, reward_decay=0.9, e_greedy=0.9, exploration_decay = 0.99, verbose=False):
         self.actions = actions  # a list
         self.lr = learning_rate
         self.gamma = reward_decay
@@ -21,6 +21,7 @@ class XQLearningTable:
         self.x_table = pd.DataFrame(columns=self.actions, dtype=np.float64)
         self.new_state_counter = 0
         self.verbose = verbose
+        self.delta = exploration_decay
 
 
     def choose_action(self, observation):
@@ -29,10 +30,10 @@ class XQLearningTable:
         state_exploration = self.x_table.loc[observation, :]
         # action selection
         # if there's some action have not been tried (i.e. value =1 in the x table), force the agent to try it first.
-        if not state_exploration.all():
+        if not all(state_exploration == 0):
             # if self.verbose:
             #     print "lets see what the state_explloration is!!!!\n", state_exploration
-            action = np.random.choice(state_exploration[state_exploration == 0].index)
+            action = np.random.choice(state_exploration[state_exploration == np.max(state_exploration)].index)
             # if self.verbose:
             #     print "action chosen:", action, '\n'
         else:
@@ -52,11 +53,12 @@ class XQLearningTable:
         q_predict = self.q_table.loc[s, a]
         if s_ != 'terminal':
             q_target = r + self.gamma * self.q_table.loc[s_, :].max()  # next state is not terminal
+            self.x_table *= self.delta
         else:
             q_target = r  # next state is terminal
         # self.q_table.loc[s, a] += self.lr * (q_target - q_predict)  # update , Morvan's original
         self.q_table.loc[s, a] += alpha * (q_target - q_predict)  # update q table , HX self defined
-        self.x_table.loc[s, a] = 1  # update x table , HX self defined
+        self.x_table.loc[s, a] = 0  # update x table , HX self defined
         if self.verbose >= 2:
             print '\n Q table is:\n', self.q_table
             print '\n X table is:\n', self.x_table
@@ -85,4 +87,3 @@ class XQLearningTable:
                     name=state,
                 )
             )
-

@@ -12,7 +12,8 @@ import numpy as np
 from HX_policy_iteration import PI
 from HX_value_iteration import VI
 from HX_QLearner import QLearningTable, QLearningTableNC
-from HX_XQL import XQLearningTable, XQLearningTablePlus
+from HX_XQL import XQLearningTable
+from HX_XQPlusL import XQPlusLearningTable
 from HX_NChain import NChainEnv
 from HX_maze import generate_random_map, FrozenLakeEnv
 import gym
@@ -22,7 +23,7 @@ import random
 
 
 def Q_FL0(learning_rate = 0.01):
-    Q_file = open('QLearner.txt', 'w')
+    Q_file = open('QLearner.txt', 'a')
 
     episode_list = []
     reward_list = []
@@ -30,7 +31,7 @@ def Q_FL0(learning_rate = 0.01):
     time_list = []
     time_list_jr = []
 
-    range_end = 10000
+    range_end = 2000000
     for episode in range(range_end):
         # alpha = (1 - math.log(episode+1, 10) / math.log(range_end, 10))/10
         alpha = learning_rate
@@ -150,28 +151,41 @@ if __name__ == "__main__":
 
     random.seed(1)
 
-    env_FL0 = FrozenLakeEnv(desc=generate_random_map(size=8, p=0.9), map_name=None,is_slippery=False)
+    env_FL0 = FrozenLakeEnv(desc=generate_random_map(size=32, p=0.9), map_name=None,is_slippery=False)
     env_FL0.render()
-    '''FrozenLake - XQ-learning'''
 
+    '''FrozenLake - XQ-plus learning'''
+
+    # print "XQPlusLearningTable"
+    # for i in range(1):
+    #     QL_FL0 = XQPlusLearningTable(actions=list(range(env_FL0.nA)),
+    #                             # learning_rate=0.1,
+    #                             reward_decay=0.99,
+    #                             e_greedy=0.9,
+    #                             exploration_decay=0.99,
+    #                             verbose = 1)
+    #     Q_FL0(learning_rate = 0.01)
+
+    '''FrozenLake - XQ-learning'''
+    #
     print "XQLearningTable"
-    for i in range(10):
+    for i in range(1):
         QL_FL0 = XQLearningTable(actions=list(range(env_FL0.nA)),
                                 # learning_rate=0.1,
                                 reward_decay=0.99,
                                 e_greedy=0.9,
-                                verbose = False)
+                                verbose = 1)
         Q_FL0(learning_rate = 0.01)
 
     '''FrozenLake - Q-learning'''
 
     # print "QLearningTable"
-    # for i in range(2):
+    # for i in range(10):
     #     QL_FL0 = QLearningTable(actions=list(range(env_FL0.nA)),
     #                             # learning_rate=0.1,
     #                             reward_decay=0.99,
     #                             e_greedy=0.9,
-    #                             verbose = False)
+    #                             verbose = True)
     #     Q_FL0(learning_rate = 0.01)
 
     '''NChain'''

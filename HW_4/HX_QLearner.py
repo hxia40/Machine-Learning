@@ -43,6 +43,8 @@ class QLearningTable:
             q_target = r  # next state is terminal
         # self.q_table.loc[s, a] += self.lr * (q_target - q_predict)  # update , Morvan's original
         self.q_table.loc[s, a] += alpha * (q_target - q_predict)  # update , HX self defined
+        # if self.verbose:
+            # print '\n Q table is:\n', self.q_table
 
     def check_state_exist(self, state):
         if state not in self.q_table.index:
@@ -50,7 +52,7 @@ class QLearningTable:
             self.new_state_counter += 1
             if self.verbose:
                 print '========adding new state====== : ', self.new_state_counter
-                print '\n Q table is:\n', self.q_table
+                # print '\n Q table is:\n', self.q_table
             self.q_table = self.q_table.append(
                 pd.Series(
                     [0]*len(self.actions),
