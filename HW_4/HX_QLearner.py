@@ -32,6 +32,7 @@ class QLearningTable:
         else:
             # choose random action
             action = np.random.choice(self.actions)
+
         return action
 
     def learn(self, s, a, r, s_, alpha):
@@ -43,16 +44,13 @@ class QLearningTable:
             q_target = r  # next state is terminal
         # self.q_table.loc[s, a] += self.lr * (q_target - q_predict)  # update , Morvan's original
         self.q_table.loc[s, a] += alpha * (q_target - q_predict)  # update , HX self defined
-        # if self.verbose:
-            # print '\n Q table is:\n', self.q_table
+        if self.verbose >= 2:
+            print('\n Q table is:\n', self.q_table)
 
     def check_state_exist(self, state):
         if state not in self.q_table.index:
             # append new state to q table
             self.new_state_counter += 1
-            if self.verbose:
-                print '========adding new state====== : ', self.new_state_counter
-                # print '\n Q table is:\n', self.q_table
             self.q_table = self.q_table.append(
                 pd.Series(
                     [0]*len(self.actions),
@@ -60,10 +58,14 @@ class QLearningTable:
                     name=state,
                 )
             )
+            if self.verbose >= 1:
+                print('========adding', self.new_state_counter,'th new state====== : ', state)
+            if self.verbose >= 2:
+                print('\n Q table is:\n', self.q_table)
 
 
 class QLearningTableNC:
-    def __init__(self, actions, learning_rate=0.01, reward_decay=0.9, e_greedy=0.9, total_length = 10):
+    def __init__(self, actions, learning_rate=0.01, reward_decay=0.9, e_greedy=0.9, total_length=10):
         self.actions = actions  # a list
         self.lr = learning_rate
         self.gamma = reward_decay
@@ -75,14 +77,14 @@ class QLearningTableNC:
         self.check_state_exist(observation)
         # action selection
         if np.random.uniform() < self.epsilon:
-            # print '\n choose best action'
+            # print('\n choose best action')
             state_action = self.q_table.loc[observation, :]
-            # print 'state_action:', state_action
+            # print('state_action:', state_action)
             # some actions may have the same value, randomly choose on in these actions
             action = np.random.choice(state_action[state_action == np.max(state_action)].index)
-            # print 'action:', action
+            # print('action:', action)
         else:
-            # print 'choose random action'
+            # print('choose random action')
             action = np.random.choice(self.actions)
         # time.sleep(0.3)
         return action
@@ -99,7 +101,7 @@ class QLearningTableNC:
 
     def check_state_exist(self, state):
         if state not in self.q_table.index:
-            # print '========adding new state======"'
+            # print('========adding new state======"')
             # append new state to q table
             self.q_table = self.q_table.append(
                 pd.Series(
