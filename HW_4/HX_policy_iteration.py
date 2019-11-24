@@ -3,8 +3,10 @@ Solving environment using Policy Itertion.
 Author : Wei Feng
 """
 import numpy as np
+import pandas as pd
 import gym
 from gym import wrappers
+from stocks_env import StocksEnv
 
 def run_episode(env, policy, gamma = 1.0, render = False):
     """ Evaluates policy by using it to run an episode and finding its
@@ -24,6 +26,9 @@ def run_episode(env, policy, gamma = 1.0, render = False):
         if render:
             env.render()
         obs, reward, done , _ = env.step(int(policy[obs]))
+
+
+
         # total_reward += (gamma ** step_idx * reward)
         # the above code is from Moustafa Alzantot , which this is problematic.
         # As the policy's target here is never to finish in shortest time. Rather,
@@ -68,15 +73,15 @@ class PI:
         return V
 
     def next_best_action(self, s, V, gamma):
-        action_values = np.zeros(env.nA)
-        for a in range(env.nA):
+        action_values = np.zeros(self.env.nA)
+        for a in range(self.env.nA):
             for prob, next_state, reward, done in self.env.P[s][a]:
                 action_values[a] += prob * (reward + gamma * V[next_state])
         return np.argmax(action_values), np.max(action_values)
 
     def optimize(self, gamma = 1):
         policy = np.tile(np.eye(self.env.nA)[1], (self.env.nS, 1))
-
+        # print("self.env.nA", self.env.nA)
         is_stable = False
 
         round_num = 0
@@ -113,3 +118,11 @@ if __name__ == '__main__':
     optimal_policy = pi.optimize(gamma=1)
     policy_score = evaluate_policy(env, optimal_policy, n=1000)
     print('Policy average score = ', policy_score)
+    '''===========stocks==========='''
+    # env_AT = StocksEnv(df=pd.read_csv('IBM.csv'),frame_bound=(50, 100), window_size=10)
+    # print(env_AT.nA)
+    # print(env_AT.nS)
+    # pi_AT = PI(env_AT)
+    # optimal_policy_AT = pi_AT.optimize(gamma=1)
+    # policy_score = evaluate_policy(env_AT, optimal_policy_AT, n=1000)
+    # print('Policy average score = ', policy_score)

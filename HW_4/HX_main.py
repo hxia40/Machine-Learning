@@ -27,127 +27,127 @@ from gym_anytrading.datasets import FOREX_EURUSD_1H_ASK, STOCKS_GOOGL
 from stocks_env import StocksEnv
 
 
-# def Q_FL0(learning_rate = 0.01):
-#     Q_file = open('QLearner.txt', 'a')
-#
-#     episode_list = []
-#     reward_list = []
-#     reward_list_jr = []
-#     time_list = []
-#     time_list_jr = []
-#
-#     range_end = 10000
-#     for episode in range(range_end):
-#         # alpha = (1 - math.log(episode+1, 10) / math.log(range_end, 10))/10
-#         alpha = learning_rate
-#         if (episode + 1) % (range_end / 100) == 0:
-#             print("episode = ", episode + 1, "learnng rate = ", alpha, "reward = ", np.mean(reward_list_jr))
-#             episode_list.append(episode + 1)
-#             time_list.append(np.mean(time_list_jr))
-#             time_list_jr = []
-#             reward_list.append(np.mean(reward_list_jr))
-#
-#             reward_list_jr = []
-#         # initial observation
-#         observation = env_FL0.reset()
-#         start_time = time.time()
-#         while True:
-#             # # fresh env
-#             # env_FL0.render()
-#
-#             # QL choose action based on observation
-#             action = QL_FL0.choose_action(str(observation))
-#             # print env_FL0.step(action)
-#
-#             # QL take action and get next observation and reward
-#             observation_, reward, done, info = env_FL0.step(action)
-#
-#             # QL learn from this transition
-#             QL_FL0.learn(str(observation), action, reward, str(observation_), alpha)
-#
-#             # swap observation
-#             observation = observation_
-#
-#             # break while loop when end of this episode
-#             if done:
-#                 time_list_jr.append(time.time()-start_time)
-#                 reward_list_jr.append(reward)
-#                 break
-#
-#     # Q_file.write('episodes:')
-#     # Q_file.write(str(episode_list))
-#     # Q_file.write('\n')
-#     # Q_file.write('rewards:')
-#     Q_file.write(str(reward_list))
-#     Q_file.write('\n')
-#     # Q_file.write('time_consumption:')
-#     # Q_file.write(str(time_list))
-#     Q_file.close()
-#
-#     # end of game
-#     print('game over')
-#     # env.destroy()
-# def Q_NC(random_seed=1):
-#     Q_file = open('QLearnerNC.txt', 'w')
-#     episode_list = []
-#     reward_list = []
-#     reward_list_jr = []
-#     time_list = []
-#     time_list_jr = []
-#
-#     range_end = 100000
-#     env_NC.seed(random_seed)
-#     for episode in range(range_end):
-#         # alpha = (1 - math.log(episode+1, 10) / math.log(range_end, 10))/10
-#         alpha = 0.01
-#         if (episode + 1) % (range_end / 100) == 0:
-#             print("episode = ", episode + 1, "learnng rate = ", alpha, "reward = ", np.mean(reward_list_jr))
-#             episode_list.append(episode + 1)
-#             time_list.append(np.mean(time_list_jr))
-#             time_list_jr = []
-#             reward_list.append(np.mean(reward_list_jr))
-#
-#             reward_list_jr = []
-#         # initial observation
-#         observation = env_NC.reset()
-#         start_time = time.time()
-#         while True:
-#             # # fresh env
-#             # env_NC.render()
-#
-#             # QL choose action based on observation
-#             action = QL_NC.choose_action(observation)
-#             # print env_NC.step(action)
-#
-#             # QL take action and get next observation and reward
-#             observation_, reward, done, info = env_NC.step(action)
-#             # print action
-#             # print env_NC.step(action)
-#
-#             # QL learn from this transition
-#             QL_NC.learn(observation, action, reward, observation, alpha)
-#
-#             # swap observation
-#             observation = observation_
-#
-#             # break while loop when end of this episode
-#             if done:
-#                 time_list_jr.append(time.time()-start_time)
-#                 reward_list_jr.append(reward)
-#                 break
-#
-#     Q_file.write('episodes:')
-#     Q_file.write(str(episode_list))
-#     Q_file.write('\n')
-#     Q_file.write('rewards:')
-#     Q_file.write(str(reward_list))
-#     Q_file.write('\n')
-#     Q_file.write('time_consumption:')
-#     Q_file.write(str(time_list))
-#
-#     # end of game
-#     print('game over')
-#     # env.destroy()
+def Q_FL0(learning_rate = 0.01):
+    Q_file = open('QLearner.txt', 'a')
+
+    episode_list = []
+    reward_list = []
+    reward_list_jr = []
+    time_list = []
+    time_list_jr = []
+
+    range_end = 10000
+    for episode in range(range_end):
+        # alpha = (1 - math.log(episode+1, 10) / math.log(range_end, 10))/10
+        alpha = learning_rate
+        if (episode + 1) % (range_end / 100) == 0:
+            print("episode = ", episode + 1, "learnng rate = ", alpha, "reward = ", np.mean(reward_list_jr))
+            episode_list.append(episode + 1)
+            time_list.append(np.mean(time_list_jr))
+            time_list_jr = []
+            reward_list.append(np.mean(reward_list_jr))
+
+            reward_list_jr = []
+        # initial observation
+        observation = env_FL0.reset()
+        start_time = time.time()
+        while True:
+            # # fresh env
+            # env_FL0.render()
+
+            # QL choose action based on observation
+            action = QL_FL0.choose_action(str(observation))
+            # print env_FL0.step(action)
+
+            # QL take action and get next observation and reward
+            observation_, reward, done, info = env_FL0.step(action)
+
+            # QL learn from this transition
+            QL_FL0.learn(str(observation), action, reward, str(observation_), alpha)
+
+            # swap observation
+            observation = observation_
+
+            # break while loop when end of this episode
+            if done:
+                time_list_jr.append(time.time()-start_time)
+                reward_list_jr.append(reward)
+                break
+
+    # Q_file.write('episodes:')
+    # Q_file.write(str(episode_list))
+    # Q_file.write('\n')
+    # Q_file.write('rewards:')
+    Q_file.write(str(reward_list))
+    Q_file.write('\n')
+    # Q_file.write('time_consumption:')
+    # Q_file.write(str(time_list))
+    Q_file.close()
+
+    # end of game
+    print('game over')
+    # env.destroy()
+def Q_NC(random_seed=1):
+    Q_file = open('QLearnerNC.txt', 'w')
+    episode_list = []
+    reward_list = []
+    reward_list_jr = []
+    time_list = []
+    time_list_jr = []
+
+    range_end = 100000
+    env_NC.seed(random_seed)
+    for episode in range(range_end):
+        # alpha = (1 - math.log(episode+1, 10) / math.log(range_end, 10))/10
+        alpha = 0.01
+        if (episode + 1) % (range_end / 100) == 0:
+            print("episode = ", episode + 1, "learnng rate = ", alpha, "reward = ", np.mean(reward_list_jr))
+            episode_list.append(episode + 1)
+            time_list.append(np.mean(time_list_jr))
+            time_list_jr = []
+            reward_list.append(np.mean(reward_list_jr))
+
+            reward_list_jr = []
+        # initial observation
+        observation = env_NC.reset()
+        start_time = time.time()
+        while True:
+            # # fresh env
+            # env_NC.render()
+
+            # QL choose action based on observation
+            action = QL_NC.choose_action(observation)
+            # print env_NC.step(action)
+
+            # QL take action and get next observation and reward
+            observation_, reward, done, info = env_NC.step(action)
+            # print action
+            # print env_NC.step(action)
+
+            # QL learn from this transition
+            QL_NC.learn(observation, action, reward, observation, alpha)
+
+            # swap observation
+            observation = observation_
+
+            # break while loop when end of this episode
+            if done:
+                time_list_jr.append(time.time()-start_time)
+                reward_list_jr.append(reward)
+                break
+
+    Q_file.write('episodes:')
+    Q_file.write(str(episode_list))
+    Q_file.write('\n')
+    Q_file.write('rewards:')
+    Q_file.write(str(reward_list))
+    Q_file.write('\n')
+    Q_file.write('time_consumption:')
+    Q_file.write(str(time_list))
+
+    # end of game
+    print('game over')
+    # env.destroy()
 
 
 def Q_AnyTrading(learning_rate = 0.01):
@@ -233,20 +233,17 @@ if __name__ == "__main__":
     print("QLearning- AnyTrading")
     # env_AT = gym.make('stocks-v0', frame_bound=(50, 100), window_size=10)
     env_AT = StocksEnv(df=pd.read_csv('SPY.csv'),frame_bound=(50, 100), window_size=10)
-    observation = env_AT.reset()
     for i in range(1):
-        QL_AnyTrading = QLearningTable(actions=list(range(2)),
+        QL_AnyTrading = QLearningTable(actions=list(range(env_AT.nA)),
                                 # learning_rate=0.1,
                                 reward_decay=0.99,
                                 e_greedy=1,
                                 verbose = 0)
         Q_AnyTrading(learning_rate = 0.01)
 
-
     '''FromzenLake env'''
-    # env_FL0 = FrozenLakeEnv(desc=generate_random_map(size=32, p=0.95), map_name=None,is_slippery=False)
-    # env_FL0 = FrozenLakeEnv(desc=None, map_name='32x32-0.95', is_slippery=False)
-    # env_FL0.render()
+    env_FL0 = FrozenLakeEnv(desc=generate_random_map(size=32, p=0.95), map_name=None, is_slippery=False)
+    # env_FL0 = FrozenLakeEnv(desc=None, map_name='4x4', is_slippery=True)
 
     '''FrozenLake - XQ-plus learning'''
 
@@ -273,7 +270,7 @@ if __name__ == "__main__":
 
     '''FrozenLake - Q-learning'''
 
-    # print "QLearningTable"
+    # print("QLearningTable")
     # for i in range(1):
     #     QL_FL0 = QLearningTable(actions=list(range(env_FL0.nA)),
     #                             # learning_rate=0.1,

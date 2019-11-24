@@ -4,6 +4,7 @@ from gym.utils import seeding
 import numpy as np
 from enum import Enum
 import matplotlib.pyplot as plt
+import time
 
 
 class Actions(Enum):
@@ -47,6 +48,8 @@ class TradingEnv(gym.Env):
         self._total_reward = None
         self._total_profit = None
         self._first_rendering = None
+
+
 
 
     def seed(self, seed=None):

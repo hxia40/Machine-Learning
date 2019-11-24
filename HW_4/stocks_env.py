@@ -2,7 +2,7 @@ import numpy as np
 
 from trading_env import TradingEnv, Actions, Positions
 
-
+import time
 class StocksEnv(TradingEnv):
 
     def __init__(self, df, window_size, frame_bound):
@@ -13,6 +13,44 @@ class StocksEnv(TradingEnv):
 
         # self.trade_fee_bid_percent = 0.01  # unit.   Original
         # self.trade_fee_ask_percent = 0.005  # unit. Original
+
+        self.nA = 2
+        self.nS = len(self.prices)
+        self.P = {s : {a : [] for a in range(self.nA)} for s in range(self.nS)}
+        '''[(0.3333333333333333, 0, 0.0, False)'''
+
+        '''prob/next_state/reward/done'''
+        '''[(1.0, array([], shape=(0, 2), dtype=float64), -3.1200000000000045, False)]'''
+        # self._current_tick = 0
+        # observation = self.signal_features[(self._current_tick-self.window_size):self._current_tick]
+
+        # def _get_observation(self):
+        #     return self.signal_features[(self._current_tick - self.window_size):self._current_tick]
+
+
+        # print('self.signal_features:\n',self.signal_features)
+        for s in range(self.nS):
+
+                for a in range(self.nA):
+                    self._current_tick = s
+                    li = self.P[s][a]
+                    next_tick = self._current_tick + 1
+
+                    # next_state = self.signal_features[(next_tick - self.window_size):next_tick]
+                    next_state = s + 1
+                    if s >= self.window_size:
+                        step_reward = self._calculate_reward(a)
+                    else:
+                        step_reward = 0
+
+                    if next_tick == self.nS -1:
+                        li.append((1.0, next_state, step_reward, True))
+                    else:
+                        if s == self.nS-1:
+                            li.append((1.0, 59, 0, True))
+                        else:
+                            li.append((1.0, next_state, step_reward, False))
+                    # print("====li========\n", li)
 
         self.trade_fee_bid_percent = 0.00  # HX
         self.trade_fee_ask_percent = 0.00  # HX
@@ -51,6 +89,7 @@ class StocksEnv(TradingEnv):
     def _calculate_reward(self, action):   # HX version, calculate reward on a daily basis
         # using the observation of self.current_tick decide today's action and the very end of day, then use tomorrow's
         # (i.e. self.current_tick + 1) observation to decide how is the reward of today.
+
         step_reward = 0
         if self._current_tick == self._end_tick:     # then there will be tomorrow's price, nor reward
             step_reward = 0
