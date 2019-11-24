@@ -36,7 +36,7 @@ def Q_FL0(learning_rate = 0.01):
     time_list = []
     time_list_jr = []
 
-    range_end = 10000
+    range_end = 100000
     for episode in range(range_end):
         # alpha = (1 - math.log(episode+1, 10) / math.log(range_end, 10))/10
         alpha = learning_rate
@@ -230,20 +230,20 @@ def Q_AnyTrading(learning_rate = 0.01):
 if __name__ == "__main__":
     '''AnyTrading - Q-learning'''
 
-    print("QLearning- AnyTrading")
-    # env_AT = gym.make('stocks-v0', frame_bound=(50, 100), window_size=10)
-    env_AT = StocksEnv(df=pd.read_csv('SPY.csv'),frame_bound=(50, 100), window_size=10)
-    for i in range(1):
-        QL_AnyTrading = QLearningTable(actions=list(range(env_AT.nA)),
-                                # learning_rate=0.1,
-                                reward_decay=0.99,
-                                e_greedy=1,
-                                verbose = 0)
-        Q_AnyTrading(learning_rate = 0.01)
+    # print("QLearning- AnyTrading")
+    # # env_AT = gym.make('stocks-v0', frame_bound=(50, 100), window_size=10)
+    # env_AT = StocksEnv(df=pd.read_csv('SPY.csv'),frame_bound=(50, 100), window_size=10)
+    # for i in range(1):
+    #     QL_AnyTrading = QLearningTable(actions=list(range(env_AT.nA)),
+    #                             # learning_rate=0.1,
+    #                             reward_decay=0.99,
+    #                             e_greedy=1,
+    #                             verbose = 0)
+    #     Q_AnyTrading(learning_rate = 0.01)
 
     '''FromzenLake env'''
-    env_FL0 = FrozenLakeEnv(desc=generate_random_map(size=32, p=0.95), map_name=None, is_slippery=False)
-    # env_FL0 = FrozenLakeEnv(desc=None, map_name='4x4', is_slippery=True)
+    # env_FL0 = FrozenLakeEnv(desc=generate_random_map(size=32, p=0.95), map_name=None, is_slippery=False)
+    env_FL0 = FrozenLakeEnv(desc=None, map_name='8x8', is_slippery=True)
 
     '''FrozenLake - XQ-plus learning'''
 
@@ -270,14 +270,14 @@ if __name__ == "__main__":
 
     '''FrozenLake - Q-learning'''
 
-    # print("QLearningTable")
-    # for i in range(1):
-    #     QL_FL0 = QLearningTable(actions=list(range(env_FL0.nA)),
-    #                             # learning_rate=0.1,
-    #                             reward_decay=0.99,
-    #                             e_greedy=0.9,
-    #                             verbose = True)
-    #     Q_FL0(learning_rate = 0.01)
+    print("QLearningTable")
+    for i in range(1):
+        QL_FL0 = QLearningTable(actions=list(range(env_FL0.nA)),
+                                # learning_rate=0.1,
+                                reward_decay=0.99,
+                                e_greedy=0.9,
+                                verbose = True)
+        Q_FL0(learning_rate = 0.1)
 
     '''NChain  Q-Learning'''
     # env_NC = NChainEnv(gym.Env)
