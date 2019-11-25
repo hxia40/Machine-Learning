@@ -7,6 +7,7 @@ import pandas as pd
 import gym
 from gym import wrappers
 from stocks_env import StocksEnv
+import time
 
 def run_episode(env, policy, gamma = 1.0, render = False):
     """ Evaluates policy by using it to run an episode and finding its
@@ -71,7 +72,7 @@ def run_episode_stock(env, policy, gamma = 1.0, render = False):
             env.render()
         actual_obs_not_using, reward, done , _ = env.step(int(policy[obs]))
         obs += 1
-        print('obs:', obs, 'r:', reward, 'done:', done)
+        # print('obs:', obs, 'r:', reward, 'done:', done)
         # time.sleep(0.3)
 
         # total_reward += (gamma ** step_idx * reward)
@@ -105,8 +106,10 @@ class PI:
         V = np.zeros(self.env.nS)
         THETA = 1e-10
         delta = float("inf")
+        round_num = 0
 
         while delta > THETA:
+
             delta = 0
             for s in range(self.env.nS):
                 expected_value = 0
@@ -135,12 +138,8 @@ class PI:
 
         while not is_stable:
             is_stable = True
-            print("\nRound Number:" + str(round_num))
+            start_time = time.time()
             round_num += 1
-            # print("Current Policy")
-            # print(
-            #     np.reshape([env.get_action_name(entry) for entry in [np.argmax(policy[s]) for s in range(self.env.nS)]],
-            #                (8,8)))
 
             V = self.policy_evaluation(policy, gamma)
             # print("Expected Value accoridng to Policy Evaluation")
@@ -153,23 +152,25 @@ class PI:
                 policy[s] = np.eye(self.env.nA)[best_action]
                 if action_by_policy != best_action:
                     is_stable = False
+            print('round_num/time:', round_num, time.time() - start_time)
 
         policy = [np.argmax(policy[s]) for s in range(self.env.nS)]
+        print("PI policy:", policy)
         return policy
 
 
 if __name__ == '__main__':
-    # env_name  = 'FrozenLake8x8-v0'
-    # env = gym.make(env_name)
-    # pi = PI(env)
-    # optimal_policy = pi.optimize(gamma=1)
-    # policy_score = evaluate_policy(env, optimal_policy, n=1000)
-    # print('Policy average score = ', policy_score)
-    '''===========stocks==========='''
-    env_AT = StocksEnv(df=pd.read_csv('SPY.csv'),frame_bound=(50, 100), window_size=10)
-    print(env_AT.nA)
-    print(env_AT.nS)
-    pi_AT = PI(env_AT)
-    optimal_policy_AT = pi_AT.optimize(gamma=1)
-    policy_score = evaluate_policy_stock(env_AT, optimal_policy_AT, n=1000)
+    env_name  = 'FrozenLake8x8-v0'
+    env = gym.make(env_name)
+    pi = PI(env)
+    optimal_policy = pi.optimize(gamma=1)
+    policy_score = evaluate_policy(env, optimal_policy, n=1000)
     print('Policy average score = ', policy_score)
+    '''===========stocks==========='''
+    # env_AT = StocksEnv(df=pd.read_csv('SPY.csv'),frame_bound=(50, 100), window_size=10)
+    # print(env_AT.nA)
+    # print(env_AT.nS)
+    # pi_AT = PI(env_AT)
+    # optimal_policy_AT = pi_AT.optimize(gamma=1)
+    # policy_score = evaluate_policy_stock(env_AT, optimal_policy_AT, n=1000)
+    # print('Policy average score = ', policy_score)

@@ -72,7 +72,7 @@ def run_episode_stock(env, policy, gamma = 1.0, render = False):
             env.render()
         actual_obs_not_using, reward, done , _ = env.step(int(policy[obs]))
         obs += 1
-        print('obs:', obs, 'r:', reward, 'done:', done)
+        # print('obs:', obs, 'r:', reward, 'done:', done)
         # time.sleep(0.3)
 
         # total_reward += (gamma ** step_idx * reward)
@@ -117,7 +117,7 @@ class VI:
         round_num = 0
 
         while delta > THETA:
-            print('round_num:', round_num)
+            start_time = time.time()
             delta = 0
             # print("\nValue Iteration: Round " + str(round_num))
             # print(np.reshape(self.V,(8,8)))
@@ -126,13 +126,14 @@ class VI:
                 delta = max(delta, np.abs(best_action_value - self.V[s]))
                 self.V[s] = best_action_value
             round_num += 1
+            print('round_num/delta/time:', round_num, delta, time.time()-start_time)
 
         policy = np.zeros(self.env.nS)
         for s in range(self.env.nS):
             best_action, best_action_value = self.next_best_action(s, self.V, gamma)
             policy[s] = best_action
-        print('policy:', policy)
-
+        print('VI policy:', policy)
+        print('VI table:', self.V)
         return policy
 
 
@@ -147,7 +148,7 @@ if __name__ == '__main__':
     '''===========stocks==========='''
     '''obs, reward, done , _ = env.step(int(policy[obs]))'''
 
-    env_AT = StocksEnv(df=pd.read_csv('SPY.csv'),frame_bound=(50, 100), window_size=10)
+    env_AT = StocksEnv(df=pd.read_csv('IBM.csv'),frame_bound=(50, 100), window_size=10)
     print(env_AT.nA)
     print(env_AT.nS)
     print("==========================")
