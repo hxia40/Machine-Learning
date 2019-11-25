@@ -8,6 +8,7 @@ import gym
 from gym import wrappers
 from stocks_env import StocksEnv
 import time
+from HX_maze import generate_random_map, FrozenLakeEnv
 
 def run_episode(env, policy, gamma = 1.0, render = False):
     """ Evaluates policy by using it to run an episode and finding its
@@ -162,15 +163,16 @@ class PI:
 if __name__ == '__main__':
     env_name  = 'FrozenLake8x8-v0'
     env = gym.make(env_name)
+
     pi = PI(env)
     optimal_policy = pi.optimize(gamma=1)
     policy_score = evaluate_policy(env, optimal_policy, n=1000)
     print('Policy average score = ', policy_score)
     '''===========stocks==========='''
-    # env_AT = StocksEnv(df=pd.read_csv('SPY.csv'),frame_bound=(50, 100), window_size=10)
-    # print(env_AT.nA)
-    # print(env_AT.nS)
-    # pi_AT = PI(env_AT)
-    # optimal_policy_AT = pi_AT.optimize(gamma=1)
-    # policy_score = evaluate_policy_stock(env_AT, optimal_policy_AT, n=1000)
-    # print('Policy average score = ', policy_score)
+    env_AT = StocksEnv(df=pd.read_csv('SPY.csv'),frame_bound=(50, 100), window_size=10)
+    print(env_AT.nA)
+    print(env_AT.nS)
+    pi_AT = PI(env_AT)
+    optimal_policy_AT = pi_AT.optimize(gamma=1)
+    policy_score = evaluate_policy_stock(env_AT, optimal_policy_AT, n=1000)
+    print('Policy average score = ', policy_score)

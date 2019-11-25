@@ -138,13 +138,13 @@ class VI:
 
 
 if __name__ == '__main__':
-    # env_name  = 'FrozenLake8x8-v0'
-    # env = gym.make(env_name)
-    # # env = FrozenLakeEnv(desc=None, map_name='4x4', is_slippery=True)
-    # vi = VI(env)
-    # optimal_policy = vi.optimize(gamma=1)
-    # policy_score = evaluate_policy(env, optimal_policy, n=1000)
-    # print('Policy average score = ', policy_score)
+    env_name  = 'FrozenLake8x8-v0'
+    env = gym.make(env_name)
+    vi = VI(env)
+    optimal_policy = vi.optimize(gamma=1)
+    policy_score = evaluate_policy(env, optimal_policy, n=1)
+    print('Policy average score = ', policy_score)
+    print('end')
     '''===========stocks==========='''
     '''obs, reward, done , _ = env.step(int(policy[obs]))'''
 
